@@ -3,10 +3,10 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">Login</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="username" class="el-form-item--username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
@@ -22,7 +22,7 @@
       </el-form-item>
 
       <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
+        <el-form-item prop="password" class="el-form-item--password">
           <span class="svg-container">
             <svg-icon icon-class="password" />
           </span>
@@ -47,20 +47,6 @@
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
-      <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
-        </div>
-
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
-      </div>
     </el-form>
 
     <el-dialog title="Or connect with" :visible.sync="showDialog">
@@ -205,8 +191,9 @@ export default {
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
-$light_gray:#fff;
+$light_gray: gray;
 $cursor: #fff;
+$deep_blue: #1c345e;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -228,7 +215,9 @@ $cursor: #fff;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
       color: $light_gray;
-      height: 47px;
+      height: 57px;
+      font-size: 16px;
+      font-family: "Roboto";
       caret-color: $cursor;
 
       &:-webkit-autofill {
@@ -238,19 +227,37 @@ $cursor: #fff;
     }
   }
 
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+  .el-button {
+    height: 57px;
+    font-size: 20px;
+    background: $deep_blue;
+    border: 0;
+  }
+
+  .el-form-item--username {
+    border: 1px solid rgba(27, 27, 27, 0.1);
+    background: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: #454545;
+    margin-bottom: 0%;
+  }
+
+  .el-form-item--password {
+    border: 1px solid rgba(27, 27, 27, 0.1);
+    background: white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     color: #454545;
   }
+
 }
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
+$bg:#fff;
 $dark_gray:#889aa4;
-$light_gray:#eee;
+$light_gray:gray;
 
 .login-container {
   min-height: 100%;
@@ -283,7 +290,7 @@ $light_gray:#eee;
     padding: 6px 5px 6px 15px;
     color: $dark_gray;
     vertical-align: middle;
-    width: 30px;
+    width: 40px;
     display: inline-block;
   }
 
@@ -291,6 +298,7 @@ $light_gray:#eee;
     position: relative;
 
     .title {
+      font-family: 'Roboto';
       font-size: 26px;
       color: $light_gray;
       margin: 0px auto 40px auto;
