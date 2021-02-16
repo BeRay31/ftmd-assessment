@@ -2,54 +2,56 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
-      <div class="title-container">
-        <h3 class="title">Login</h3>
-      </div>
+      <div class="form-container">
+        <div class="title-container">
+          <h3 class="title">Fakultas Teknik Mesin dan Dirgantara</h3>
+        </div>
 
-      <el-form-item prop="username" class="el-form-item--username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password" class="el-form-item--password">
+        <el-form-item prop="username" class="el-form-item--username">
           <span class="svg-container">
-            <svg-icon icon-class="password" />
+            <svg-icon icon-class="user" />
           </span>
           <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="Password"
-            name="password"
-            tabindex="2"
+            ref="username"
+            v-model="loginForm.username"
+            placeholder="Username"
+            name="username"
+            type="text"
+            tabindex="1"
             autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
           />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
         </el-form-item>
-      </el-tooltip>
 
-      <div class="forgot-password">
-        <a href="/401">Forgot Password</a>
+        <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+          <el-form-item prop="password" class="el-form-item--password">
+            <span class="svg-container">
+              <svg-icon icon-class="password" />
+            </span>
+            <el-input
+              :key="passwordType"
+              ref="password"
+              v-model="loginForm.password"
+              :type="passwordType"
+              placeholder="Password"
+              name="password"
+              tabindex="2"
+              autocomplete="on"
+              @keyup.native="checkCapslock"
+              @blur="capsTooltip = false"
+              @keyup.enter.native="handleLogin"
+            />
+            <span class="show-pwd" @click="showPwd">
+              <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+            </span>
+          </el-form-item>
+        </el-tooltip>
+
+        <div class="forgot-password">
+          <a href="/401">Forgot Password</a>
+        </div>
+
+        <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
       </div>
-
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
     </el-form>
 
@@ -195,7 +197,7 @@ export default {
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
-$light_gray: gray;
+$light_gray: lightgray;
 $cursor: #fff;
 $deep_blue: #325372;
 $light_blue: #4c9acc;
@@ -219,7 +221,7 @@ $light_blue: #4c9acc;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: #4e5a65;
       height: 57px;
       font-size: 16px;
       font-family: "Roboto";
@@ -239,21 +241,28 @@ $light_blue: #4c9acc;
     border: 0;
   }
 
+  .form-container {
+    border-radius: 10px;
+    padding: 10% 8% 10% 8%;
+    background: #e3f8ff;
+  }
+
   .el-form-item--username {
-    border: 1px solid rgba(27, 27, 27, 0.1);
+    border: 1px solid $light_gray;
     background: white;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    color: #454545;
+    color: #4e5a65;
     margin-bottom: 0%;
   }
 
   .el-form-item--password {
-    border: 1px solid rgba(27, 27, 27, 0.1);
+    border: 1px solid $light_gray;
     background: white;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    color: #454545;
+    margin-top: 0%;
+    color: #4e5a65;
   }
 
   .forgot-password {
@@ -266,6 +275,7 @@ $light_blue: #4c9acc;
 
 <style lang="scss" scoped>
 $bg:#fff;
+$deep_blue: #325372;
 $dark_gray:#889aa4;
 $light_gray:gray;
 
@@ -310,7 +320,7 @@ $light_gray:gray;
     .title {
       font-family: 'Roboto';
       font-size: 26px;
-      color: $light_gray;
+      color: $deep_blue;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
