@@ -45,6 +45,10 @@
         </el-form-item>
       </el-tooltip>
 
+      <div class="forgot-password">
+        <a href="/401">Forgot Password</a>
+      </div>
+
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
     </el-form>
@@ -193,7 +197,8 @@ export default {
 $bg:#283443;
 $light_gray: gray;
 $cursor: #fff;
-$deep_blue: #1c345e;
+$deep_blue: #325372;
+$light_blue: #4c9acc;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -230,7 +235,7 @@ $deep_blue: #1c345e;
   .el-button {
     height: 57px;
     font-size: 20px;
-    background: $deep_blue;
+    background: $light_blue;
     border: 0;
   }
 
@@ -251,6 +256,11 @@ $deep_blue: #1c345e;
     color: #454545;
   }
 
+  .forgot-password {
+    font-style: italic;
+    color: $light_blue;
+    margin-bottom: 6%;
+  }
 }
 </style>
 
