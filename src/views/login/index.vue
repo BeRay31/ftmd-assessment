@@ -236,7 +236,7 @@ $light_blue: #4c9acc;
 
   .el-button {
     height: 57px;
-    font-size: 20px;
+    font-size: 18px;
     background: $light_blue;
     border: 0;
   }
@@ -244,7 +244,8 @@ $light_blue: #4c9acc;
   .form-container {
     border-radius: 10px;
     padding: 10% 8% 10% 8%;
-    background: #e3f8ff;
+    background: ghostwhite;
+    box-shadow: 0px 4px 5px 2px #9bacc2;
   }
 
   .el-form-item--username {
@@ -277,21 +278,21 @@ $light_blue: #4c9acc;
 $bg:#fff;
 $deep_blue: #325372;
 $dark_gray:#889aa4;
-$light_gray:gray;
+$light_gray: ghostwhite;
 
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-color: lightsteelblue;
   overflow: hidden;
 
   .login-form {
-    position: relative;
+    // position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 5% 5% 0;
     margin: 0 auto;
-    overflow: hidden;
+    // overflow: hidden;
   }
 
   .tips {
@@ -321,7 +322,7 @@ $light_gray:gray;
       font-family: 'Roboto';
       font-size: 26px;
       color: $deep_blue;
-      margin: 0px auto 40px auto;
+      margin: 0px auto 50px auto;
       text-align: center;
       font-weight: bold;
     }
