@@ -18,7 +18,6 @@
             name="username"
             type="text"
             tabindex="1"
-            autocomplete="on"
           />
         </el-form-item>
 
@@ -35,7 +34,6 @@
               placeholder="Password"
               name="password"
               tabindex="2"
-              autocomplete="on"
               @keyup.native="checkCapslock"
               @blur="capsTooltip = false"
               @keyup.enter.native="handleLogin"
