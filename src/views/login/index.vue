@@ -2,65 +2,57 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
-      <div class="title-container">
-        <h3 class="title">Login Form</h3>
-      </div>
+      <div class="form-container">
+        <div class="title-container">
+          <h3 class="title">Fakultas Teknik Mesin dan Dirgantara</h3>
+        </div>
 
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
+        <el-form-item prop="username" class="el-form-item--username">
           <span class="svg-container">
-            <svg-icon icon-class="password" />
+            <svg-icon icon-class="user" />
           </span>
           <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="Password"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
+            ref="username"
+            v-model="loginForm.username"
+            placeholder="Username"
+            name="username"
+            type="text"
+            tabindex="1"
+            auto-complete="off"
           />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
         </el-form-item>
-      </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+        <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+          <el-form-item prop="password" class="el-form-item--password">
+            <span class="svg-container">
+              <svg-icon icon-class="password" />
+            </span>
+            <el-input
+              :key="passwordType"
+              ref="password"
+              v-model="loginForm.password"
+              :type="passwordType"
+              placeholder="Password"
+              name="password"
+              auto-complete="off"
+              tabindex="2"
+              @keyup.native="checkCapslock"
+              @blur="capsTooltip = false"
+              @keyup.enter.native="handleLogin"
+            />
+            <span class="show-pwd" @click="showPwd">
+              <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+            </span>
+          </el-form-item>
+        </el-tooltip>
 
-      <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
+        <div class="forgot-password">
+          <a href="/401">Forgot Password</a>
         </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
-        </div>
 
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
+        <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
       </div>
+
     </el-form>
 
     <el-dialog title="Or connect with" :visible.sync="showDialog">
@@ -205,8 +197,10 @@ export default {
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
-$light_gray:#fff;
+$light_gray: lightgray;
 $cursor: #fff;
+$deep_blue: #325372;
+$light_blue: #4c9acc;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -227,8 +221,10 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
+      color: #4e5a65;
+      height: 57px;
+      font-size: 16px;
+      font-family: "Roboto";
       caret-color: $cursor;
 
       &:-webkit-autofill {
@@ -238,33 +234,65 @@ $cursor: #fff;
     }
   }
 
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
+  .el-button {
+    height: 57px;
+    font-size: 18px;
+    background: $light_blue;
+    border: 0;
+  }
+
+  .form-container {
+    border-radius: 10px;
+    padding: 10% 8% 10% 8%;
+    background: ghostwhite;
+    box-shadow: 0px 4px 5px 2px #9bacc2;
+  }
+
+  .el-form-item--username {
+    border: 1px solid $light_gray;
+    background: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: #4e5a65;
+    margin-bottom: 0%;
+  }
+
+  .el-form-item--password {
+    border: 1px solid $light_gray;
+    background: white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-top: 0%;
+    color: #4e5a65;
+  }
+
+  .forgot-password {
+    font-style: italic;
+    color: $light_blue;
+    margin-bottom: 6%;
   }
 }
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
+$bg:#fff;
+$deep_blue: #325372;
 $dark_gray:#889aa4;
-$light_gray:#eee;
+$light_gray: ghostwhite;
 
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-color: lightsteelblue;
   overflow: hidden;
 
   .login-form {
-    position: relative;
+    // position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 5% 5% 0;
     margin: 0 auto;
-    overflow: hidden;
+    // overflow: hidden;
   }
 
   .tips {
@@ -283,7 +311,7 @@ $light_gray:#eee;
     padding: 6px 5px 6px 15px;
     color: $dark_gray;
     vertical-align: middle;
-    width: 30px;
+    width: 40px;
     display: inline-block;
   }
 
@@ -291,9 +319,10 @@ $light_gray:#eee;
     position: relative;
 
     .title {
+      font-family: 'Roboto';
       font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
+      color: $deep_blue;
+      margin: 0px auto 50px auto;
       text-align: center;
       font-weight: bold;
     }
