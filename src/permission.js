@@ -54,19 +54,17 @@ router.beforeEach(async(to, from, next) => {
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
       // determine whether the user has obtained his permission roles through getInfo
-      const hasRoles = store.getters.user_type
+      const hasRoles = store.getters.routes_user_type
       if (hasRoles) {
-        console.error('MASUK SINI')
         next()
       } else {
         try {
+          console.log('MASUK SINI')
           // get user info
-          // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
           const { user_type } = await store.dispatch('user/getInfo')
 
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', user_type)
-
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)
 
