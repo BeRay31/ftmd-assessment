@@ -20,7 +20,8 @@ async function validateToken(token) {
       // If admin and token valid
       const prevUserType = localStorage.getItem('user_type')
       if (!prevUserType && prevUserType !== respAuth.data.user_type) {
-        await store.dispatch('user/resetToken')
+        await store.dispatch('permission/resetUserType')
+        await store.dispatch('user/logout')
         return false
       }
       localStorage.setItem('id_user', respAuth.data.id_user)
@@ -35,12 +36,14 @@ async function validateToken(token) {
       return true
     } else {
       // reset token cuz not valid
-      await store.dispatch('user/resetToken')
+      await store.dispatch('permission/resetUserType')
+      await store.dispatch('user/logout')
       return false
     }
   } catch (e) {
     console.error(e.stack)
-    await store.dispatch('user/resetToken')
+    await store.dispatch('permission/resetUserType')
+    await store.dispatch('user/logout')
     return false
   }
 }
@@ -83,7 +86,7 @@ router.beforeEach(async(to, from, next) => {
           next({ ...to, replace: true })
         } catch (error) {
           // remove token and go to login page to re-login
-          await store.dispatch('user/resetToken')
+          await store.dispatch('user/logout')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
           NProgress.done()

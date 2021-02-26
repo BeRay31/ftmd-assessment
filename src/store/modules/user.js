@@ -61,9 +61,9 @@ const actions = {
 
   // user logout
   logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      commit('SET_TOKEN', '')
-      commit('SET_USER_TYPE', 'null')
+    return new Promise((resolve) => {
+      commit('SET_TOKEN', null)
+      commit('SET_USER_TYPE', null)
       commit('SET_ID_USER', null)
       removeToken()
       resetRouter()
@@ -74,8 +74,8 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
-      commit('SET_TOKEN', '')
-      commit('SET_USER_TYPE', '')
+      commit('SET_TOKEN', null)
+      commit('SET_USER_TYPE', null)
       removeToken()
       resolve()
     })

@@ -58,6 +58,12 @@ const actions = {
       commit('SET_USER_TYPE', user_type)
       resolve(accessedRoutes)
     })
+  },
+  resetUserType({ commit }) {
+    return new Promise(resolve => {
+      commit('SET_USER_TYPE', null)
+      resolve(true)
+    })
   }
 }
 
