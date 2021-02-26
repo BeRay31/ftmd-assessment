@@ -12,23 +12,29 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
 async function validateToken(token) {
-  const respAuth = await Authorization.verifyToken({
-    token
-  })
-  if (respAuth.data) {
-    // If admin and token valid
-    localStorage.setItem('id_user', respAuth.data.id_user)
-    localStorage.setItem('user_type', respAuth.data.user_type)
-    const loginData = {
-      id_user: respAuth.data.id_user,
-      token: token,
-      username: localStorage.getItem('username') || 'user',
-      user_type: respAuth.data.user_type
+  try {
+    const respAuth = await Authorization.verifyToken({
+      token
+    })
+    if (respAuth.data) {
+      // If admin and token valid
+      localStorage.setItem('id_user', respAuth.data.id_user)
+      localStorage.setItem('user_type', respAuth.data.user_type)
+      const loginData = {
+        id_user: respAuth.data.id_user,
+        token: token,
+        username: localStorage.getItem('username') || 'user',
+        user_type: respAuth.data.user_type
+      }
+      await store.dispatch('user/login', loginData)
+      return true
+    } else {
+      // reset token cuz not valid
+      await store.dispatch('user/resetToken')
+      return false
     }
-    await store.dispatch('user/login', loginData)
-    return true
-  } else {
-    // reset token cuz not valid
+  } catch (e) {
+    console.error(e.stack)
     await store.dispatch('user/resetToken')
     return false
   }
@@ -59,7 +65,6 @@ router.beforeEach(async(to, from, next) => {
         next()
       } else {
         try {
-          console.log('MASUK SINI')
           // get user info
           const { user_type } = await store.dispatch('user/getInfo')
 

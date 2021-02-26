@@ -8,9 +8,13 @@
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          {{ username }}
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>
+            {{ user_type }}
+          </el-dropdown-item>
           <router-link to="/profile/index">
             <el-dropdown-item>Profile</el-dropdown-item>
           </router-link>
@@ -40,7 +44,9 @@ export default {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'device'
+      'device',
+      'username',
+      'user_type'
     ])
   },
   methods: {
@@ -57,7 +63,7 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  height: 50px;
+  height: 60px;
   overflow: hidden;
   position: relative;
   background: #f4f9f9;
@@ -116,14 +122,19 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
+        display: flex;
         margin-top: 5px;
         position: relative;
+        align-items: center;
+        gap: 1rem;
+        font-weight: bold;
 
         .user-avatar {
           cursor: pointer;
           width: 40px;
           height: 40px;
           border-radius: 10px;
+          border-radius: 50%;
         }
 
         .el-icon-caret-bottom {
