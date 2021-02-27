@@ -7,7 +7,7 @@ import { asyncRoutes, constantRoutes } from '@/router'
  */
 function hasPermission(user_type, route) {
   if (route.meta && route.meta.roles) {
-    return user_type in route.meta.roles
+    return route.meta.roles.includes(user_type)
   } else {
     return true
   }
@@ -57,6 +57,12 @@ const actions = {
       commit('SET_ROUTES', accessedRoutes)
       commit('SET_USER_TYPE', user_type)
       resolve(accessedRoutes)
+    })
+  },
+  resetUserType({ commit }) {
+    return new Promise(resolve => {
+      commit('SET_USER_TYPE', null)
+      resolve(true)
     })
   }
 }
