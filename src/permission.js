@@ -12,24 +12,38 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
 async function validateToken(token) {
-  const respAuth = await Authorization.verifyToken({
-    token
-  })
-  if (respAuth.data) {
-    // If admin and token valid
-    localStorage.setItem('id_user', respAuth.data.id_user)
-    localStorage.setItem('user_type', respAuth.data.user_type)
-    const loginData = {
-      id_user: respAuth.data.id_user,
-      token: token,
-      username: localStorage.getItem('username') || 'user',
-      user_type: respAuth.data.user_type
+  try {
+    const respAuth = await Authorization.verifyToken({
+      token
+    })
+    if (respAuth.data) {
+      // If admin and token valid
+      const prevUserType = localStorage.getItem('user_type')
+      if (!prevUserType && prevUserType !== respAuth.data.user_type) {
+        await store.dispatch('permission/resetUserType')
+        await store.dispatch('user/logout')
+        return false
+      }
+      localStorage.setItem('id_user', respAuth.data.id_user)
+      localStorage.setItem('user_type', respAuth.data.user_type)
+      const loginData = {
+        id_user: respAuth.data.id_user,
+        token: token,
+        username: localStorage.getItem('username') || 'user',
+        user_type: respAuth.data.user_type
+      }
+      await store.dispatch('user/login', loginData)
+      return true
+    } else {
+      // reset token cuz not valid
+      await store.dispatch('permission/resetUserType')
+      await store.dispatch('user/logout')
+      return false
     }
-    await store.dispatch('user/login', loginData)
-    return true
-  } else {
-    // reset token cuz not valid
-    await store.dispatch('user/resetToken')
+  } catch (e) {
+    console.error(e.stack)
+    await store.dispatch('permission/resetUserType')
+    await store.dispatch('user/logout')
     return false
   }
 }
@@ -59,7 +73,6 @@ router.beforeEach(async(to, from, next) => {
         next()
       } else {
         try {
-          console.log('MASUK SINI')
           // get user info
           const { user_type } = await store.dispatch('user/getInfo')
 
@@ -73,7 +86,7 @@ router.beforeEach(async(to, from, next) => {
           next({ ...to, replace: true })
         } catch (error) {
           // remove token and go to login page to re-login
-          await store.dispatch('user/resetToken')
+          await store.dispatch('user/logout')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
           NProgress.done()
