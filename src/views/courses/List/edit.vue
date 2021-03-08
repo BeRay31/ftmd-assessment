@@ -48,7 +48,7 @@
 </template>
 
 <script>
-// import Courses from '@/api/courses'
+import Courses from '@/api/courses'
 
 export default {
   name: 'Modal',
@@ -82,13 +82,18 @@ export default {
     },
     async handleEdit() {
       console.log('handling edit. . .')
-      //   Courses.editLecturer({ course_name: this.selectedCourse.cname, course_class: this.selectedCourse.class, semester: this.selectedCourse.semester, lecturer: this.selectedCourse.lecturer }).then((res) => {
-      //     if (res.status === 200) {
-      //       console.log('ganti')
-      //     } else {
-      //       console.log('error')
-      //     }
-      //   })
+      Courses.editLecturer({
+        course_name: this.selectedCourse.cname,
+        class: this.selectedCourse.class,
+        semester: this.selectedCourse.semester,
+        lecturer_name: this.selectedCourse.lecturer
+      }).then((res) => {
+        if (res.msg === 'OK') {
+          console.log('ganti')
+        } else {
+          console.log('error')
+        }
+      })
       close()
     }
   }
