@@ -8,17 +8,6 @@
         <el-form>
           <el-form-item>
             <MDInput
-              v-model="formData.id"
-              :maxlength="100"
-              required
-              name="Nomor Identitas"
-              type="number"
-            >
-              Nomor Identitas
-            </MDInput>
-          </el-form-item>
-          <el-form-item>
-            <MDInput
               v-model="formData.name"
               :maxlength="100"
               required
@@ -95,7 +84,6 @@ export default {
       formData: {
         name: null,
         username: null,
-        id: null,
         email: null,
         password: null,
         user_type: null 
@@ -107,7 +95,6 @@ export default {
       return (
         this.formData.name &&
         this.formData.username &&
-        this.formData.id &&
         this.formData.email && 
         this.formData.password &&
         this.formData.user_type
@@ -135,7 +122,6 @@ export default {
         this.formData = {
           name: null,
           username: null,
-          id: null,
           email: null,
           password: null,
           user_type: null 
