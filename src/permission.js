@@ -19,18 +19,18 @@ async function validateToken(token) {
     if (respAuth.data) {
       // If admin and token valid
       const prevUserType = localStorage.getItem('user_type')
-      if (!prevUserType && prevUserType !== respAuth.data.user_type) {
+      if (!prevUserType && prevUserType !== respAuth.data.user_type.trim()) {
         await store.dispatch('permission/resetUserType')
         await store.dispatch('user/logout')
         return false
       }
       localStorage.setItem('id_user', respAuth.data.id_user)
-      localStorage.setItem('user_type', respAuth.data.user_type)
+      localStorage.setItem('user_type', respAuth.data.user_type.trim())
       const loginData = {
         id_user: respAuth.data.id_user,
         token: token,
         username: localStorage.getItem('username') || 'user',
-        user_type: respAuth.data.user_type
+        user_type: respAuth.data.user_type.trim()
       }
       await store.dispatch('user/login', loginData)
       return true
@@ -77,7 +77,7 @@ router.beforeEach(async(to, from, next) => {
           const { user_type } = await store.dispatch('user/getInfo')
 
           // generate accessible routes map based on roles
-          const accessRoutes = await store.dispatch('permission/generateRoutes', user_type)
+          const accessRoutes = await store.dispatch('permission/generateRoutes', user_type.trim())
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)
 

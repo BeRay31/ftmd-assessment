@@ -44,5 +44,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/table.scss";
 @import "./index.scss";
 </style>
