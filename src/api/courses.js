@@ -4,10 +4,10 @@ import service from '@/utils/request'
 export default class Courses {
     static baseGroupURL = `courses`;
 
-    static async fetchCourses() {
+    static async fetchCourses(pages) {
       const res = await service.get(`${this.baseGroupURL}/get`, {
         params: {
-          pageNum: 1
+          pageNum: pages
         }
       })
       return res
