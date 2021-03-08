@@ -13,7 +13,7 @@
         >
           <span class="form-title">Edit Course Details</span>
           <slot name="body">
-            <el-form ref="editForm">
+            <el-form @submit.prevent="handleEdit">
               <label for="name">Kuliah</label>
               <input id="name" v-model="selectedCourse.cname" type="text">
               <label for="name">Kelas</label>
