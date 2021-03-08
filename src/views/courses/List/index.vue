@@ -3,7 +3,7 @@
     <h1>Course List Page</h1>
     <div class="pagenum">
       <button input="button" @click="prev()">&laquo;</button>
-      <button input="button" disabled>{{ page }}</button>
+      <span>{{ page }}</span>
       <button input="button" @click="next()">&raquo;</button>
     </div>
     <table id="course-table">
@@ -42,7 +42,8 @@ export default {
       courses: [],
       page: 1,
       showModal: false,
-      selectedCourse: { cname: 'oke' }
+      selectedCourse: { cname: 'oke' },
+      maxpage: 2
     }
   },
   created() {
@@ -50,14 +51,18 @@ export default {
   },
   methods: {
     fetchCourses(pagenum) {
+      // console.log(this.page)
       Courses.fetchCourses(pagenum).then((res) => {
         this.courses = res
+        this.maxpage = res.maxpage
+        // console.log(this.maxpage)
       })
     },
     next() {
-      const nextPage = this.page + 1
-      this.fetchCourses(nextPage)
-      this.page += 1
+      if (this.page < this.maxpage) {
+        this.page += 1
+        this.fetchCourses(this.page)
+      }
     },
     prev() {
       if (this.page > 1) {
@@ -69,6 +74,18 @@ export default {
       this.selectedCourse = course
       this.$emit('update', course)
       this.showModal = true
+    },
+    deleteCourse(course) {
+      const courseDetails = {
+        name: course.cname,
+        semester: course.semester,
+        class: course.class
+      }
+      Courses.deleteCourse(courseDetails).then((res) => {
+        if (res.msg === 'OK') {
+          this.fetchCourses(this.page)
+        }
+      })
     },
     closeModal() {
       this.showModal = false

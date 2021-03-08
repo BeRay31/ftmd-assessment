@@ -13,40 +13,43 @@
         >
           <span class="form-title">Edit Course Details</span>
           <slot name="body">
-            <form method="post">
+            <el-form ref="editForm">
               <label for="name">Kuliah</label>
               <input id="name" v-model="selectedCourse.cname" type="text">
+              <label for="name">Kelas</label>
+              <input id="name" v-model="selectedCourse.class" type="text">
               <label for="dosen">Dosen</label>
               <input id="dosen" v-model="selectedCourse.lecturer" type="text"><br>
               <label for="semester">Semester</label>
               <input id="semester" v-model="selectedCourse.semester" type="number"><br>
-            </form>
+              <div class="modal-footer">
+                <el-button
+                  type="button"
+                  class="btn-green"
+                  aria-label="Close modal"
+                  @click.native.prevent="handleEdit"
+                >
+                  DONE
+                </el-button>
+                <el-button
+                  type="button"
+                  class="btn-green"
+                  @click="close"
+                >
+                  CLOSE
+                </el-button>
+              </div>
+            </el-form>
           </slot>
         </section>
-        <footer class="modal-footer">
-
-          <button
-            type="button"
-            class="btn-green"
-            aria-label="Close modal"
-            @click="close"
-          >
-            DONE
-          </button>
-          <button
-            type="button"
-            class="btn-green"
-            @click="close"
-          >
-            CLOSE
-          </button>
-        </footer>
       </div>
     </div>
   </transition>
 </template>
 
 <script>
+// import Courses from '@/api/courses'
+
 export default {
   name: 'Modal',
   props: {
@@ -76,6 +79,17 @@ export default {
     },
     setCourse(newCourse) {
       this.selectedCourse = newCourse
+    },
+    async handleEdit() {
+      console.log('handling edit. . .')
+      //   Courses.editLecturer({ course_name: this.selectedCourse.cname, course_class: this.selectedCourse.class, semester: this.selectedCourse.semester, lecturer: this.selectedCourse.lecturer }).then((res) => {
+      //     if (res.status === 200) {
+      //       console.log('ganti')
+      //     } else {
+      //       console.log('error')
+      //     }
+      //   })
+      close()
     }
   }
 }
