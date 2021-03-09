@@ -72,7 +72,7 @@
           type="primary"
           class="btn btn-primary btn-login"
           @click.prevent="openModal"
-        >Tambahkan</el-button>
+        >{{ id_user ? 'Ubah' : 'Tambah' }}</el-button>
       </div>
     </div>
     <ConfirmModal 
