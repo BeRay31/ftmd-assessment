@@ -1,5 +1,3 @@
-@import './variables.scss';
-
 @mixin colorBtn($color) {
   background: $color;
 
@@ -13,32 +11,61 @@
   }
 }
 
+.btn {
+  border-radius: 2rem;
+  border: none;
+  cursor: pointer;
+  font-family: Nunito, sans-serif;
+
+  &-primary {
+    @include btn(#2196f3);
+  }
+
+  &-primary-light {
+    @include btn(lighten(#2196f3, 6));
+  }
+
+  &-secondary {
+    @include btn(#f57200);
+  }
+
+  &-small {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  &-large {
+    padding: 1rem 3rem !important;
+    font-weight: bold;
+  }
+}
+
 .blue-btn {
-  @include colorBtn($blue)
+  @include colorBtn($blue);
 }
 
 .light-blue-btn {
-  @include colorBtn($light-blue)
+  @include colorBtn($light-blue);
 }
 
 .red-btn {
-  @include colorBtn($red)
+  @include colorBtn($red);
 }
 
 .pink-btn {
-  @include colorBtn($pink)
+  @include colorBtn($pink);
 }
 
 .green-btn {
-  @include colorBtn($green)
+  @include colorBtn($green);
 }
 
 .tiffany-btn {
-  @include colorBtn($tiffany)
+  @include colorBtn($tiffany);
 }
 
 .yellow-btn {
-  @include colorBtn($yellow)
+  @include colorBtn($yellow);
 }
 
 .pan-btn {
@@ -64,7 +91,7 @@
 
   &:before,
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     right: 0;
