@@ -68,6 +68,7 @@
         :loading="loading"
         type="primary"
         class="btn btn-primary btn-login"
+        @click.native.prevent="handleLogin"
       >Login</el-button>
     </el-form>
   </div>

@@ -30,6 +30,16 @@ const userRoute = {
         title: 'Tambahkan Pengguna',
         roles: ['admin']
       }
+    },
+    {
+      path: ':id',
+      component: () => import(/* webpackPreload: true */ '@/views/user/Create/index'),
+      name: 'updateUser',
+      meta: {
+        roles: ['admin'],
+        activeMenu: '/list'
+      },
+      hidden: true
     }
   ]
 }

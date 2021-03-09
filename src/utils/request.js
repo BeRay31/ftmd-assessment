@@ -16,7 +16,7 @@ export const isPathWhiteListed = path => {
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 15000 // request timeout
+  timeout: 15000 // request timeout,
 })
 
 // request interceptor
@@ -57,7 +57,7 @@ service.interceptors.response.use(
     // if the custom code is not 20000, it is judged as an error.
     if (response.status < 200 || response.status > 299) {
       Message({
-        message: res.message || 'Error',
+        message: res.msg || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
