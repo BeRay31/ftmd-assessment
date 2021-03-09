@@ -19,7 +19,7 @@ async function validateToken(token) {
     if (respAuth.data) {
       // If admin and token valid
       const prevUserType = localStorage.getItem('user_type')
-      if (!prevUserType && prevUserType !== respAuth.data.user_type.trim()) {
+      if (prevUserType && prevUserType !== respAuth.data.user_type.trim()) {
         await store.dispatch('permission/resetUserType')
         await store.dispatch('user/logout')
         return false
