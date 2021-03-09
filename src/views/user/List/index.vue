@@ -44,7 +44,7 @@
       v-if="modal.state"
       :state="modal.state"
       :user-data="modal.carriedData"
-      @close-modal="closeModal"
+      @closeModal="closeModal"
       @submit="deleteUser"
     />
   </div>
