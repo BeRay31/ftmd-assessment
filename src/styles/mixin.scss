@@ -64,3 +64,24 @@
     border-bottom: $transparent-border-style;
   }
 }
+
+@mixin btn($color) {
+  background-color: $color;
+  color: white;
+  transition: all 0.2s ease;
+  &:hover {
+    background-color: darken($color, 25);
+  }
+
+  &-alt {
+    background-color: white;
+    color: $color;
+    border: 1px solid $color;
+
+    transition: all 0.2s ease;
+    &:hover {
+      background-color: $color;
+      color: white;
+    }
+  }
+}

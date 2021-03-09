@@ -21,53 +21,105 @@
             <td>{{ user.email }}</td>
             <td>{{ user.user_type }}</td>
             <td class="action">
-              <el-button type="primary" icon="el-icon-edit">Edit</el-button>
-              <el-button type="primary" icon="el-icon-delete">Delete</el-button>
+              <el-button 
+                type="primary"
+                icon="el-icon-edit"
+                @click="goToEditUser(user)"
+              >Edit</el-button>
+              <el-button 
+                type="primary"
+                icon="el-icon-delete"
+                @click="openModal(user)"
+              >Delete</el-button>
             </td>
           </tr>
         </table>
         <Pagination 
-          :totalPage="totalPage"
-          :currentPage="currentPage"
+          :total-page="totalPage"
+          :current-page="currentPage"
         />
       </div>
     </div>
+    <DeleteModal 
+      v-if="modal.state"
+      :state="modal.state"
+      :user-data="modal.carriedData"
+      @close-modal="closeModal"
+      @submit="deleteUser"
+    />
   </div>
 </template>
 
 <script>
+import { Message } from 'element-ui' 
+
 import Users from '@/api/users'
 import Pagination from '@/components/Pagination/Pagination'
+import DeleteModal from '../Modal/DeleteModal/index'
 
 export default {
   name: 'UserList',
   components: {
-    Pagination
-  },
-  async mounted() {
-    await this.getUserList();
-  },
-  watch: {
-    async currentPage() {
-      await this.getUserList();
-    }
+    Pagination,
+    DeleteModal
   },
   data() {
     return {
       userData: [],
       currentPage: 1,
-      totalPage: null
+      totalPage: null,
+      modal: {
+        state: false,
+        carriedData: null
+      }
     }
+  },
+  watch: {
+    async currentPage() {
+      await this.getUserList()
+    }
+  },
+  async mounted() {
+    await this.getUserList()
   },
   methods: {
     async getUserList() {
-      const params = {
-        pageSize: 10,
-        page: this.currentPage
+      try {
+        const params = {
+          pageSize: 10,
+          page: this.currentPage
+        }
+        const userResp = await Users.getAllUser(params)
+        this.userData = userResp.data
+        this.totalPage = userResp.lastPage
+      } catch (e) {
+        console.error(e.stack)
       }
-      const userResp = await Users.getAllUser(params)
-      this.userData = userResp.data
-      this.totalPage = userResp.lastPage
+    },
+    async deleteUser() {
+      try {
+        await Users.deleteUser(this.modal.carriedData.id_user)
+        await this.getUserList()
+        this.closeModal()
+        Message({
+          message: 'User berhasil dihapus',
+          type: 'success',
+          duration: 5 * 1000
+        })
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    openModal(carriedData) {
+      this.modal.carriedData = carriedData
+      this.modal.state = true
+    },
+    closeModal() {
+      this.modal.state = false
+      this.modal.carriedData = null
+    },
+    goToEditUser(user) {
+      this.$router.push({ name: 'updateUser', params: { id: user.id_user }})
     }
   }
 }

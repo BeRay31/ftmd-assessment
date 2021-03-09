@@ -127,7 +127,7 @@ $color-secondary: white;
   h3 {
     font-size: 1.6rem;
     text-align: center;
-    color: $purple;
+    color: #2196f3;
   }
 
   &.active {
