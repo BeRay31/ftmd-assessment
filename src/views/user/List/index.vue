@@ -21,12 +21,12 @@
             <td>{{ user.email }}</td>
             <td>{{ user.user_type }}</td>
             <td class="action">
-              <el-button 
+              <el-button
                 type="primary"
                 icon="el-icon-edit"
                 @click="goToEditUser(user)"
               >Edit</el-button>
-              <el-button 
+              <el-button
                 type="primary"
                 icon="el-icon-delete"
                 @click="openModal(user)"
@@ -34,13 +34,14 @@
             </td>
           </tr>
         </table>
-        <Pagination 
+        <Pagination
           :total-page="totalPage"
           :current-page="currentPage"
+          @pageChange="updatePage"
         />
       </div>
     </div>
-    <DeleteModal 
+    <DeleteModal
       v-if="modal.state"
       :state="modal.state"
       :user-data="modal.carriedData"
@@ -51,7 +52,7 @@
 </template>
 
 <script>
-import { Message } from 'element-ui' 
+import { Message } from 'element-ui'
 
 import Users from '@/api/users'
 import Pagination from '@/components/Pagination/Pagination'
@@ -83,6 +84,10 @@ export default {
     await this.getUserList()
   },
   methods: {
+    updatePage(index) {
+      this.currentPage = index
+      this.getUserList()
+    },
     async getUserList() {
       try {
         const params = {

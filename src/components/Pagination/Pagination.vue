@@ -40,14 +40,14 @@ export default {
   computed: {
     pageShown() {
       const ascendingCompare = (firstElement, secondElement) =>
-        firstElement - secondElement;
+        firstElement - secondElement
 
-      const shown = [1, this.totalPage];
+      const shown = [1, this.totalPage]
 
       if (this.totalPage > 2) {
         // second index and second last index
-        shown.push(2);
-        shown.push(this.totalPage - 1);
+        shown.push(2)
+        shown.push(this.totalPage - 1)
 
         // current page and surrounding page
         if (
@@ -55,29 +55,29 @@ export default {
           this.currentPage > 1 &&
           this.currentPage < this.totalPage
         ) {
-          shown.push(this.currentPage);
-          shown.push(this.currentPage - 1);
-          shown.push(this.currentPage + 1);
+          shown.push(this.currentPage)
+          shown.push(this.currentPage - 1)
+          shown.push(this.currentPage + 1)
         }
       }
 
-      return this.uniqueArray(shown).sort(ascendingCompare);
+      return this.uniqueArray(shown).sort(ascendingCompare)
     }
   },
   methods: {
     goToIndex(index) {
       if (index >= 1 && index <= this.totalPage) {
-        this.$emit('pageChange', index);
+        this.$emit('pageChange', index)
       }
     },
     uniqueArray(array) {
-      return [...new Set(array)];
+      return [...new Set(array)]
     },
     isApart(index) {
-      return index && this.pageShown[index] - this.pageShown[index - 1] > 1;
+      return index && this.pageShown[index] - this.pageShown[index - 1] > 1
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

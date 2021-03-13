@@ -4,7 +4,7 @@
       <h1 v-if="!id_user">Tambahkan Pengguna</h1>
       <h1 v-else>Update Data Pengguna</h1>
     </header>
-    <div class="content-contaienr">
+    <div class="content-container">
       <div class="form-card">
         <el-form>
           <el-form-item v-if="id_user">
@@ -28,10 +28,10 @@
           </el-form-item>
           <el-form-item>
             <MDInput
-              v-model="formData.username" 
+              v-model="formData.username"
               :maxlength="100"
               required
-              
+
               name="Username"
             >
               Username
@@ -39,7 +39,7 @@
           </el-form-item>
           <el-form-item>
             <MDInput
-              v-model="formData.email" 
+              v-model="formData.email"
               :maxlength="100"
               required
               type="email"
@@ -50,7 +50,7 @@
           </el-form-item>
           <el-form-item>
             <MDInput
-              v-model="formData.password" 
+              v-model="formData.password"
               :maxlength="100"
               required
               name="Password"
@@ -75,7 +75,7 @@
         >{{ id_user ? 'Ubah' : 'Tambah' }}</el-button>
       </div>
     </div>
-    <ConfirmModal 
+    <ConfirmModal
       v-if="modal.state"
       :state="modal.state"
       :title="modalTitle"
@@ -107,7 +107,7 @@ export default {
         username: null,
         email: null,
         password: null,
-        user_type: null 
+        user_type: null
       },
       modal: {
         state: false,
@@ -149,7 +149,7 @@ export default {
       return (
         this.formData.name &&
         this.formData.username &&
-        this.formData.email && 
+        this.formData.email &&
         this.formData.password &&
         this.formData.user_type
       )
@@ -186,7 +186,7 @@ export default {
             username: null,
             email: null,
             password: null,
-            user_type: null 
+            user_type: null
           }
         }
       } else {
