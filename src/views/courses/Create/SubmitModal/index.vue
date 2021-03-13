@@ -2,14 +2,14 @@
   <Modal :state="state" :title="title" @closeModal="$emit('closeModal')">
     <div class="content">
       <div class="content__body">
-        {{ title.includes('ubah') ? `Properti user dengan id ${userData.id_user} akan diubah sesuai formulir yang ditampilkan` : `User akan ditambahkan ke dalam sistem untuk dapat masuk kedalam sistem.` }}
+        Mata kuliah akan didaftarkan ke dalam sistem akreditasi.
       </div>
       <div class="content__button-group">
         <button class="btn btn-primary-alt" @click="$emit('closeModal')">Batalkan</button>
         <button
           :class="['btn btn-primary']"
           @click="$emit('submit')"
-        >{{ title.includes('ubah') ? 'Ya Ubah' : 'Ya Tambahkan' }}</button>
+        >Daftarkan</button>
       </div>
     </div>
   </Modal>
@@ -34,7 +34,7 @@ export default {
     },
     title: {
       type: String,
-      default: 'Apakah anda yakin ingin membuat user?'
+      default: 'Buat Mata Kuliah?'
     }
   }
 }

@@ -24,7 +24,7 @@ const courseRoutes = {
       component: () => import('@/views/courses/Create/index'),
       name: 'CreateCrouse',
       meta: {
-        title: 'Buat Mata Kuliah',
+        title: 'Tambah Mata Kuliah',
         icon: 'form',
         roles: ['admin', 'lecturer']
       }
