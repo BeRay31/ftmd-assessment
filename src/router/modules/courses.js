@@ -30,13 +30,13 @@ const courseRoutes = {
       }
     },
     {
-      path: 'edit/:id',
-      component: () => import('@/views/courses/Create/index'),
-      name: 'EditCourse',
+      path: ':id',
+      component: () => import(/* webpackPreload: true */'@/views/courses/LO/index'),
+      name: 'LOCourse',
       meta: {
-        title: 'Edit Mata Kuliah',
-        roles: ['admin', 'lecturer'],
-        activeMenu: '/courses/list'
+        title: 'Learning Outcomes',
+        roles: ['admin'],
+        activeMenu: '/list'
       },
       hidden: true
     }
