@@ -6,34 +6,36 @@
     <div class="content-container">
       <div class="form-card">
         <el-form>
-          <el-row :gutter="30">
-            <el-col :span="6">
-              <el-form-item>
-                <MDInput v-model="formData.code">Kode</MDInput>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item>
-                <MDInput v-model="formData.class">Kelas</MDInput>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item>
-                <MDInput v-model="formData.semester">Semester</MDInput>
-              </el-form-item>
-            </el-col>
-          </el-row>
           <el-form-item>
             <MDInput v-model="formData.name">Mata Kuliah</MDInput>
           </el-form-item>
-          <el-form-item>
-            <MDInput v-model="formData.lecturer_name">Dosen</MDInput>
-          </el-form-item>
+          <el-row :gutter="30">
+            <el-col :span="6">
+              <el-form-item>
+                <MDInput v-model="formData.class" type="number">Kelas</MDInput>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <MDInput v-model="formData.semester" type="number">Semester</MDInput>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <MDInput v-model="formData.year" type="number">Tahun Ajaran</MDInput>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-button
+            type="primary"
+            class="btn btn-primary btn-login"
+            @click.prevent="openModal"
+          >Pilih Dosen</el-button>
         </el-form>
         <el-button
           :loading="loading"
           type="primary"
-          class="btn btn-primary btn-login large"
+          class="btn btn-primary btn-login"
           @click.prevent="openModal"
         >Tambah</el-button>
       </div>
@@ -66,11 +68,11 @@ export default {
         state: false
       },
       formData: {
-        code: null,
         name: null,
         class: null,
         semester: null,
-        lecturer_name: null
+        id_lecturer: null,
+        year: null
       }
     }
   },

@@ -2,7 +2,28 @@
   <div class="user-list-container">
     <header>
       <h1>Daftar Pengguna</h1>
+      <div class="search">
+        <img src="@/assets/svg/search.svg" alt>
+        <input v-model="searchQuery" type="text" class="card" placeholder="Cari Users">
+      </div>
     </header>
+    <div class="filter-container">
+      <el-button
+        :type="userTypeFilter == 'admin' ? 'primary' : 'info'"
+        class="btn"
+        @click.prevent="setUserTypeFilter('admin')"
+      >Admin</el-button>
+      <el-button
+        :type="userTypeFilter == 'lecturer' ? 'primary' : 'info'"
+        class="btn"
+        @click.prevent="setUserTypeFilter('lecturer')"
+      >Dosen</el-button>
+      <el-button
+        :type="userTypeFilter == 'student' ? 'primary' : 'info'"
+        class="btn"
+        @click.prevent="setUserTypeFilter('student')"
+      >Mahasiswa</el-button>
+    </div>
     <div class="content-container">
       <div class="card">
         <table>
@@ -14,26 +35,33 @@
             <th>Tipe user</th>
             <th>Aksi</th>
           </tr>
-          <tr v-for="user in userData" :key="user.id_user">
-            <td>{{ user.id_user }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.user_type }}</td>
-            <td class="action">
-              <el-button
-                type="primary"
-                icon="el-icon-edit"
-                @click="goToEditUser(user)"
-              >Edit</el-button>
-              <el-button
-                type="primary"
-                icon="el-icon-delete"
-                @click="openModal(user)"
-              >Delete</el-button>
-            </td>
-          </tr>
+          <template v-if="userData && userData.length > 0">
+            <tr v-for="user in userData" :key="user.id_user">
+              <td>{{ user.id_user }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.user_type }}</td>
+              <td class="action">
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  @click="goToEditUser(user)"
+                >Edit</el-button>
+                <el-button
+                  type="primary"
+                  icon="el-icon-delete"
+                  @click="openModal(user)"
+                >Delete</el-button>
+              </td>
+            </tr>
+          </template>
         </table>
+        <template v-if="!userData || userData.length == 0">
+          <tr>
+            <h4 class="empty-state">No - Data</h4>
+          </tr>
+        </template>
         <Pagination
           :total-page="totalPage"
           :current-page="currentPage"
@@ -69,6 +97,8 @@ export default {
       userData: [],
       currentPage: 1,
       totalPage: null,
+      searchQuery: '',
+      userTypeFilter: '',
       modal: {
         state: false,
         carriedData: null
@@ -77,6 +107,12 @@ export default {
   },
   watch: {
     async currentPage() {
+      await this.getUserList()
+    },
+    async searchQuery() {
+      await this.getUserList()
+    },
+    async userTypeFilter() {
       await this.getUserList()
     }
   },
@@ -88,11 +124,24 @@ export default {
       this.currentPage = index
       this.getUserList()
     },
+    setUserTypeFilter(type) {
+      if (type.includes(this.userTypeFilter)) {
+        this.userTypeFilter = null
+      } else {
+        this.userTypeFilter = type
+      }
+    },
     async getUserList() {
       try {
         const params = {
           pageSize: 10,
           page: this.currentPage
+        }
+        if (this.searchQuery !== '') {
+          params.searchQuery = this.searchQuery
+        }
+        if (this.userTypeFilter) {
+          params.userType = this.userTypeFilter
         }
         const userResp = await Users.getAllUser(params)
         this.userData = userResp.data
