@@ -25,7 +25,7 @@
       >Mahasiswa</el-button>
     </div>
     <div class="content-container">
-      <div class="card">
+      <div v-loading="listLoading" class="card">
         <table>
           <tr>
             <th>Id</th>
@@ -99,6 +99,7 @@ export default {
       totalPage: null,
       searchQuery: '',
       userTypeFilter: '',
+      listLoading: false,
       modal: {
         state: false,
         carriedData: null
@@ -132,6 +133,7 @@ export default {
       }
     },
     async getUserList() {
+      this.listLoading = true
       try {
         const params = {
           pageSize: 10,
@@ -149,6 +151,7 @@ export default {
       } catch (e) {
         console.error(e.stack)
       }
+      this.listLoading = false
     },
     async deleteUser() {
       try {
