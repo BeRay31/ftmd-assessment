@@ -1,35 +1,18 @@
 <template>
   <Modal :state="state" :title="title" @closeModal="$emit('closeModal')">
     <div class="content">
-      <el-form>
-        <el-form-item>
-          <MDInput v-model="courseLO.id_lo" :disabled="edit">Learning Outcome</MDInput>
-          <div style="color: lightgray"> contoh: (1, 2, dsb.) </div>
-        </el-form-item>
-        <el-form-item>
-          <div style="color: lightslategray; font-size: 18px">KMT</div>
-          <el-radio-group v-model="courseLO.tag">
-            <el-radio-button label="L">L</el-radio-button>
-            <el-radio-button label="M">M</el-radio-button>
-            <el-radio-button label="H">H</el-radio-button>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
+      <div class="content__body">
+        Learning Outcome kode {{ lo.id_lo }} akan dihapus dari sistem.
+      </div>
       <div class="content__button-group">
         <el-button
           class="btn btn-primary-alt"
           @click="$emit('closeModal')"
-        >Batalkan</el-button>
+        >Batal</el-button>
         <el-button
-          v-if="!edit"
           :class="['btn btn-primary']"
-          @click="$emit('submitCreate', courseLO)"
-        >Tambah LO</el-button>
-        <el-button
-          v-else
-          :class="['btn btn-primary']"
-          @click="$emit('submitEdit', courseLO)"
-        >Ubah detail LO</el-button>
+          @click="$emit('submit', lo)"
+        >Hapus LO</el-button>
       </div>
     </div>
   </Modal>
@@ -37,13 +20,11 @@
 
 <script>
 import Modal from '@/components/Modal'
-import MDInput from '@/components/MDinput'
 
 export default {
-  name: 'CreateModal',
+  name: 'DeleteModal',
   components: {
-    Modal,
-    MDInput
+    Modal
   },
   props: {
     state: {
@@ -52,23 +33,11 @@ export default {
     },
     title: {
       type: String,
-      default: 'Tambah LO'
+      default: 'Hapus LO?'
     },
     lo: {
       type: Object,
       default: null
-    },
-    edit: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      courseLO: {
-        id_lo: this.lo.id_lo,
-        tag: this.lo.tag.trim()
-      }
     }
   }
 }

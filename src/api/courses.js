@@ -30,12 +30,26 @@ export default class Courses {
     }
 
     static async fetchCourseLO(id_course) {
-      const res = await service.get(`${this.baseLOURL}/courseLO`, { params: { code: id_course }})
+      const res = await service.get(`${this.baseLOURL}/${id_course}`)
       return res
     }
 
     static async createCourseLO(loDetails) {
-      const res = await service.post(`${this.baseLOURL}/createCourseLO`, loDetails)
+      const res = await service.post(`${this.baseLOURL}/`, loDetails)
+      return res
+    }
+
+    static async deleteCourseLO(loDetails) {
+      const res = await service.delete(`${this.baseLOURL}/${loDetails.id_course}`, {
+        params: {
+          id_lo: loDetails.id_lo
+        }
+      })
+      return res
+    }
+
+    static async editCourseLO(loDetails) {
+      const res = await service.put(`${this.baseLOURL}/`, loDetails)
       return res
     }
 }

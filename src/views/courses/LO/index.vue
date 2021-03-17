@@ -8,7 +8,8 @@
         type="primary"
         icon="el-icon-edit-outline"
         @click="handleCreate"
-      >Tambah LO</el-button>
+      >Buat LO</el-button>
+      <el-link type="info" @click="backToList">Kembali</el-link>
     </div>
     <div class="content-container">
       <div class="card">
@@ -29,6 +30,16 @@
                 type="primary"
                 icon="el-icon-view"
               >Lihat detail</el-button>
+              <el-button
+                type="primary"
+                icon="el-icon-delete"
+                @click="openDeleteModal(lo)"
+              >Hapus LO</el-button>
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                @click="openEditModal(lo)"
+              >Ubah Detail</el-button>
             </td>
           </tr>
         </table>
@@ -37,7 +48,18 @@
     <CreateModal
       v-if="modal.state"
       :state="modal.state"
-      @submit="addLO"
+      :lo="modal.lo"
+      :edit="modal.edit"
+      :title="modal.title"
+      @submitCreate="addLO"
+      @submitEdit="editLO"
+      @closeModal="closeModal"
+    />
+    <DeleteModal
+      v-if="modal.stateDelete"
+      :state="modal.stateDelete"
+      :lo="modal.lo"
+      @submit="deleteLO"
       @closeModal="closeModal"
     />
   </div>
@@ -46,19 +68,25 @@
 <script>
 import Courses from '@/api/courses'
 import CreateModal from '@/views/courses/LO/CreateModal/index'
+import DeleteModal from '@/views/courses/LO/DeleteModal/index'
 import { Message } from 'element-ui'
 
 export default {
   name: 'CourseLO',
   components: {
-    CreateModal
+    CreateModal,
+    DeleteModal
   },
   data() {
     return {
       id_course: null,
       data: null,
       modal: {
-        state: false
+        state: false, // Create Modal
+        edit: false, // For Modal: to determine submit/edit
+        stateDelete: false, // Delete Modal
+        lo: null,
+        title: ''
       }
     }
   },
@@ -67,11 +95,20 @@ export default {
     this.fetchLO()
   },
   methods: {
+    backToList() {
+      this.$router.push({ name: 'CourseList' })
+    },
     handleCreate() {
+      this.modal.lo = { id_lo: null, tag: 'L' }
       this.modal.state = true
+      this.modal.edit = false
+      this.modal.title = 'Tambah LO'
     },
     closeModal() {
       this.modal.state = false
+      this.modal.stateDelete = false
+      this.modal.lo = null
+      this.modal.edit = false
     },
     async addLO(courseLO) {
       this.modal.state = false
@@ -108,6 +145,51 @@ export default {
           duration: 3 * 1000
         })
       }
+    },
+    async deleteLO(lo) {
+      try {
+        await Courses.deleteCourseLO(lo)
+        Message({
+          message: 'LO dihapus',
+          type: 'success',
+          duration: 3 * 1000
+        })
+        this.closeModal()
+        this.fetchLO()
+      } catch (e) {
+        Message({
+          message: e.stack,
+          type: 'error',
+          duration: 3 * 1000
+        })
+      }
+    },
+    async editLO(courseLO) {
+      try {
+        const loDetails = {}
+        loDetails.code = this.id_course
+        loDetails.tag = courseLO.tag
+        loDetails.id = courseLO.id_lo
+        this.closeModal()
+        await Courses.editCourseLO(loDetails)
+        this.fetchLO()
+      } catch (e) {
+        Message({
+          message: e.stack,
+          type: 'error',
+          duration: 3 * 1000
+        })
+      }
+    },
+    openDeleteModal(lo) {
+      this.modal.lo = lo
+      this.modal.stateDelete = true
+    },
+    openEditModal(lo) {
+      this.modal.lo = lo
+      this.modal.state = true
+      this.modal.edit = true
+      this.modal.title = 'Ubah Detail LO'
     }
   }
 }
