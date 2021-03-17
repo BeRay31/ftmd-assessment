@@ -62,6 +62,8 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve) => {
+      localStorage.removeItem('user_type')
+      localStorage.removeItem('id_user')
       commit('SET_TOKEN', null)
       commit('SET_USER_TYPE', null)
       commit('SET_ID_USER', null)
