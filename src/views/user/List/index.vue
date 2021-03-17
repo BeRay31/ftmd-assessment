@@ -107,9 +107,6 @@ export default {
     }
   },
   watch: {
-    async currentPage() {
-      await this.getUserList()
-    },
     async searchQuery() {
       await this.getUserList()
     },
