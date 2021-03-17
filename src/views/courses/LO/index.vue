@@ -2,6 +2,7 @@
   <div class="course-lo-container">
     <header>
       <h1>Learning Outcomes</h1>
+      <div style="font-size: 1rem; margin-top: -1rem; margin-bottom: 1rem">{{ name }} ({{lecturer}})</div>
     </header>
     <div class="button-panel">
       <el-button
@@ -80,6 +81,8 @@ export default {
   data() {
     return {
       id_course: null,
+      name: null,
+      lecturer: null,
       data: null,
       modal: {
         state: false, // Create Modal
@@ -92,6 +95,13 @@ export default {
   },
   async created() {
     this.id_course = this.$route.params.id
+    try {
+      const res = await Courses.fetchCourseById(this.id_course)
+      this.name = res.rows[0].name
+      this.lecturer = res.rows[0].lecturer_name
+    } catch (e) {
+      console.log(e.stack)
+    }
     this.fetchLO()
   },
   methods: {

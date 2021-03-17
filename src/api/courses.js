@@ -14,6 +14,11 @@ export default class Courses {
       return res
     }
 
+    static async fetchCourseById(id_course) {
+      const res = await service.get(`${this.baseGroupURL}/${id_course}`)
+      return res
+    }
+
     static async editCourse(courseDetails) {
       const res = await service.post(`${this.baseGroupURL}/${courseDetails.id_course}`, courseDetails)
       return res
