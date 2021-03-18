@@ -12,7 +12,7 @@
           <el-row :gutter="30">
             <el-col :span="6">
               <el-form-item>
-                <MDInput v-model="formData.class" type="number">Kelas</MDInput>
+                <MDInput v-model="formData.class" type="number" min="1">Kelas</MDInput>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -62,12 +62,14 @@
           type="primary"
           class="btn btn-primary btn-login"
           @click.prevent="openModal('submitConfirmation')"
-        >Tambah</el-button>
+        >{{ id_course ? 'Ubah' : 'Tambah' }}</el-button>
       </div>
     </div>
     <SubmitModal
       v-if="isModalOpen('submitConfirmation')"
       :state="isModalOpen('submitConfirmation')"
+      :title="id_course? `Ubah properti Mata Kuliah ${formData.name} ?` : null"
+      :content="id_course? `Data yang diganti akan di simpan kedalam sistem` : null"
       @closeModal="closeModal"
       @submit="handleSubmit"
     />
@@ -163,6 +165,15 @@ export default {
           duration: 5 * 1000
         }
         state = false
+      } else {
+        if (this.formData.class < 0) {
+          messageObject = {
+            message: 'Kelas tidak boleh <= 0',
+            type: 'error',
+            duration: 5 * 1000
+          }
+          state = false
+        }
       }
       if (!this.formData.semester) {
         messageObject = {
@@ -218,23 +229,20 @@ export default {
       if (this.validateForm()) {
         try {
           this.formData.class = +this.formData.class
-          Course.createCourse(this.formData).then((res) => {
-            if (res.msg === 'OK') {
-              Message({
-                message: 'Mata kuliah berhasil didaftarkan',
-                type: 'success',
-                duration: 5 * 1000
-              })
-              this.$router.push({ name: 'CourseList' })
-            } else {
-              Message({
-                message: 'Mata kuliah gagal didaftarkan',
-                type: 'error',
-                duration: 5 * 1000
-              })
-              this.closeModal()
-            }
+          let message
+          if (this.id_course) {
+            await Course.updateCourse(this.id_course, this.formData)
+            message = 'Mata Kuliah berhasil diupdate'
+          } else {
+            await Course.createCourse(this.formData)
+            message = 'Mata Kuliah baru ditambahkan'
+          }
+          Message({
+            message: message,
+            type: 'success',
+            duration: 5 * 1000
           })
+          this.$router.push({ name: 'CourseList' })
         } catch (e) {
           Message({
             message: e.stack,

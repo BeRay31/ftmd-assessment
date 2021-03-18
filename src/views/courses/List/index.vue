@@ -23,16 +23,20 @@
       <div class="card">
         <table v-loading="listLoading">
           <tr>
+            <th>Id</th>
             <th>Mata Kuliah</th>
             <th>Kelas</th>
+            <th>Dosen Pengampu</th>
             <th>Semester</th>
             <th>Tahun Ajaran</th>
             <th>Aksi</th>
           </tr>
           <template v-if="courses && courses.length > 0">
             <tr v-for="course in courses" :key="course.id_course">
+              <td>{{ course.id_course }}</td>
               <td>{{ course.name }}</td>
               <td>{{ course.class }}</td>
+              <td>{{ course.lecturer_name }}</td>
               <td>{{ course.semester %2 == 0 ? 'Genap' : 'Ganjil' }}</td>
               <td>{{ course.tahun_ajaran }}</td>
               <td class="action">
