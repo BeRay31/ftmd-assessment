@@ -32,7 +32,7 @@ const userRoute = {
       }
     },
     {
-      path: ':id',
+      path: 'edit/:id',
       component: () => import(/* webpackPreload: true */ '@/views/user/Create/index'),
       name: 'updateUser',
       meta: {

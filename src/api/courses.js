@@ -23,4 +23,9 @@ export default class Courses {
       const res = await service.post(`${this.baseGroupURL}/`, courseDetails)
       return res
     }
+
+    static async getById(id_course) {
+      const res = await service.get(`${this.baseGroupURL}/${id_course}`)
+      return res
+    }
 }

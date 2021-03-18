@@ -39,7 +39,7 @@
                 <el-button
                   type="primary"
                   icon="el-icon-edit"
-                  @click="openModal(course)"
+                  @click="goToEditCourse(course)"
                 >Edit</el-button>
                 <el-button
                   type="warning"
@@ -63,13 +63,6 @@
         />
       </div>
     </div>
-    <EditModal
-      v-if="modal.state"
-      :state="modal.state"
-      :course="modal.course"
-      @closeModal="closeModal"
-      @submit="editCourses"
-    />
     <DeleteModal
       v-if="modal.stateDelete"
       :state="modal.stateDelete"
@@ -82,15 +75,13 @@
 
 <script>
 import Courses from '@/api/courses'
-import EditModal from '@/views/courses/List/EditModal/index'
-import DeleteModal from '@/views/courses/List/DeleteModal/index'
+import DeleteModal from '../Modal/DeleteModal/index'
 import Pagination from '@/components/Pagination/Pagination'
 import { Message } from 'element-ui'
 
 export default {
   name: 'CourseList',
   components: {
-    EditModal,
     DeleteModal,
     Pagination
   },
@@ -205,9 +196,8 @@ export default {
       this.modal.stateDelete = false
       this.modal.course = null
     },
-    openModal(course) {
-      this.modal.course = course
-      this.modal.state = true
+    goToEditCourse(course) {
+      this.$router.push({ name: 'EditCourse', params: { id: course.id_course }})
     }
   }
 }
