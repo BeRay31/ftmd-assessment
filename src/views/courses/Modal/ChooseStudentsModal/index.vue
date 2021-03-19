@@ -4,19 +4,19 @@
       <div class="card content-container">
         <div class="search">
           <img src="@/assets/svg/search.svg" alt>
-          <input v-model="searchQuery" type="text" class="card" placeholder="Cari Dosen">
+          <input v-model="searchQuery" type="text" class="card" placeholder="Cari Mahasiswa">
         </div>
         <table>
           <tr>
             <th />
             <th>Id</th>
-            <th>Username</th>
-            <th>Nama Dosen</th>
+            <th>Username/NIM</th>
+            <th>Nama</th>
           </tr>
           <template v-if="userData && userData.length > 0">
             <tr v-for="user in userData" :key="user.id_user">
               <td>
-                <input v-model="selectedLecturer" :value="user" type="radio">
+                <input v-model="selectedStudent" :value="user.id_user" type="checkbox">
               </td>
               <td>{{ user.id_user }}</td>
               <td>{{ user.username }}</td>
@@ -34,7 +34,7 @@
         <button class="btn btn-primary-alt" @click="closeModal">Batal</button>
         <button
           :class="['btn btn-primary']"
-          @click="emitSelectLecturer"
+          @click="emitSelectedStudents"
         >Pilih</button>
       </div>
     </div>
@@ -48,7 +48,7 @@ import Users from '@/api/users'
 import { Message } from 'element-ui'
 
 export default {
-  name: 'ChooseLecturer',
+  name: 'ChooseStudents',
   components: {
     Modal,
     Pagination
@@ -60,11 +60,7 @@ export default {
     },
     title: {
       type: String,
-      default: 'Pilih Dosen'
-    },
-    prevSelectedLecturer: {
-      type: Object,
-      default: null
+      default: 'Pilih Mahasiswa'
     }
   },
   data() {
@@ -74,7 +70,7 @@ export default {
       totalPage: null,
       searchQuery: '',
       listLoading: false,
-      selectedLecturer: null
+      selectedStudent: []
     }
   },
   watch: {
@@ -96,12 +92,12 @@ export default {
       this.currentPage = index
       this.getUserList()
     },
-    emitSelectLecturer() {
-      if (this.selectedLecturer) {
-        this.$emit('submit', this.selectedLecturer)
+    emitSelectedStudents() {
+      if (this.selectedStudent) {
+        this.$emit('submit', this.selectedStudent)
       } else {
         Message({
-          message: 'Pilih Dosen!',
+          message: 'Pilih Mahasiswa!',
           type: 'error',
           duration: 3 * 1000
         })
@@ -113,7 +109,7 @@ export default {
         const params = {
           pageSize: 10,
           page: this.currentPage,
-          userType: 'lecturer'
+          userType: 'student'
         }
         if (this.searchQuery !== '') {
           params.searchQuery = this.searchQuery

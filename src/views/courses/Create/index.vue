@@ -65,6 +65,11 @@
         >{{ id_course ? 'Ubah' : 'Tambah' }}</el-button>
       </div>
     </div>
+    <template v-if="id_course">
+      <ClassAttendance
+        :id-course="id_course"
+      />
+    </template>
     <SubmitModal
       v-if="isModalOpen('submitConfirmation')"
       :state="isModalOpen('submitConfirmation')"
@@ -84,10 +89,12 @@
 </template>
 
 <script>
+import ClassAttendance from './components/ClassAttendance/index'
 import SubmitModal from '../Modal/SubmitModal/index'
 import ChooseLecturer from '../Modal/ChooseLecturerModal/index'
 import MDInput from '@/components/MDinput'
 import { Message } from 'element-ui'
+
 import Course from '@/api/courses'
 import Users from '@/api/users'
 
@@ -96,7 +103,8 @@ export default {
   components: {
     MDInput,
     SubmitModal,
-    ChooseLecturer
+    ChooseLecturer,
+    ClassAttendance
   },
   data() {
     return {
