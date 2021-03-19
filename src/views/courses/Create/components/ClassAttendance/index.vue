@@ -13,13 +13,13 @@
           <th>Id</th>
           <th>Username/NIM</th>
           <th>Nama Lengkap</th>
-          <th>Aksi</th>
+          <th v-if="isAdmin">Aksi</th>
         </tr>
         <tr v-for="student in students" :key="student.id_user">
           <td>{{ student.id_user }}</td>
           <td>{{ student.username }}</td>
           <td>{{ student.name }}</td>
-          <td class="action">
+          <td v-if="isAdmin" class="action">
             <el-button
               type="warning"
               icon="el-icon-delete"
@@ -34,6 +34,7 @@
         @pageChange="updatePage"
       />
       <el-button
+        v-if="isAdmin"
         type="primary"
         class="btn"
         @click="openModal('selectStudents')"
@@ -90,6 +91,7 @@ export default {
   data() {
     return {
       students: [],
+      isAdmin: this.$store.getters.user_type === 'admin',
       currentPage: 1,
       totalPage: null,
       searchQuery: '',
