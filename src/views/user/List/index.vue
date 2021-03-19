@@ -162,6 +162,11 @@ export default {
         })
       } catch (e) {
         console.error(e)
+        Message({
+          message: 'Error saat menghapus user',
+          type: 'error',
+          duration: 5 * 1000
+        })
       }
     },
     openModal(carriedData) {

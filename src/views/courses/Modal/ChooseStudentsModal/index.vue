@@ -6,7 +6,7 @@
           <img src="@/assets/svg/search.svg" alt>
           <input v-model="searchQuery" type="text" class="card" placeholder="Cari Mahasiswa">
         </div>
-        <table>
+        <table v-loading="listLoading">
           <tr>
             <th />
             <th>Id</th>
@@ -16,7 +16,7 @@
           <template v-if="userData && userData.length > 0">
             <tr v-for="user in userData" :key="user.id_user">
               <td>
-                <input v-model="selectedStudent" :value="user.id_user" type="checkbox">
+                <input v-model="selectedStudents" :value="user.id_user" type="checkbox">
               </td>
               <td>{{ user.id_user }}</td>
               <td>{{ user.username }}</td>
@@ -61,6 +61,10 @@ export default {
     title: {
       type: String,
       default: 'Pilih Mahasiswa'
+    },
+    excludedUser: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -70,7 +74,7 @@ export default {
       totalPage: null,
       searchQuery: '',
       listLoading: false,
-      selectedStudent: []
+      selectedStudents: []
     }
   },
   watch: {
@@ -79,9 +83,6 @@ export default {
     }
   },
   async mounted() {
-    if (this.prevSelectedLecturer) {
-      this.selectedLecturer = this.prevSelectedLecturer
-    }
     await this.getUserList()
   },
   methods: {
@@ -93,8 +94,8 @@ export default {
       this.getUserList()
     },
     emitSelectedStudents() {
-      if (this.selectedStudent) {
-        this.$emit('submit', this.selectedStudent)
+      if (this.selectedStudents) {
+        this.$emit('submit', this.selectedStudents)
       } else {
         Message({
           message: 'Pilih Mahasiswa!',
@@ -110,6 +111,9 @@ export default {
           pageSize: 10,
           page: this.currentPage,
           userType: 'student'
+        }
+        if (this.excludedUser.length > 0) {
+          params.ex_ids_user = this.excludedUser.toString()
         }
         if (this.searchQuery !== '') {
           params.searchQuery = this.searchQuery
@@ -128,5 +132,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "./index.scss";
-@import "@/styles/table.scss"
+@import "@/styles/table.scss";
 </style>

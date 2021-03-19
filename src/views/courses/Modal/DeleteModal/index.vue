@@ -2,7 +2,7 @@
   <Modal :state="state" :title="title" @closeModal="$emit('closeModal')">
     <div class="content">
       <div class="content__body">
-        Mata kuliah {{ course.name }} akan terhapus dari sistem.
+        {{ content }}
       </div>
       <div class="content__button-group">
         <button class="btn btn-primary-alt" @click="$emit('closeModal')">Batal</button>
@@ -32,9 +32,9 @@ export default {
       type: String,
       default: 'Hapus Mata Kuliah?'
     },
-    course: {
-      type: Object,
-      default: null
+    content: {
+      type: String,
+      default: 'Mata kuliah akan dihapus'
     }
   }
 }

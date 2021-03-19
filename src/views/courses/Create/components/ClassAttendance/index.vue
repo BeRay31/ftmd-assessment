@@ -23,8 +23,7 @@
             <el-button
               type="warning"
               icon="el-icon-delete"
-              @click="openDeleteModal(course)"
-              @submit="deleteCourse(course)"
+              @click="openDeleteEnrollmentModal(student)"
             >Delete</el-button>
           </td>
         </tr>
@@ -37,24 +36,55 @@
       <el-button
         type="primary"
         class="btn"
+        @click="openModal('selectStudents')"
       >Tambah Mahasiswa</el-button>
     </div>
+    <DeleteModal
+      v-if="isModalOpen('deleteConfirm')"
+      :state="isModalOpen('deleteConfirm')"
+      title="Hapus Mahasiswa dari Kelas ?"
+      :content="`Mahasiswa '${modal.carriedData.name}' akan dihapus dari daftar mahasiswa`"
+      @closeModal="closeModal"
+      @submit="deleteEnrollment"
+    />
+    <ChooseStudents
+      v-if="isModalOpen('selectStudents')"
+      :state="isModalOpen('selectStudents')"
+      :excluded-user="currentStudentList"
+      @closeModal="closeModal"
+      @submit="openEnrollConfirmModal"
+    />
+    <SubmitModal
+      v-if="isModalOpen('confirmEnroll')"
+      :state="isModalOpen('confirmEnroll')"
+      title="Daftarkan Mahasiswa ke Kelas ?"
+      content="Mahasiswa yang dipilih sebelumnya akan didaftarkan pada kelas ini !"
+      @closeModal="closeModal"
+      @submit="handleSubmitSelectedStudents"
+    />
   </div>
 </template>
 
 <script>
 import CourseStudent from '@/api/courseStudent'
 import Pagination from '@/components/Pagination/Pagination'
+import DeleteModal from '@/views/courses/Modal/DeleteModal/index'
+import ChooseStudents from '@/views/courses/Modal/ChooseStudentsModal/index'
+import SubmitModal from '@/views/courses/Modal/SubmitModal/index'
+import { Message } from 'element-ui'
 
 export default {
   name: 'ClassAttendance',
   components: {
-    Pagination
+    Pagination,
+    DeleteModal,
+    ChooseStudents,
+    SubmitModal
   },
   props: {
     idCourse: {
       default: null,
-      type: String
+      type: String || Number
     }
   },
   data() {
@@ -63,7 +93,14 @@ export default {
       currentPage: 1,
       totalPage: null,
       searchQuery: '',
-      listLoading: false
+      listLoading: false,
+      selectedStudents: [],
+      currentStudentList: [],
+      modal: {
+        state: '',
+        type: '',
+        carriedData: null
+      }
     }
   },
   watch: {
@@ -73,8 +110,17 @@ export default {
   },
   async mounted() {
     await this.getClassAttendance()
+    await this.getAllClassAttendance()
   },
   methods: {
+    async getAllClassAttendance() {
+      const attendanceResp = await CourseStudent.getCourseStudent(this.idCourse)
+      if (attendanceResp.data && attendanceResp.data.length > 0) {
+        this.currentStudentList = attendanceResp.data.map(el => el.id_user)
+      } else {
+        this.currentStudentList = []
+      }
+    },
     async getClassAttendance() {
       this.listLoading = true
       try {
@@ -86,7 +132,6 @@ export default {
           params.searchQuery = this.searchQuery
         }
         const attendanceResp = await CourseStudent.getCourseStudent(this.idCourse, params)
-        console.log(attendanceResp)
         this.students = attendanceResp.data
         this.totalPage = attendanceResp.lastPage
       } catch (e) {
@@ -94,9 +139,73 @@ export default {
       }
       this.listLoading = false
     },
+    async deleteEnrollment() {
+      try {
+        await CourseStudent.deleteCourseEnrollmentById(this.modal.carriedData.id)
+        await this.getClassAttendance()
+        await this.getAllClassAttendance()
+        Message({
+          message: 'Mahasiswa berhasil dihapus dari kelas',
+          type: 'success',
+          duration: 5 * 1000
+        })
+      } catch (e) {
+        console.log(e)
+        Message({
+          message: 'Error saat menghapus Mahasiswa dari kelas',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
+      this.closeModal()
+    },
+    async handleSubmitSelectedStudents() {
+      try {
+        const ids_user = this.modal.carriedData.toString()
+        const data = {
+          ids_user
+        }
+        await CourseStudent.enrollUserByIds(this.idCourse, data)
+        await this.getAllClassAttendance()
+        Message({
+          message: 'Mahasiswa yang dipilih berhasil didaftarkan',
+          type: 'success',
+          duration: 5 * 1000
+        })
+      } catch (e) {
+        console.log(e)
+        Message({
+          message: 'Gagal saat mendaftarkan user',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
+      this.closeModal()
+      await this.getClassAttendance()
+      await this.getAllClassAttendance()
+    },
+    openEnrollConfirmModal(carriedData) {
+      this.modal.carriedData = carriedData
+      this.openModal('confirmEnroll')
+    },
     async updatePage(index) {
       this.currentPage = index
       await this.getClassAttendance()
+    },
+    openDeleteEnrollmentModal(carriedData) {
+      this.openModal('deleteConfirm')
+      this.modal.carriedData = carriedData
+    },
+    closeModal() {
+      this.modal.state = false
+      this.modal.carriedData = null
+    },
+    openModal(type) {
+      this.modal.state = true
+      this.modal.type = type
+    },
+    isModalOpen(type) {
+      return this.modal.state && this.modal.type === type
     }
   }
 }
