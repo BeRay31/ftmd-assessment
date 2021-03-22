@@ -26,6 +26,11 @@
               >Edit</el-button>
               <el-button
                 type="warning"
+                icon="el-icon-s-management"
+                @click="openLOModal(course.id_course)"
+              >Lihat LO</el-button>
+              <el-button
+                type="warning"
                 icon="el-icon-delete"
                 @click="openDeleteModal(course)"
                 @submit="deleteCourse(course)"
@@ -92,9 +97,11 @@ export default {
     await this.fetchCourses()
   },
   methods: {
+    openLOModal(id_course) {
+      this.$router.push({ name: 'LOCourse', params: { id: id_course }})
+    },
     async editCourses(edited) {
       try {
-        console.log(edited)
         const fetched = await Courses.editCourse(edited)
         if (fetched.rows > 0) {
           Message({

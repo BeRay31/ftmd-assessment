@@ -220,7 +220,7 @@ $dark_gray: #889aa4;
   align-items: center;
 
   .login-form {
-    background: $bg-form;
+    background: white;
     border-radius: 2rem;
     position: relative;
     width: 520px;
@@ -229,6 +229,7 @@ $dark_gray: #889aa4;
     margin: 0 auto;
     overflow: hidden;
     text-align: center;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.13);
   }
 
   .tips {
@@ -256,7 +257,7 @@ $dark_gray: #889aa4;
 
     .title {
       font-size: 2rem;
-      color: black;
+      color: rgba(33,150,243,255);
       margin: 0px auto 2rem auto;
       font-weight: bold;
       text-align: center;
