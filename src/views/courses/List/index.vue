@@ -16,8 +16,8 @@
           <tr v-for="course in courses.rows" :key="course.id_course">
             <td>{{ course.name }}</td>
             <td>{{ course.class }}</td>
-            <td>1</td>
-            <td>2021/2022</td>
+            <td>{{ course.semester }}</td>
+            <td>{{ course.tahun_ajaran }}</td>
             <td class="action">
               <el-button
                 type="primary"

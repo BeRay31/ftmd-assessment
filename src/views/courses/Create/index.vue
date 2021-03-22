@@ -22,6 +22,11 @@
                 <MDInput v-model="formData.semester">Semester</MDInput>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <MDInput v-model="formData.tahun_ajaran">Tahun Ajaran</MDInput>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-form-item>
             <MDInput v-model="formData.name">Mata Kuliah</MDInput>
@@ -70,7 +75,8 @@ export default {
         name: null,
         class: null,
         semester: null,
-        lecturer_name: null
+        lecturer_name: null,
+        tahun_ajaran: null
       }
     }
   },
@@ -87,7 +93,8 @@ export default {
         this.formData.name &&
         this.formData.class &&
         this.formData.semester &&
-        this.formData.lecturer_name
+        this.formData.lecturer_name &&
+        this.formData.tahun_ajaran
       )
     },
     async handleSubmit() {

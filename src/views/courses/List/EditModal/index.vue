@@ -21,7 +21,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item>
-              <MDInput>Tahun Ajaran</MDInput>
+              <MDInput v-model="editCourse.tahun_ajaran">Tahun Ajaran</MDInput>
             </el-form-item>
           </el-col>
         </el-row>
@@ -68,7 +68,8 @@ export default {
         name: this.course.name,
         class: this.course.class,
         semester: this.course.semester,
-        lecturer_name: this.course.lecturer_name
+        lecturer_name: this.course.lecturer_name,
+        tahun_ajaran: this.course.tahun_ajaran
       }
     }
   }
