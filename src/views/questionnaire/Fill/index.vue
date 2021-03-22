@@ -147,7 +147,7 @@ header h1 {
 
     &:hover {
       background-color: lighten($color: #2196f3, $amount: 10);
-  }
+    }
   }
 }
 
