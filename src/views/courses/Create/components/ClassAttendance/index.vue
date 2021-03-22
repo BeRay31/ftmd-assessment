@@ -163,11 +163,16 @@ export default {
     },
     async handleSubmitSelectedStudents() {
       try {
-        const ids_user = this.modal.carriedData.toString()
-        const data = {
-          ids_user
+        if (this.modal.carriedData.emitType === 'list') {
+          const ids_user = this.modal.carriedData.selectedStudents.toString()
+          const data = {
+            ids_user
+          }
+          await CourseStudent.enrollUserByIds(this.idCourse, data)
+        } else if (this.modal.carriedData.emitType === 'fileData') {
+          await CourseStudent.enrolluserByFile(this.idCourse, this.modal.carriedData.fileStudents)
+          // TODO:: Handle file Data
         }
-        await CourseStudent.enrollUserByIds(this.idCourse, data)
         await this.getAllClassAttendance()
         Message({
           message: 'Mahasiswa yang dipilih berhasil didaftarkan',
