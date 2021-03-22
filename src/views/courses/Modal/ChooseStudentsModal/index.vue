@@ -145,7 +145,7 @@ export default {
       this.getUserList()
     },
     emitSelectedStudents() {
-      if (this.selectedStudents) {
+      if (this.selectedStudents.length > 0) {
         this.$emit('submit', {
           emitType: 'list',
           selectedStudents: this.selectedStudents
