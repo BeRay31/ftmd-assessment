@@ -13,6 +13,7 @@ import Layout from '@/layout'
 import nestedRouter from './modules/nested'
 import courseRouter from './modules/courses'
 import userRoute from './modules/user'
+import questionnaireRoute from './modules/questionnaire'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -116,6 +117,7 @@ export const asyncRoutes = [
   userRoute,
   courseRouter,
   nestedRouter,
+  questionnaireRoute,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
