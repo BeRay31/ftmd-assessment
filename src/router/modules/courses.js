@@ -39,6 +39,26 @@ const courseRoutes = {
         activeMenu: '/courses/list'
       },
       hidden: true
+    },
+    {
+      path: 'addLoComponent/:id',
+      component: () => import('@/views/courses/AddLoWeight/index'),
+      name: 'AddLoComponent',
+      meta: {
+        title: 'Tambah LO Component',
+        roles: ['lecturer']
+      },
+      hidden: true
+    },
+    {
+      path: 'loComponentList/:id',
+      component: () => import('@/views/courses/LoWeightList/index'),
+      name: 'LoComponentList',
+      meta: {
+        title: 'LO Component List',
+        roles: ['lecturer']
+      },
+      hidden: true
     }
   ]
 }
