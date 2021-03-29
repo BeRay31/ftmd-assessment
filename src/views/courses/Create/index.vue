@@ -67,7 +67,7 @@
     </div>
     <template v-if="id_course">
       <ClassAttendance
-        :id-course="id_course"
+        :id-course="+id_course"
       />
     </template>
     <SubmitModal

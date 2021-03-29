@@ -169,7 +169,7 @@ export default {
       this.listLoading = true
       try {
         const params = {
-          pageSize: 10,
+          pageSize: 6,
           page: this.currentPage,
           userType: 'student'
         }

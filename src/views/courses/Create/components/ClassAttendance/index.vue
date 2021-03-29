@@ -85,7 +85,7 @@ export default {
   props: {
     idCourse: {
       default: null,
-      type: String || Number
+      type: Number
     }
   },
   data() {
