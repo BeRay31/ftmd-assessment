@@ -16,9 +16,9 @@ export default class Courses {
     }
 
     static async editCourse(courseDetails) {
-      const res = await service.post(`${this.baseGroupURL}/${courseDetails.id_course}`, courseDetails)
+      await service.post(`${this.baseGroupURL}/${courseDetails.id_course}`, courseDetails)
     }
-    
+
     static async updateCourse(id_course, data) {
       const res = await service.post(`${this.baseGroupURL}/${id_course}`, data)
       return res

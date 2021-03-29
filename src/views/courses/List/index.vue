@@ -4,7 +4,7 @@
       <h1>Daftar Mata Kuliah</h1>
       <div class="search">
         <img src="@/assets/svg/search.svg" alt>
-        <input v-model="searchQuery" type="text" class="card" placeholder="Cari Users">
+        <input v-model="searchQuery" type="text" class="card" placeholder="Cari Mata Kuliah">
       </div>
     </header>
     <div class="filter-container">
@@ -23,40 +23,59 @@
       <div class="card">
         <table v-loading="listLoading">
           <tr>
-            <th>Id</th>
+            <template v-if="$store.getters.routes_user_type !== 'student'">
+              <th>Id</th>
+            </template>
             <th>Mata Kuliah</th>
             <th>Kelas</th>
             <th>Dosen Pengampu</th>
             <th>Semester</th>
             <th>Tahun Ajaran</th>
             <th>Aksi</th>
+            <template v-if="$store.getters.routes_user_type == 'student'">
+              <th>Nilai Akhir</th>
+            </template>
           </tr>
           <template v-if="courses && courses.length > 0">
             <tr v-for="course in courses" :key="course.id_course">
-              <td>{{ course.id_course }}</td>
+              <template v-if="$store.getters.routes_user_type !== 'student'">
+                <td>{{ course.id_course }}</td>
+              </template>
               <td>{{ course.name }}</td>
               <td>{{ course.class }}</td>
               <td>{{ course.lecturer_name }}</td>
               <td>{{ course.semester %2 == 0 ? 'Genap' : 'Ganjil' }}</td>
               <td>{{ course.tahun_ajaran }}</td>
-              <td class="action">
-                <el-button
-                  type="primary"
-                  icon="el-icon-edit"
-                  @click="goToEditCourse(course)"
-                >Edit</el-button>
-                <el-button
-                  type="warning"
-                  icon="el-icon-s-management"
-                  @click="openLOModal(course.id_course)"
-                >Lihat LO</el-button>
-                <el-button
-                  type="warning"
-                  icon="el-icon-delete"
-                  @click="openDeleteModal(course)"
-                  @submit="deleteCourse(course)"
-                >Delete</el-button>
-              </td>
+              <template v-if="$store.getters.routes_user_type !== 'student'">
+                <td class="action">
+                  <el-button
+                    type="primary"
+                    icon="el-icon-edit"
+                    @click="goToEditCourse(course)"
+                  >Edit</el-button>
+                  <el-button
+                    type="warning"
+                    icon="el-icon-s-management"
+                    @click="openLOModal(course.id_course)"
+                  >Lihat LO</el-button>
+                  <el-button
+                    type="warning"
+                    icon="el-icon-delete"
+                    @click="openDeleteModal(course)"
+                  >Delete</el-button>
+                </td>
+              </template>
+              <template v-else>
+                <td class="action">
+                  <el-button
+                    :disabled="course.index == null"
+                    type="warning"
+                    icon="el-icon-s-management"
+                    @click="goToCourseOutcome(course)"
+                  >Rincian Nilai</el-button>
+                </td>
+                <td style="padding: 19px 0rem">{{ course.index || 'N/A' }}</td>
+              </template>
             </tr>
           </template>
         </table>
@@ -84,6 +103,7 @@
 
 <script>
 import Courses from '@/api/courses'
+import CourseStudent from '@/api/courseStudent'
 import DeleteModal from '../Modal/DeleteModal/index'
 import Pagination from '@/components/Pagination/Pagination'
 import { Message } from 'element-ui'
@@ -148,7 +168,12 @@ export default {
         if (this.semesterFilter) {
           params.semester = this.semesterFilter
         }
-        const courseResp = await Courses.fetchCourses(params)
+        let courseResp
+        if (this.$store.getters.routes_user_type !== 'student') {
+          courseResp = await Courses.fetchCourses(params)
+        } else {
+          courseResp = await CourseStudent.getCourseAttended(this.$store.getters.id_user, params)
+        }
         this.courses = courseResp.data
         this.totalPage = courseResp.lastPage
       } catch (e) {
@@ -210,6 +235,9 @@ export default {
     },
     goToEditCourse(course) {
       this.$router.push({ name: 'EditCourse', params: { id: course.id_course }})
+    },
+    goToCourseOutcome(course) {
+      this.$router.push({ name: 'StudentCourseOutcomes', params: { id: course.id_course }})
     }
   }
 }

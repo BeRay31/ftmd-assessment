@@ -2,7 +2,7 @@
   <div class="course-lo-container">
     <header>
       <h1>Learning Outcomes</h1>
-      <div style="font-size: 1rem; margin-top: -1rem; margin-bottom: 1rem">{{ name }} ({{lecturer}})</div>
+      <div style="font-size: 1rem; margin-top: -1rem; margin-bottom: 1rem">{{ name }} ({{ lecturer }})</div>
     </header>
     <div class="button-panel">
       <el-button
