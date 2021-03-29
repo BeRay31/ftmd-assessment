@@ -2,56 +2,76 @@
   <div class="course-list-container">
     <header>
       <h1>Daftar Mata Kuliah</h1>
+      <div class="search">
+        <img src="@/assets/svg/search.svg" alt>
+        <input v-model="searchQuery" type="text" class="card" placeholder="Cari Users">
+      </div>
     </header>
+    <div class="filter-container">
+      <el-button
+        :type="semesterFilter == 1 ? 'primary' : 'info'"
+        class="btn"
+        @click.prevent="setSemesterFilter(1)"
+      >Ganjil</el-button>
+      <el-button
+        :type="semesterFilter == 2 ? 'primary' : 'info'"
+        class="btn"
+        @click.prevent="setSemesterFilter(2)"
+      >Genap</el-button>
+    </div>
     <div class="content-container">
       <div class="card">
-        <table>
+        <table v-loading="listLoading">
           <tr>
+            <th>Id</th>
             <th>Mata Kuliah</th>
             <th>Kelas</th>
+            <th>Dosen Pengampu</th>
             <th>Semester</th>
             <th>Tahun Ajaran</th>
             <th>Aksi</th>
           </tr>
-          <tr v-for="course in courses.rows" :key="course.id_course">
-            <td>{{ course.name }}</td>
-            <td>{{ course.class }}</td>
-            <td>1</td>
-            <td>2021/2022</td>
-            <td class="action">
-              <el-button
-                type="primary"
-                icon="el-icon-edit"
-                @click="openModal(course)"
-              >Edit</el-button>
-              <el-button
-                type="warning"
-                icon="el-icon-s-management"
-                @click="openLOModal(course.id_course)"
-              >Lihat LO</el-button>
-              <el-button
-                type="warning"
-                icon="el-icon-delete"
-                @click="openDeleteModal(course)"
-                @submit="deleteCourse(course)"
-              >Delete</el-button>
-            </td>
-          </tr>
+          <template v-if="courses && courses.length > 0">
+            <tr v-for="course in courses" :key="course.id_course">
+              <td>{{ course.id_course }}</td>
+              <td>{{ course.name }}</td>
+              <td>{{ course.class }}</td>
+              <td>{{ course.lecturer_name }}</td>
+              <td>{{ course.semester %2 == 0 ? 'Genap' : 'Ganjil' }}</td>
+              <td>{{ course.tahun_ajaran }}</td>
+              <td class="action">
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  @click="goToEditCourse(course)"
+                >Edit</el-button>
+                <el-button
+                  type="warning"
+                  icon="el-icon-s-management"
+                  @click="openLOModal(course.id_course)"
+                >Lihat LO</el-button>
+                <el-button
+                  type="warning"
+                  icon="el-icon-delete"
+                  @click="openDeleteModal(course)"
+                  @submit="deleteCourse(course)"
+                >Delete</el-button>
+              </td>
+            </tr>
+          </template>
         </table>
+        <template v-if="!courses || courses.length == 0">
+          <tr>
+            <h4 class="empty-state">No - Data</h4>
+          </tr>
+        </template>
         <Pagination
           :total-page="totalPage"
           :current-page="currentPage"
-          @pageChange="changePage"
+          @pageChange="updatePage"
         />
       </div>
     </div>
-    <EditModal
-      v-if="modal.state"
-      :state="modal.state"
-      :course="modal.course"
-      @closeModal="closeModal"
-      @submit="editCourses"
-    />
     <DeleteModal
       v-if="modal.stateDelete"
       :state="modal.stateDelete"
@@ -64,15 +84,13 @@
 
 <script>
 import Courses from '@/api/courses'
-import EditModal from '@/views/courses/List/EditModal/index'
-import DeleteModal from '@/views/courses/List/DeleteModal/index'
+import DeleteModal from '../Modal/DeleteModal/index'
 import Pagination from '@/components/Pagination/Pagination'
 import { Message } from 'element-ui'
 
 export default {
   name: 'CourseList',
   components: {
-    EditModal,
     DeleteModal,
     Pagination
   },
@@ -81,6 +99,9 @@ export default {
       courses: [],
       currentPage: 1,
       totalPage: null,
+      searchQuery: '',
+      semesterFilter: '',
+      listLoading: false,
       modal: {
         state: false,
         stateDelete: false,
@@ -89,16 +110,51 @@ export default {
     }
   },
   watch: {
-    async currentPage() {
-      await this.fetchCourses()
+    async searchQuery() {
+      await this.getCoursesList()
+    },
+    async semesterFilter() {
+      await this.getCoursesList()
     }
   },
   async mounted() {
-    await this.fetchCourses()
+    await this.getCoursesList()
   },
   methods: {
     openLOModal(id_course) {
       this.$router.push({ name: 'LOCourse', params: { id: id_course }})
+    },
+    updatePage(index) {
+      this.currentPage = index
+      this.getCoursesList()
+    },
+    setSemesterFilter(type) {
+      if (this.semesterFilter === type) {
+        this.semesterFilter = null
+      } else {
+        this.semesterFilter = type
+      }
+    },
+    async getCoursesList() {
+      this.listLoading = true
+      try {
+        const params = {
+          pageSize: 10,
+          page: this.currentPage
+        }
+        if (this.searchQuery !== '') {
+          params.searchQuery = this.searchQuery
+        }
+        if (this.semesterFilter) {
+          params.semester = this.semesterFilter
+        }
+        const courseResp = await Courses.fetchCourses(params)
+        this.courses = courseResp.data
+        this.totalPage = courseResp.lastPage
+      } catch (e) {
+        console.error(e.stack)
+      }
+      this.listLoading = false
     },
     async editCourses(edited) {
       try {
@@ -124,19 +180,6 @@ export default {
           type: 'error',
           duration: 3 * 1000
         })
-      }
-    },
-    changePage(index) {
-      this.currentPage = index
-      this.fetchCourses()
-    },
-    async fetchCourses() {
-      try {
-        const fetched = await Courses.fetchCourses(this.currentPage)
-        this.courses = fetched
-        this.totalPage = fetched.totalPage
-      } catch (e) {
-        console.error(e.stack)
       }
     },
     openDeleteModal(course) {
@@ -165,9 +208,8 @@ export default {
       this.modal.stateDelete = false
       this.modal.course = null
     },
-    openModal(course) {
-      this.modal.course = course
-      this.modal.state = true
+    goToEditCourse(course) {
+      this.$router.push({ name: 'EditCourse', params: { id: course.id_course }})
     }
   }
 }

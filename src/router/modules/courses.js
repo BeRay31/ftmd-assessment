@@ -30,6 +30,16 @@ const courseRoutes = {
       }
     },
     {
+      path: 'edit/:id',
+      component: () => import('@/views/courses/Create/index'),
+      name: 'EditCourse',
+      meta: {
+        title: 'Ubah Mata Kuliah',
+        icon: 'form',
+        roles: ['admin', 'lecturer']
+      }
+    },
+    {
       path: ':id',
       component: () => import(/* webpackPreload: true */'@/views/courses/LO/index'),
       name: 'LOCourse',
