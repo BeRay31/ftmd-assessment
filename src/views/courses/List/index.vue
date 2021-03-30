@@ -141,38 +141,6 @@ export default {
     await this.getCoursesList()
   },
   methods: {
-    updatePage(index) {
-      this.currentPage = index
-      this.getCoursesList()
-    },
-    setSemesterFilter(type) {
-      if (this.semesterFilter === type) {
-        this.semesterFilter = null
-      } else {
-        this.semesterFilter = type
-      }
-    },
-    async getCoursesList() {
-      this.listLoading = true
-      try {
-        const params = {
-          pageSize: 10,
-          page: this.currentPage
-        }
-        if (this.searchQuery !== '') {
-          params.searchQuery = this.searchQuery
-        }
-        if (this.semesterFilter) {
-          params.semester = this.semesterFilter
-        }
-        const courseResp = await Courses.fetchCourses(params)
-        this.courses = courseResp.data
-        this.totalPage = courseResp.lastPage
-      } catch (e) {
-        console.error(e.stack)
-      }
-      this.listLoading = false
-    },
     openLOModal(id_course) {
       this.$router.push({ name: 'LOCourse', params: { id: id_course }})
     },
