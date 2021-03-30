@@ -30,6 +30,28 @@ const courseRoutes = {
       }
     },
     {
+      path: 'edit/:id',
+      component: () => import('@/views/courses/Create/index'),
+      name: 'EditCourse',
+      meta: {
+        title: 'Ubah Mata Kuliah',
+        icon: 'form',
+        roles: ['admin', 'lecturer']
+      },
+      hidden: true
+    },
+    {
+      path: 'course-outcomes/student/:id',
+      component: () => import(/* webpackPreload: true */'@/views/courses/CourseOutcome/Student/index'),
+      name: 'StudentCourseOutcomes',
+      meta: {
+        title: 'Student Outcomes',
+        roles: ['student'],
+        activeMenu: '/list'
+      },
+      hidden: true
+    },
+    {
       path: ':id',
       component: () => import(/* webpackPreload: true */'@/views/courses/LO/index'),
       name: 'LOCourse',
