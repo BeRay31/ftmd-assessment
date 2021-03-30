@@ -10,17 +10,12 @@ export default class Courses {
       return res
     }
 
+    static async updateCourse(id_course, data) {
+      await service.post(`${this.baseGroupURL}/${id_course}`, data)
+    }
+
     static async fetchCourseById(id_course) {
       const res = await service.get(`${this.baseGroupURL}/${id_course}`)
-      return res
-    }
-
-    static async editCourse(courseDetails) {
-      await service.post(`${this.baseGroupURL}/${courseDetails.id_course}`, courseDetails)
-    }
-
-    static async updateCourse(id_course, data) {
-      const res = await service.post(`${this.baseGroupURL}/${id_course}`, data)
       return res
     }
 
