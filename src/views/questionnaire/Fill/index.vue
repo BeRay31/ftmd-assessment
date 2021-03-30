@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       datas: {
-        'id_course': 1,
+        'id_course': this.$route.params.id,
         'answer_list': [
           {
             'id': 1,
