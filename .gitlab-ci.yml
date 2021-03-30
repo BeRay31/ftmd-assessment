@@ -1,0 +1,25 @@
+stages:
+  - build
+  - deploy
+install_dependencies:
+  stage: build
+  script:
+    - npm install --silent
+    - echo "Install Dependencies Done"
+  cache:
+    key: dependencies
+    paths:
+      - node_modules/
+build_and_deploy_staging:
+  stage: deploy
+  cache:
+    key: dependencies
+    paths:
+      - node_modules/
+  script:
+    - sudo npm run build:prod
+    - echo "Build Done"
+    - sudo \cp -R dist/ /home/g13518055/
+  after_script:
+    - sudo rm -rf dist/
+    - sudo rm -rf node_modules/
