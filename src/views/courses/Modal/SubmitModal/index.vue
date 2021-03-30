@@ -2,7 +2,7 @@
   <Modal :state="state" :title="title" @closeModal="$emit('closeModal')">
     <div class="content">
       <div class="content__body">
-        Mata kuliah akan didaftarkan ke dalam sistem akreditasi.
+        {{ content }}
       </div>
       <div class="content__button-group">
         <button class="btn btn-primary-alt" @click="$emit('closeModal')">Batalkan</button>
@@ -35,6 +35,10 @@ export default {
     title: {
       type: String,
       default: 'Buat Mata Kuliah?'
+    },
+    content: {
+      type: String,
+      default: 'Mata kuliah akan didaftarkan ke dalam sistem akreditasi.'
     }
   }
 }
