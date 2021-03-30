@@ -41,6 +41,17 @@ const courseRoutes = {
       hidden: true
     },
     {
+      path: 'course-outcomes/student/:id',
+      component: () => import(/* webpackPreload: true */'@/views/courses/CourseOutcome/Student/index'),
+      name: 'StudentCourseOutcomes',
+      meta: {
+        title: 'Student Outcomes',
+        roles: ['student'],
+        activeMenu: '/list'
+      },
+      hidden: true
+    },
+    {
       path: ':id',
       component: () => import(/* webpackPreload: true */'@/views/courses/LO/index'),
       name: 'LOCourse',
@@ -48,6 +59,26 @@ const courseRoutes = {
         title: 'Learning Outcomes',
         roles: ['admin'],
         activeMenu: '/list'
+      },
+      hidden: true
+    },
+    {
+      path: 'addLoComponent/:id',
+      component: () => import('@/views/courses/AddLoWeight/index'),
+      name: 'AddLoComponent',
+      meta: {
+        title: 'Tambah LO Component',
+        roles: ['lecturer']
+      },
+      hidden: true
+    },
+    {
+      path: 'loComponentList/:id',
+      component: () => import('@/views/courses/LoWeightList/index'),
+      name: 'LoComponentList',
+      meta: {
+        title: 'LO Component List',
+        roles: ['lecturer']
       },
       hidden: true
     }
