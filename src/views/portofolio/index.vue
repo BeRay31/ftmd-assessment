@@ -1,5 +1,5 @@
 <template>
-  <div class="questionnaire-result-container">
+  <div class="portofolio-container">
     <header>
       <h1>Portofolio Perkuliahan</h1>
     </header>
@@ -44,6 +44,10 @@ export default {
 
   header h1 {
     font-weight: 600;
+  }
+
+  .portofolio-container {
+    padding: 1rem 2rem;
   }
 
   .content-container {

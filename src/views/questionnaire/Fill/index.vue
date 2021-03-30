@@ -5,74 +5,28 @@
     </header>
     <div class="content-container">
       <div class="card">
-        <div class="odd">
-          <p>1. Saya memperoleh informasi yang cukup tentang hal-hal tertentu yang harus saya capai atau kuasai
-            (luaran matakuliah) sesudah mengikuti matakuliah ini.</p>
-          <RadioInput v-model="questionOne" />
+        <div v-for="data in datas['answer_list']" :key="data['id']" :class="{ 'odd': data['id'] % 2 != 0 }">
+          <p>{{ data["id"] }}. {{ data["text"] }}</p>
+          <RadioInput v-model="data['answer']" />
         </div>
-
-        <p>2. Pelaksanaan perkuliahan diarahkan agar mahasiswa dapat mencapai atau menguasai luaran matakuliah ini.</p>
-        <RadioInput v-model="questionTwo" />
-
-        <div class="odd">
-          <p>3. Saya mencapai atau menguasai luaran matakuliah ini.</p>
-          <RadioInput v-model="questionThree" />
-        </div>
-
-        <p>4. Pelaksanaan perkuliahan terorganisir dengan baik.</p>
-        <RadioInput v-model="questionFour" />
-
-        <div class="odd">
-          <p>5. Dosen berkomunikasi dengan efektif.</p>
-          <RadioInput v-model="questionFive" />
-        </div>
-
-        <p>6. Dosen peduli terhadap pencapaian atau penguasaan mahasiswa akan luaran matakuliah ini.</p>
-        <RadioInput v-model="questionSix" />
-
-        <div class="odd">
-          <p>7. Dosen berlaku adil (fair) kepada mahasiswa.</p>
-          <RadioInput v-model="questionSeven" />
-        </div>
-
-        <p>8. Beban kerja untuk matakuliah ini sesuai dengan SKS-nya.</p>
-        <RadioInput v-model="questionEight" />
-
-        <div class="odd">
-          <p>9. Sarana dan prasarana untuk matakuliah tersedia dengan memadai.</p>
-          <RadioInput v-model="questionNine" />
-        </div>
-
-        <p>10. Tersedia cukup fasilitas pendukung di luar kuliah yang memungkinkan saya mengikuti matakuliah
-          ini dengan baik.</p>
-        <RadioInput v-model="questionTen" />
-
-        <div class="odd">
-          <p>11. Saya berusaha dengan sungguh-sungguh mengikuti matakuliah ini.</p>
-          <RadioInput v-model="questionEleven" />
-        </div>
-
-        <p>12. Saya memperoleh pengalaman belajar yang positif dalam matakuliah ini.</p>
-        <RadioInput v-model="questionTwelve" />
-
         <div class="submitBtn">
           <button @click="handleSubmit">Submit</button>
         </div>
       </div>
     </div>
     <div v-if="submitted">
-      <p>questionOne : {{ questionOne }}</p>
-      <p>questionTwo : {{ questionTwo }}</p>
-      <p>questionThree : {{ questionThree }}</p>
-      <p>questionFour : {{ questionFour }}</p>
-      <p>questionFive : {{ questionFive }}</p>
-      <p>questionSix : {{ questionSix }}</p>
-      <p>questionSeven : {{ questionSeven }}</p>
-      <p>questionEight : {{ questionEight }}</p>
-      <p>questionNine : {{ questionNine }}</p>
-      <p>questionTen : {{ questionTen }}</p>
-      <p>questionEleven : {{ questionEleven }}</p>
-      <p>questionTwelve : {{ questionTwelve }}</p>
+      <p>questionOne : {{ datas["answer_list"][0]["answer"] }}</p>
+      <p>questionTwo : {{ datas["answer_list"][1]["answer"] }}</p>
+      <p>questionThree : {{ datas["answer_list"][2]["answer"] }}</p>
+      <p>questionFour : {{ datas["answer_list"][3]["answer"] }}</p>
+      <p>questionFive : {{ datas["answer_list"][4]["answer"] }}</p>
+      <p>questionSix : {{ datas["answer_list"][5]["answer"] }}</p>
+      <p>questionSeven : {{ datas["answer_list"][6]["answer"] }}</p>
+      <p>questionEight : {{ datas["answer_list"][7]["answer"] }}</p>
+      <p>questionNine : {{ datas["answer_list"][8]["answer"] }}</p>
+      <p>questionTen : {{ datas["answer_list"][9]["answer"] }}</p>
+      <p>questionEleven : {{ datas["answer_list"][10]["answer"] }}</p>
+      <p>questionTwelve : {{ datas["answer_list"][11]["answer"] }}</p>
     </div>
   </div>
 </template>
@@ -84,18 +38,71 @@ export default {
   components: { RadioInput },
   data() {
     return {
-      questionOne: null,
-      questionTwo: null,
-      questionThree: null,
-      questionFour: null,
-      questionFive: null,
-      questionSix: null,
-      questionSeven: null,
-      questionEight: null,
-      questionNine: null,
-      questionTen: null,
-      questionEleven: null,
-      questionTwelve: null,
+      datas: {
+        'id_course': 1,
+        'answer_list': [
+          {
+            'id': 1,
+            'text': 'Saya memperoleh informasi yang cukup tentang hal-hal tertentu yang harus saya capai atau kuasai (luaran matakuliah) sesudah mengikuti matakuliah ini.',
+            'answer': null
+          },
+          {
+            'id': 2,
+            'text': 'Pelaksanaan perkuliahan diarahkan agar mahasiswa dapat mencapai atau menguasai luaran matakuliah ini.',
+            'answer': null
+          },
+          {
+            'id': 3,
+            'text': 'Saya mencapai atau menguasai luaran matakuliah ini.',
+            'answer': null
+          },
+          {
+            'id': 4,
+            'text': 'Pelaksanaan perkuliahan terorganisir dengan baik.',
+            'answer': null
+          },
+          {
+            'id': 5,
+            'text': 'Dosen berkomunikasi dengan efektif.',
+            'answer': null
+          },
+          {
+            'id': 6,
+            'text': 'Dosen peduli terhadap pencapaian atau penguasaan mahasiswa akan luaran matakuliah ini.',
+            'answer': null
+          },
+          {
+            'id': 7,
+            'text': 'Dosen berlaku adil (fair) kepada mahasiswa.',
+            'answer': null
+          },
+          {
+            'id': 8,
+            'text': 'Beban kerja untuk matakuliah ini sesuai dengan SKS-nya.',
+            'answer': null
+          },
+          {
+            'id': 9,
+            'text': 'Sarana dan prasarana untuk matakuliah tersedia dengan memadai.',
+            'answer': null
+          },
+          {
+            'id': 10,
+            'text': 'Tersedia cukup fasilitas pendukung di luar kuliah yang memungkinkan saya mengikuti matakuliah ini dengan baik.',
+            'answer': null
+          },
+          {
+            'id': 11,
+            'text': 'Saya berusaha dengan sungguh-sungguh mengikuti matakuliah ini.',
+            'answer': null
+          },
+          {
+            'id': 12,
+            'text': 'Saya memperoleh pengalaman belajar yang positif dalam matakuliah ini.',
+            'answer': null
+          }
+        ]
+      },
       submitted: false
     }
   },
@@ -111,6 +118,10 @@ export default {
 
 header h1 {
   font-weight: 600;
+}
+
+.questionnaire-container {
+  padding: 1rem 2rem;
 }
 
 .content-container {

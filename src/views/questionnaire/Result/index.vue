@@ -107,6 +107,10 @@ export default {
     font-weight: 600;
   }
 
+.questionnaire-result-container {
+  padding: 1rem 2rem;
+}
+
   .content-container {
     width: 100%;
     display: flex;
