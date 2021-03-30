@@ -1,15 +1,27 @@
 <template>
   <Modal :state="state" :title="title" @closeModal="$emit('closeModal')">
     <div class="content">
-      <div class="content__body">
-        Mata kuliah {{ course.name }} akan terhapus dari sistem.
-      </div>
+      <el-form>
+        <el-form-item>
+          <MDInput v-model="editComponent.component">Komponen</MDInput>
+        </el-form-item>
+        <el-form-item>
+          <MDInput v-model="editComponent.id_lo">ID LO</MDInput>
+        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item>
+              <MDInput v-model="editComponent.percentage">Persentase</MDInput>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
       <div class="content__button-group">
-        <button class="btn btn-primary-alt" @click="$emit('closeModal')">Batal</button>
-        <button
+        <el-button class="btn btn-primary-alt" @click="$emit('closeModal')">Batalkan</el-button>
+        <el-button
           :class="['btn btn-primary']"
-          @click="$emit('submit')"
-        >Hapus</button>
+          @click="$emit('submit', editComponent)"
+        >Ubah</el-button>
       </div>
     </div>
   </Modal>
@@ -17,11 +29,13 @@
 
 <script>
 import Modal from '@/components/Modal'
+import MDInput from '@/components/MDinput'
 
 export default {
-  name: 'DeleteModal',
+  name: 'EditModal',
   components: {
-    Modal
+    Modal,
+    MDInput
   },
   props: {
     state: {
@@ -30,11 +44,22 @@ export default {
     },
     title: {
       type: String,
-      default: 'Hapus Mata Kuliah?'
+      default: 'Ubah Detail Komponen'
     },
-    course: {
+    component: {
       type: Object,
       default: null
+    }
+  },
+  data() {
+    return {
+      editComponent: {
+        id: this.component.id,
+        id_course: this.component.id_course,
+        component: this.component.component,
+        id_lo: this.component.id_lo,
+        percentage: this.component.percentage
+      }
     }
   }
 }
