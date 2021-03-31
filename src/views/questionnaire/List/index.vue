@@ -46,17 +46,26 @@
               <td>{{ course.lecturer_name }}</td>
               <td>{{ course.semester %2 == 0 ? 'Genap' : 'Ganjil' }}</td>
               <td>{{ course.tahun_ajaran }}</td>
-              <template v-if="$store.getters.routes_user_type !== 'student'">
+              <template v-if="$store.getters.routes_user_type === 'admin'">
                 <td class="action">
                   <el-button
                     type="primary"
                     icon="el-icon-edit"
-                    @click="goToEditCourse(course)"
+                    @click="goToFillQuestionnaire(course)"
                   >Pengisian</el-button>
                   <el-button
                     type="warning"
                     icon="el-icon-s-order"
-                    @click="openLOModal(course.id_course)"
+                    @click="goToQuestionnaireResults(course)"
+                  >Lihat Hasil</el-button>
+                </td>
+              </template>
+              <template v-else-if="$store.getters.routes_user_type !== 'student'">
+                <td class="action">
+                  <el-button
+                    type="warning"
+                    icon="el-icon-s-order"
+                    @click="goToQuestionnaireResults(course)"
                   >Lihat Hasil</el-button>
                 </td>
               </template>
@@ -65,14 +74,8 @@
                   <el-button
                     type="primary"
                     icon="el-icon-edit"
-                    @click="goToEditCourse(course)"
+                    @click="goToFillQuestionnaire(course)"
                   >Pengisian</el-button>
-                  <el-button
-                    :disabled="course.index == null"
-                    type="warning"
-                    icon="el-icon-s-management"
-                    @click="goToCourseOutcome(course)"
-                  >Rincian Nilai</el-button>
                 </td>
                 <td style="padding: 19px 0rem">{{ course.index || 'N/A' }}</td>
               </template>
@@ -168,10 +171,10 @@ export default {
       }
       this.listLoading = false
     },
-    goToEditCourse(course) {
+    goToFillQuestionnaire(course) {
       this.$router.push({ name: 'FillQuestionnaire', params: { id: course.id_course }})
     },
-    goToCourseOutcome(course) {
+    goToQuestionnaireResults(course) {
       this.$router.push({ name: 'QuestionnaireResults', params: { id: course.id_course }})
     }
   }

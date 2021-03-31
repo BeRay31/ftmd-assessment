@@ -1,7 +1,7 @@
 <template>
   <div class="questionnaire-container">
     <header>
-      <h1>Kuisioner Perkuliahan</h1>
+      <h1>Kuisioner Perkuliahan - {{ datas['id_course'] }}</h1>
     </header>
     <div class="content-container">
       <div class="card">
