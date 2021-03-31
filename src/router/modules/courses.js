@@ -39,6 +39,29 @@ const courseRoutes = {
         activeMenu: '/list'
       },
       hidden: true
+    },
+    {
+      path: 'assess/:code&:year',
+      component: () => import(/* webpackPreload: true */'@/views/courses/Assess/index'),
+      name: 'AssessCourse',
+      meta: {
+        icon: 'chart',
+        title: 'Assessment',
+        roles: ['admin'],
+        activeMenu: '/list'
+      },
+      hidden: true
+    },
+    {
+      path: 'assess/:id_course',
+      component: () => import(/* webpackPreload: true */'@/views/courses/Assess/CO/index'),
+      name: 'AssessCO',
+      meta: {
+        title: 'CourseOutcome',
+        roles: ['admin'],
+        activeMenu: '/assess/:code&:year'
+      },
+      hidden: true
     }
   ]
 }

@@ -57,4 +57,23 @@ export default class Courses {
       const res = await service.put(`${this.baseLOURL}/`, loDetails)
       return res
     }
+
+    static async fetchCourseAssessment(code, year) {
+      const res = await service.get(`assess/`, {
+        params: {
+          code: code,
+          year: year
+        }
+      })
+      return res
+    }
+
+    static async fetchCourseDetails(id_course, page) {
+      const res = await service.get(`assess/${id_course}`, {
+        params: {
+          page: page
+        }
+      })
+      return res
+    }
 }
