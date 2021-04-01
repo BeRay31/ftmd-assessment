@@ -14,24 +14,13 @@
         </div>
       </div>
     </div>
-    <div v-if="submitted">
-      <p>questionOne : {{ datas["answer_list"][0]["answer"] }}</p>
-      <p>questionTwo : {{ datas["answer_list"][1]["answer"] }}</p>
-      <p>questionThree : {{ datas["answer_list"][2]["answer"] }}</p>
-      <p>questionFour : {{ datas["answer_list"][3]["answer"] }}</p>
-      <p>questionFive : {{ datas["answer_list"][4]["answer"] }}</p>
-      <p>questionSix : {{ datas["answer_list"][5]["answer"] }}</p>
-      <p>questionSeven : {{ datas["answer_list"][6]["answer"] }}</p>
-      <p>questionEight : {{ datas["answer_list"][7]["answer"] }}</p>
-      <p>questionNine : {{ datas["answer_list"][8]["answer"] }}</p>
-      <p>questionTen : {{ datas["answer_list"][9]["answer"] }}</p>
-      <p>questionEleven : {{ datas["answer_list"][10]["answer"] }}</p>
-      <p>questionTwelve : {{ datas["answer_list"][11]["answer"] }}</p>
-    </div>
   </div>
 </template>
 
 <script>
+import { Message } from 'element-ui'
+
+import Questionnaire from '@/api/questionnaires'
 import RadioInput from './components/RadioInput.vue'
 
 export default {
@@ -39,6 +28,7 @@ export default {
   data() {
     return {
       datas: {
+        'id_user': this.$store.getters.id_user,
         'id_course': this.$route.params.id,
         'answer_list': [
           {
@@ -102,13 +92,52 @@ export default {
             'answer': null
           }
         ]
-      },
-      submitted: false
+      }
     }
   },
   methods: {
-    handleSubmit() {
-      this.submitted = !this.submitted
+    validateForm() {
+      var temp = true
+      for (var i = 0; i < this.datas.answer_list.length; i++) {
+        temp = temp && (this.datas.answer_list[i].answer !== null)
+      }
+      return temp
+    },
+    async handleSubmit() {
+      if (this.$store.getters.routes_user_type !== 'student') {
+        if (this.validateForm()) {
+          console.log('wao')
+        }
+        Message({
+          message: 'Hanya mahasiswa yang bisa submit form',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      } else {
+        if (this.validateForm()) {
+          try {
+            await Questionnaire.saveAnswer(this.datas)
+            Message({
+              message: 'Kuisioner berhasil di submit!',
+              type: 'success',
+              duration: 5 * 1000
+            })
+            this.$router.push({ name: 'QuestionnaireList' })
+          } catch (e) {
+            Message({
+              message: e.stack || 'Error while submitting',
+              type: 'error',
+              duration: 5 * 1000
+            })
+          }
+        } else {
+          Message({
+            message: 'Seluruh pertanyaan harus diisi',
+            type: 'error',
+            duration: 5 * 1000
+          })
+        }
+      }
     }
   }
 }
