@@ -1,37 +1,15 @@
 <template>
   <Modal :state="state" :title="title" @closeModal="$emit('closeModal')">
     <div class="content">
-      <el-form>
-        <el-form-item>
-          <MDInput v-model="editCourse.name">Mata Kuliah</MDInput>
-        </el-form-item>
-        <el-form-item>
-          <MDInput v-model="editCourse.lecturer_name">Dosen Pengajar</MDInput>
-        </el-form-item>
-        <el-row :gutter="20">
-          <el-col :span="6">
-            <el-form-item>
-              <MDInput v-model="editCourse.class">Kelas</MDInput>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item>
-              <MDInput v-model="editCourse.semester">Semester</MDInput>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item>
-              <MDInput v-model="editCourse.tahun_ajaran">Tahun Ajaran</MDInput>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+      <div class="content__body">
+        Komponen {{ component.component }} akan terhapus dari sistem.
+      </div>
       <div class="content__button-group">
-        <el-button class="btn btn-primary-alt" @click="$emit('closeModal')">Batalkan</el-button>
-        <el-button
+        <button class="btn btn-primary-alt" @click="$emit('closeModal')">Batal</button>
+        <button
           :class="['btn btn-primary']"
-          @click="$emit('submit', editCourse)"
-        >Ubah dosen</el-button>
+          @click="$emit('submit')"
+        >Hapus</button>
       </div>
     </div>
   </Modal>
@@ -39,13 +17,11 @@
 
 <script>
 import Modal from '@/components/Modal'
-import MDInput from '@/components/MDinput'
 
 export default {
-  name: 'EditModal',
+  name: 'DeleteModal',
   components: {
-    Modal,
-    MDInput
+    Modal
   },
   props: {
     state: {
@@ -54,23 +30,11 @@ export default {
     },
     title: {
       type: String,
-      default: 'Ubah Detail Matakuliah'
+      default: 'Hapus Mata Kuliah?'
     },
-    course: {
+    component: {
       type: Object,
       default: null
-    }
-  },
-  data() {
-    return {
-      editCourse: {
-        id_course: this.course.id_course,
-        name: this.course.name,
-        class: this.course.class,
-        semester: this.course.semester,
-        lecturer_name: this.course.lecturer_name,
-        tahun_ajaran: this.course.tahun_ajaran
-      }
     }
   }
 }

@@ -32,9 +32,6 @@
             <th>Semester</th>
             <th>Tahun Ajaran</th>
             <th>Aksi</th>
-            <template v-if="$store.getters.routes_user_type == 'student'">
-              <th>Nilai Akhir</th>
-            </template>
           </tr>
           <template v-if="courses && courses.length > 0">
             <tr v-for="course in courses" :key="course.id_course">
@@ -46,40 +43,37 @@
               <td>{{ course.lecturer_name }}</td>
               <td>{{ course.semester %2 == 0 ? 'Genap' : 'Ganjil' }}</td>
               <td>{{ course.tahun_ajaran }}</td>
-              <template v-if="$store.getters.routes_user_type !== 'student'">
+              <template v-if="$store.getters.routes_user_type === 'admin'">
                 <td class="action">
                   <el-button
                     type="primary"
                     icon="el-icon-edit"
-                    @click="goToEditCourse(course)"
-                  >Edit</el-button>
+                    @click="goToFillQuestionnaire(course)"
+                  >Pengisian</el-button>
                   <el-button
                     type="warning"
-                    icon="el-icon-s-management"
-                    @click="openLOModal(course.id_course)"
-                  >Lihat LO</el-button>
+                    icon="el-icon-s-order"
+                    @click="goToQuestionnaireResults(course)"
+                  >Lihat Hasil</el-button>
+                </td>
+              </template>
+              <template v-else-if="$store.getters.routes_user_type !== 'student'">
+                <td class="action">
                   <el-button
                     type="warning"
-                    icon="el-icon-s-data"
-                    @click="goToAssess(course.code, course.tahun_ajaran)"
-                  >Assess</el-button>
-                  <el-button
-                    type="warning"
-                    icon="el-icon-delete"
-                    @click="openDeleteModal(course)"
-                  >Delete</el-button>
+                    icon="el-icon-s-order"
+                    @click="goToQuestionnaireResults(course)"
+                  >Lihat Hasil</el-button>
                 </td>
               </template>
               <template v-else>
                 <td class="action">
                   <el-button
-                    :disabled="course.index == null"
-                    type="warning"
-                    icon="el-icon-s-management"
-                    @click="goToCourseOutcome(course)"
-                  >Rincian Nilai</el-button>
+                    type="primary"
+                    icon="el-icon-edit"
+                    @click="goToFillQuestionnaire(course)"
+                  >Pengisian</el-button>
                 </td>
-                <td style="padding: 19px 0rem">{{ course.index || 'N/A' }}</td>
               </template>
             </tr>
           </template>
@@ -96,27 +90,17 @@
         />
       </div>
     </div>
-    <DeleteModal
-      v-if="modal.stateDelete"
-      :state="modal.stateDelete"
-      :course="modal.course"
-      @closeModal="closeModal"
-      @submit="deleteCourse"
-    />
   </div>
 </template>
 
 <script>
 import Courses from '@/api/courses'
 import CourseStudent from '@/api/courseStudent'
-import DeleteModal from '../Modal/DeleteModal/index'
 import Pagination from '@/components/Pagination/Pagination'
-import { Message } from 'element-ui'
 
 export default {
   name: 'CourseList',
   components: {
-    DeleteModal,
     Pagination
   },
   data() {
@@ -146,12 +130,6 @@ export default {
     await this.getCoursesList()
   },
   methods: {
-    goToAssess(code, tahun_ajaran) {
-      this.$router.push({ name: 'AssessCourse', params: { code: code, year: tahun_ajaran }})
-    },
-    openLOModal(id_course) {
-      this.$router.push({ name: 'LOCourse', params: { id: id_course }})
-    },
     updatePage(index) {
       this.currentPage = index
       this.getCoursesList()
@@ -189,63 +167,11 @@ export default {
       }
       this.listLoading = false
     },
-    async editCourses(edited) {
-      try {
-        const fetched = await Courses.editCourse(edited)
-        if (fetched.rows > 0) {
-          Message({
-            message: 'Update sukses!',
-            type: 'success',
-            duration: 3 * 1000
-          })
-        } else {
-          Message({
-            message: fetched.msg,
-            type: 'error',
-            duration: 3 * 1000
-          })
-        }
-        this.closeModal()
-        this.fetchCourses()
-      } catch (e) {
-        Message({
-          message: e.stack,
-          type: 'error',
-          duration: 3 * 1000
-        })
-      }
+    goToFillQuestionnaire(course) {
+      this.$router.push({ name: 'FillTeamworkQuestionnaire', params: { id: course.id_course }})
     },
-    openDeleteModal(course) {
-      this.modal.stateDelete = true
-      this.modal.course = course
-    },
-    async deleteCourse() {
-      Courses.deleteCourse(this.modal.course.id_course).then((res) => {
-        if (res.msg === 'OK') {
-          this.modal.state = false
-          this.modal.stateDelete = false
-          this.modal.course = null
-          this.fetchCourses()
-        } else {
-          Message({
-            message: res.msg,
-            type: 'error',
-            duration: 3 * 1000
-          })
-          this.closeModal()
-        }
-      })
-    },
-    closeModal() {
-      this.modal.state = false
-      this.modal.stateDelete = false
-      this.modal.course = null
-    },
-    goToEditCourse(course) {
-      this.$router.push({ name: 'EditCourse', params: { id: course.id_course }})
-    },
-    goToCourseOutcome(course) {
-      this.$router.push({ name: 'StudentCourseOutcomes', params: { id: course.id_course }})
+    goToQuestionnaireResults(course) {
+      this.$router.push({ name: 'TeamworkQuestionnaireResults', params: { id: course.id_course }})
     }
   }
 }
