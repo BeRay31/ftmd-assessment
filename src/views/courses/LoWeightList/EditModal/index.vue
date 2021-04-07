@@ -6,7 +6,15 @@
           <MDInput v-model="editComponent.component">Komponen</MDInput>
         </el-form-item>
         <el-form-item>
-          <MDInput v-model="editComponent.id_lo">ID LO</MDInput>
+          <el-select v-model="editComponent.code" placeholder="Learning Outcome">
+            <el-option value="A"> A - Penyelesaian Masalah</el-option>
+            <el-option value="B"> B - Desain</el-option>
+            <el-option value="C"> C - Komunikasi</el-option>
+            <el-option value="D"> D - Etika Profesi</el-option>
+            <el-option value="E"> E - Kerja Sama</el-option>
+            <el-option value="F"> F - Eksperimen</el-option>
+            <el-option value="G"> G - Belajar Sepanjang Hayat</el-option>
+          </el-select>
         </el-form-item>
         <el-row :gutter="20">
           <el-col :span="6">
@@ -57,6 +65,7 @@ export default {
         id: this.component.id,
         id_course: this.component.id_course,
         component: this.component.component,
+        code: this.component.code,
         id_lo: this.component.id_lo,
         percentage: this.component.percentage
       }
