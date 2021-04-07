@@ -18,7 +18,7 @@
           </tr>
           <tr>
             <td class="highlight">Nilai Akhir</td>
-            <td class="highlight">{{ outcomeData[0].index }}</td>
+            <td class="highlight">{{ getIndex(outcomeData[0].index) }}</td>
           </tr>
         </table>
       </div>
@@ -54,6 +54,23 @@ export default {
     async getCourseOutcomeData() {
       const respCourseOutcome = await CourseStudent.getStudentCourseOutcome(this.$store.getters.id_user, this.id_course)
       this.outcomeData = respCourseOutcome.data
+    },
+    getIndex(mark) {
+      if (mark > 3.5) {
+        return 'A'
+      } else if (mark > 3) {
+        return 'AB'
+      } else if (mark > 2.5) {
+        return 'B'
+      } else if (mark > 2) {
+        return 'BC'
+      } else if (mark > 1) {
+        return 'C'
+      } else if (mark > 0) {
+        return 'D'
+      } else {
+        return 'E'
+      }
     }
   }
 }
