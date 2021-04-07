@@ -12,6 +12,11 @@
           <el-row :gutter="30">
             <el-col :span="6">
               <el-form-item>
+                <MDInput v-model="formData.sks" type="number" :min="1" :max="4">SKS</MDInput>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
                 <MDInput v-model="formData.class" type="number" min="1">Kelas</MDInput>
               </el-form-item>
             </el-col>
@@ -73,8 +78,8 @@
     <SubmitModal
       v-if="isModalOpen('submitConfirmation')"
       :state="isModalOpen('submitConfirmation')"
-      :title="id_course? `Ubah properti Mata Kuliah ${formData.name} ?` : null"
-      :content="id_course? `Data yang diganti akan di simpan kedalam sistem` : null"
+      :title="id_course? `Ubah properti Mata Kuliah ${formData.name} ?` : `Tamabah Mata kuliah ?`"
+      :content="id_course? `Data yang diganti akan di simpan kedalam sistem` : `Mata kuliah '${formData.name}' akan ditambahkan kedalam sistem`"
       @closeModal="closeModal"
       @submit="handleSubmit"
     />
@@ -120,7 +125,8 @@ export default {
         class: null,
         semester: null,
         id_lecturer: null,
-        year: null
+        year: null,
+        sks: null
       },
       lecturerData: null
     }
@@ -134,6 +140,7 @@ export default {
       this.formData.year = respCourse.data.tahun_ajaran
       this.formData.class = respCourse.data.class + ''
       this.formData.id_lecturer = respCourse.data.id_lecturer
+      this.formData.sks = respCourse.data.sks
       const respUser = await Users.getById(this.formData.id_lecturer)
       this.lecturerData = respUser.data
     }

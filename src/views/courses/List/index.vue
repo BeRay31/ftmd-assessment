@@ -28,6 +28,7 @@
             </template>
             <th>Mata Kuliah</th>
             <th>Kelas</th>
+            <th>Jumlah SKS</th>
             <th>Dosen Pengampu</th>
             <th>Semester</th>
             <th>Tahun Ajaran</th>
@@ -43,6 +44,7 @@
               </template>
               <td>{{ course.name }}</td>
               <td>{{ course.class }}</td>
+              <td>{{ course.sks }}</td>
               <td>{{ course.lecturer_name }}</td>
               <td>{{ course.semester %2 == 0 ? 'Genap' : 'Ganjil' }}</td>
               <td>{{ course.tahun_ajaran }}</td>
