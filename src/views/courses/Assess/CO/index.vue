@@ -1,7 +1,14 @@
 <template>
   <div class="course-container">
     <header>
-      <h1>Course Outcome</h1>
+      <h1>Course Outcome Details</h1>
+      <div class="search">
+        <img src="@/assets/svg/search.svg" alt>
+        <input v-model="searchQuery" type="text" class="card" placeholder="Cari Mata Kuliah">
+      </div>
+      <el-button type="primary" @click.prevent="calculateIndex">
+        Calculate Index
+      </el-button>
     </header>
     <div class="content-container">
       <div class="card">
@@ -11,12 +18,14 @@
             <th v-for="component in components" :key="component.id">
               {{ component.component }}
             </th>
+            <th>Nilai Akhir</th>
           </tr>
           <tr v-for="student in students" :key="student.id">
             <td>{{ student.name }}</td>
             <td v-for="detail in student.details" :key="detail.component">
               {{ detail.score }}
             </td>
+            <td>{{ student.index ? student.index.toFixed(2) : 'N/A' }}</td>
           </tr>
         </table>
         <Pagination
@@ -56,6 +65,11 @@ export default {
     this.fetchDetails()
   },
   methods: {
+    async calculateIndex() {
+      Course.calculateCourseIndex(this.courseCode).then((res) => {
+        console.log(res)
+      })
+    },
     changePage(index) {
       this.page = index
       this.fetchDetails()

@@ -58,11 +58,11 @@ export default class Courses {
       return res
     }
 
-    static async fetchCourseAssessment(code, year) {
+    static async fetchCourseAssessment(tahunAjaran, semester) {
       const res = await service.get(`assess/`, {
         params: {
-          code: code,
-          year: year
+          tahunAjaran: tahunAjaran,
+          semester: semester
         }
       })
       return res
@@ -74,6 +74,11 @@ export default class Courses {
           page: page
         }
       })
+      return res
+    }
+
+    static async calculateCourseIndex(id_course) {
+      const res = await service.post(`assess/${id_course}`)
       return res
     }
 }

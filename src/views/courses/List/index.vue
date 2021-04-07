@@ -147,6 +147,8 @@ export default {
   },
   methods: {
     goToAssess(code, tahun_ajaran) {
+      console.log(code)
+      console.log(tahun_ajaran)
       this.$router.push({ name: 'AssessCourse', params: { code: code, year: tahun_ajaran }})
     },
     openLOModal(id_course) {
