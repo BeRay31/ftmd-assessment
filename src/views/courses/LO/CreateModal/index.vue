@@ -3,15 +3,43 @@
     <div class="content">
       <el-form>
         <el-form-item>
-          <MDInput v-model="courseLO.id_lo" :disabled="edit">Learning Outcome</MDInput>
-          <div style="color: lightgray"> contoh: (1, 2, dsb.) </div>
+          <div style="color: lightslategray; font-size: 18px">Learning Outcome</div>
+          <el-radio-group v-model="courseLO.id_lo">
+            <el-tooltip class="item" effect="dark" content="Penyelesaian Masalah" placement="top">
+              <el-radio-button label="1">A</el-radio-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="Desain" placement="top">
+              <el-radio-button label="2">B</el-radio-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="Komunikasi" placement="top">
+              <el-radio-button label="3">C</el-radio-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="Etika Profesi" placement="top">
+              <el-radio-button label="4">D</el-radio-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="Kerja Sama" placement="top">
+              <el-radio-button label="5">E</el-radio-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="Eksperimen" placement="top">
+              <el-radio-button label="6">F</el-radio-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="Belajar Sepanjang Hayat" placement="top">
+              <el-radio-button label="7">G</el-radio-button>
+            </el-tooltip>
+          </el-radio-group>
         </el-form-item>
         <el-form-item>
           <div style="color: lightslategray; font-size: 18px">KMT</div>
           <el-radio-group v-model="courseLO.tag">
-            <el-radio-button label="L">L</el-radio-button>
-            <el-radio-button label="M">M</el-radio-button>
-            <el-radio-button label="H">H</el-radio-button>
+            <el-tooltip class="item" effect="dark" content="Low" placement="top">
+              <el-radio-button label="L">L</el-radio-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="Medium" placement="top">
+              <el-radio-button label="M">M</el-radio-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="High" placement="top">
+              <el-radio-button label="H">H</el-radio-button>
+            </el-tooltip>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -37,13 +65,11 @@
 
 <script>
 import Modal from '@/components/Modal'
-import MDInput from '@/components/MDinput'
 
 export default {
   name: 'CreateModal',
   components: {
-    Modal,
-    MDInput
+    Modal
   },
   props: {
     state: {
