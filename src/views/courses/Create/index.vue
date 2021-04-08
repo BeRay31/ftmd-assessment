@@ -6,9 +6,18 @@
     <div class="content-container">
       <div class="form-card">
         <el-form>
-          <el-form-item>
-            <MDInput v-model="formData.name">Mata Kuliah</MDInput>
-          </el-form-item>
+          <el-row :gutter="30">
+            <el-col :span="4">
+              <el-form-item>
+                <MDInput v-model="formData.code">Kode</MDInput>
+              </el-form-item>
+            </el-col>
+            <el-col :span="14">
+              <el-form-item>
+                <MDInput v-model="formData.name">Mata Kuliah</MDInput>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-row :gutter="30">
             <el-col :span="6">
               <el-form-item>
@@ -22,7 +31,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item>
-                <MDInput v-model="formData.tahun_ajaran">Tahun Ajaran</MDInput>
+                <MDInput v-model="formData.sks" type="number" min="1">Jumlah SKS</MDInput>
               </el-form-item>
             </el-col>
           </el-row>
@@ -125,9 +134,10 @@ export default {
         class: null,
         semester: null,
         lecturer_name: null,
-        tahun_ajaran: null,
+        year: null,
         id_lecturer: null,
-        year: null
+        sks: null,
+        code: null
       },
       lecturerData: null
     }
@@ -136,6 +146,7 @@ export default {
     this.id_course = this.$route.params.id
     if (this.id_course) {
       const respCourse = await Course.getById(this.id_course)
+      this.formData.code = respCourse.data.code
       this.formData.name = respCourse.data.name
       this.formData.semester = respCourse.data.semester
       this.formData.year = respCourse.data.tahun_ajaran
@@ -163,15 +174,7 @@ export default {
       this.closeModal()
     },
     validateForm() {
-      return (
-        this.formData.code &&
-        this.formData.name &&
-        this.formData.class &&
-        this.formData.semester &&
-        this.formData.lecturer_name &&
-        this.formData.tahun_ajaran
-      )
-      let messageObject
+      var messageObject
       let state = true
       if (!this.formData.name) {
         messageObject = {
@@ -249,6 +252,7 @@ export default {
       return state
     },
     async handleSubmit() {
+      console.log(this.formData)
       if (this.validateForm()) {
         try {
           this.formData.class = +this.formData.class
@@ -274,6 +278,7 @@ export default {
           })
         }
       } else {
+        console.log('hehehehehehe')
         this.closeModal()
       }
     }

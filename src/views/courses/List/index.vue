@@ -60,11 +60,6 @@
                   >Lihat LO</el-button>
                   <el-button
                     type="warning"
-                    icon="el-icon-s-data"
-                    @click="goToAssess(course.code, course.tahun_ajaran)"
-                  >Assess</el-button>
-                  <el-button
-                    type="warning"
                     icon="el-icon-delete"
                     @click="openDeleteModal(course)"
                   >Delete</el-button>
@@ -146,11 +141,6 @@ export default {
     await this.getCoursesList()
   },
   methods: {
-    goToAssess(code, tahun_ajaran) {
-      console.log(code)
-      console.log(tahun_ajaran)
-      this.$router.push({ name: 'AssessCourse', params: { code: code, year: tahun_ajaran }})
-    },
     openLOModal(id_course) {
       this.$router.push({ name: 'LOCourse', params: { id: id_course }})
     },
