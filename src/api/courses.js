@@ -81,4 +81,9 @@ export default class Courses {
       const res = await service.post(`assess/`, data)
       return res
     }
+
+    static async fetchAssessDetails(code, data) {
+      const res = await service.get(`assess/${code}`, { params: data })
+      return res
+    }
 }

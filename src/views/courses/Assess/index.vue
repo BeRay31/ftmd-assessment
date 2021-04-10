@@ -54,10 +54,7 @@
           </tr>
           <tr v-for="course in displayed" :key="course.code">
             <td>{{ course.code }}</td>
-            <td
-             class="course-name"
-             @click.prevent="goToDetails"
-            >{{ course.name }}</td>
+            <td class="course-name" @click.prevent="goToDetails(course.code)">{{ course.name }}</td>
             <td>
               {{
                 course.kelas > 1
@@ -93,7 +90,7 @@ export default {
       semester: null,
       courses: null,
       displayed: null,
-      searchQuery: "",
+      searchQuery: '',
       totalPage: 1,
       currentPage: 1
     }
@@ -141,7 +138,7 @@ export default {
       data.courses = this.courses.map(a => a.code)
       Course.calculateCourseAssessment(data).then((res) => {
         Message({
-          message: "Assessment berhasil",
+          message: 'Assessment berhasil',
           type: 'success',
           duration: 2 * 1000
         })
@@ -154,8 +151,8 @@ export default {
         })
       })
     },
-    goToDetails() {
-      console.log('TODO')
+    goToDetails(code) {
+      this.$router.push({ name: 'AssessCourseDetails', params: { code: code, year: '2020/2021', sem: 2 }})
     },
     setSemesterFilter(sem) {
       this.semester = sem
@@ -168,7 +165,7 @@ export default {
     },
     checkSubstring(course) {
       return course.name.toLowerCase().includes(this.searchQuery)
-    } 
+    }
   }
 }
 </script>
