@@ -19,7 +19,6 @@
         @click.prevent="assessCourse"
       >Calculate Index</el-button>
 
-      <!-- <label style="display: block">Semester</label> -->
       <el-button
         :type="semester == 1 ? 'primary' : 'info'"
         class="btn"
@@ -31,7 +30,6 @@
         @click.prevent="setSemesterFilter(2)"
       >Genap</el-button>
 
-      <!-- <label style="display: block">Tahun Ajaran</label> -->
       <select v-model="tahunAjaran">
         <option v-for="tahun in allTahun" :key="tahun" :value="tahun.tahun_ajaran">
           {{ tahun.tahun_ajaran }}
@@ -54,7 +52,7 @@
             <th>Nama</th>
             <th>Kelas</th>
           </tr>
-          <tr v-for="course in courses" :key="course.code">
+          <tr v-for="course in displayed" :key="course.code">
             <td>{{ course.code }}</td>
             <td>{{ course.name }}</td>
             <td>
@@ -91,14 +89,15 @@ export default {
       allTahun: null,
       semester: null,
       courses: null,
-      searchQuery: null,
+      displayed: null,
+      searchQuery: "",
       totalPage: 1,
       currentPage: 1
     }
   },
   watch: {
-    async searchQuery() {
-      this.fetchCourseAssessment()
+    searchQuery() {
+      this.display()
     },
     tahunAjaran() {
       this.fetchCourseAssessment()
@@ -125,18 +124,18 @@ export default {
   },
   methods: {
     async fetchCourseAssessment() {
-      Course.fetchCourseAssessment(this.tahunAjaran, this.semester, this.searchQuery).then(
+      Course.fetchCourseAssessment(this.tahunAjaran, this.semester).then(
         (res) => {
           this.courses = res.rows
           this.allTahun = res.allTahun
+          this.display()
         })
     },
     assessCourse() {
       var data = {}
       data.tahun_ajaran = this.tahunAjaran
       data.semester = this.semester
-      data.courses = this.courses
-      console.log(data)
+      data.courses = this.courses.map(a => a.code)
       Course.calculateCourseAssessment(data).then((res) => {
         Message({
           message: res.msg,
@@ -149,7 +148,7 @@ export default {
           message: err.stack,
           type: 'error',
           duration: 2 * 1000
-        })      
+        })
       })
     },
     setSemesterFilter(sem) {
@@ -157,7 +156,13 @@ export default {
     },
     updatePage(index) {
       this.currentPage = index
-    }
+    },
+    display() {
+      this.displayed = this.courses.filter(this.checkSubstring)
+    },
+    checkSubstring(course) {
+      return course.name.toLowerCase().includes(this.searchQuery)
+    } 
   }
 }
 </script>

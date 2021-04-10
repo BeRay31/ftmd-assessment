@@ -58,12 +58,11 @@ export default class Courses {
       return res
     }
 
-    static async fetchCourseAssessment(tahunAjaran, semester, searchQuery) {
+    static async fetchCourseAssessment(tahunAjaran, semester) {
       const res = await service.get(`assess/`, {
         params: {
           tahunAjaran: tahunAjaran,
-          semester: semester,
-          searchQuery: searchQuery
+          semester: semester
         }
       })
       return res
