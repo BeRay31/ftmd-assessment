@@ -54,7 +54,10 @@
           </tr>
           <tr v-for="course in displayed" :key="course.code">
             <td>{{ course.code }}</td>
-            <td>{{ course.name }}</td>
+            <td
+             class="course-name"
+             @click.prevent="goToDetails"
+            >{{ course.name }}</td>
             <td>
               {{
                 course.kelas > 1
@@ -138,7 +141,7 @@ export default {
       data.courses = this.courses.map(a => a.code)
       Course.calculateCourseAssessment(data).then((res) => {
         Message({
-          message: res.msg,
+          message: "Assessment berhasil",
           type: 'success',
           duration: 2 * 1000
         })
@@ -150,6 +153,9 @@ export default {
           duration: 2 * 1000
         })
       })
+    },
+    goToDetails() {
+      console.log('TODO')
     },
     setSemesterFilter(sem) {
       this.semester = sem
