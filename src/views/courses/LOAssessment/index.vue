@@ -8,6 +8,10 @@
       </div>
     </header>
     <div class="filter-container">
+      <select v-model="tahunAjaran">
+        <option value="">-</option>
+        <option v-for="item in listTahunAjaran" :key="item.tahun_ajaran" :value="item.tahun_ajaran">{{ item.tahun_ajaran }}</option>
+      </select>
       <el-button
         :type="semesterFilter == 1 ? 'primary' : 'info'"
         class="btn"
@@ -26,6 +30,8 @@
             <th>Id</th>
             <th>Mata Kuliah</th>
             <th>Kelas</th>
+            <th>Tahun Ajaran</th>
+            <th>Semester</th>
             <th>Course Assessment</th>
             <th>LO A</th>
             <th>LO B</th>
@@ -40,14 +46,16 @@
               <td>{{ course.id_course }}</td>
               <td>{{ course.name }}</td>
               <td>{{ course.class }}</td>
-              <td>4.0</td>
-              <td>4.0</td>
-              <td>4.0</td>
-              <td>4.0</td>
-              <td>4.0</td>
-              <td>4.0</td>
-              <td>4.0</td>
-              <td>4.0</td>
+              <td>{{ course.course_assessment }}</td>
+              <td>{{ course.tahun_ajaran }}</td>
+              <td>{{ course.semester %2 == 0 ? 'Genap' : 'Ganjil' }}</td>
+              <td>{{ course.loScores[1] }}</td>
+              <td>{{ course.loScores[2] }}</td>
+              <td>{{ course.loScores[3] }}</td>
+              <td>{{ course.loScores[4] }}</td>
+              <td>{{ course.loScores[5] }}</td>
+              <td>{{ course.loScores[6] }}</td>
+              <td>{{ course.loScores[7] }}</td>
             </tr>
           </template>
         </table>
@@ -63,11 +71,12 @@
         />
       </div>
     </div>
+    <span>{{ tahunAjaran }}</span>
   </div>
 </template>
 
 <script>
-import Courses from '@/api/courses'
+import LOAssessment from '@/api/loAssessment'
 import Pagination from '@/components/Pagination/Pagination'
 
 export default {
@@ -83,6 +92,8 @@ export default {
       totalPage: null,
       searchQuery: '',
       semesterFilter: '',
+      tahunAjaran: '',
+      listTahunAjaran: [],
       listLoading: false
     }
   },
@@ -92,10 +103,16 @@ export default {
     },
     async semesterFilter() {
       await this.getCoursesList()
+    },
+    async tahunAjaran() {
+      await this.getCoursesList()
     }
   },
   async mounted() {
+    this.listLoading = true
     await this.getCoursesList()
+    await this.getTahunAjaranList()
+    this.listLoading = false
   },
   methods: {
     updatePage(index) {
@@ -109,8 +126,15 @@ export default {
         this.semesterFilter = type
       }
     },
+    async getTahunAjaranList() {
+      try {
+        const tahunAjaranList = await LOAssessment.fetchTahunAjaranList()
+        this.listTahunAjaran = tahunAjaranList.data
+      } catch (e) {
+        console.error(e.stack)
+      }
+    },
     async getCoursesList() {
-      this.listLoading = true
       try {
         const params = {
           pageSize: 10,
@@ -122,13 +146,15 @@ export default {
         if (this.semesterFilter) {
           params.semester = this.semesterFilter
         }
-        const courseResp = await Courses.fetchCourses(params)
+        if (this.tahunAjaran) {
+          params.tahun_ajaran = this.tahunAjaran
+        }
+        const courseResp = await LOAssessment.fetchCoursesWithLOScores(params)
         this.courses = courseResp.data
         this.totalPage = courseResp.lastPage
       } catch (e) {
         console.error(e.stack)
       }
-      this.listLoading = false
     }
   }
 }
