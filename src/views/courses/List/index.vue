@@ -54,6 +54,11 @@
                     @click="goToEditCourse(course)"
                   >Edit</el-button>
                   <el-button
+                    type="primary"
+                    icon="el-icon-edit"
+                    @click="goToComponentLo(course)"
+                  >Komponen LO</el-button>
+                  <el-button
                     type="warning"
                     icon="el-icon-s-management"
                     @click="openLOModal(course.id_course)"
@@ -238,6 +243,9 @@ export default {
     },
     goToCourseOutcome(course) {
       this.$router.push({ name: 'StudentCourseOutcomes', params: { id: course.id_course }})
+    },
+    goToComponentLo(course) {
+      this.$router.push({ name: 'LoComponentList', params: { id: course.id_course }})
     }
   }
 }
