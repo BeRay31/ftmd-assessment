@@ -10,9 +10,9 @@
             <MDInput v-model="formData.name">Mata Kuliah</MDInput>
           </el-form-item>
           <el-row :gutter="30">
-             <el-col :span="6">
+            <el-col :span="6">
               <el-form-item>
-                <MDInput v-model="formData.code" type="number" min="1" max="4">Kode</MDInput>
+                <MDInput v-model="formData.code">Kode</MDInput>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -141,7 +141,6 @@ export default {
     this.id_course = this.$route.params.id
     if (this.id_course) {
       const respCourse = await Course.getById(this.id_course)
-      console.log(respCourse)
       this.formData.name = respCourse.data.name
       this.formData.code = respCourse.data.code
       this.formData.semester = respCourse.data.semester

@@ -42,7 +42,7 @@
               <template v-if="$store.getters.routes_user_type !== 'student'">
                 <td>{{ course.id_course }}</td>
               </template>
-              <td>{{ course.name }}</td>
+              <td>{{ [course.code, course.name].join(" ") }}</td>
               <td>{{ course.class }}</td>
               <td>{{ course.sks }}</td>
               <td>{{ course.lecturer_name }}</td>
@@ -200,7 +200,7 @@ export default {
           })
         }
         this.closeModal()
-        this.fetchCourses()
+        this.getCoursesList()
       } catch (e) {
         Message({
           message: e.stack,
@@ -219,7 +219,7 @@ export default {
           this.modal.state = false
           this.modal.stateDelete = false
           this.modal.course = null
-          this.fetchCourses()
+          this.getCoursesList()
         } else {
           Message({
             message: res.msg,
