@@ -9,7 +9,7 @@
     </header>
     <div class="filter-container">
       <select v-model="tahunAjaran">
-        <option value="">-</option>
+        <option value="" selected>-</option>
         <option v-for="item in listTahunAjaran" :key="item.tahun_ajaran" :value="item.tahun_ajaran">{{ item.tahun_ajaran }}</option>
       </select>
       <el-button
@@ -71,7 +71,6 @@
         />
       </div>
     </div>
-    <span>{{ tahunAjaran }}</span>
   </div>
 </template>
 
