@@ -5,7 +5,7 @@
     </header>
     <div class="content-container">
       <div class="card">
-        <p>Nama Lengkap : </p> 
+        <p>Nama Lengkap : </p>
         <input v-model="datas.name" placeholder="Nama Lengkap">
         <p>NIM : </p>
         <input v-model="datas.nim" placeholder="NIM">
@@ -19,8 +19,8 @@
       </div>
     </div>
     <div v-if="submitted">
-      <p>Nama Lengkap : {{datas["name"]}} </p>
-      <p>NIM : {{datas["nim"]}} </p>
+      <p>Nama Lengkap : {{ datas["name"] }} </p>
+      <p>NIM : {{ datas["nim"] }} </p>
       <p>questionOne : {{ datas["answer_list"][0]["answer"] }}</p>
       <p>questionTwo : {{ datas["answer_list"][1]["answer"] }}</p>
       <p>questionThree : {{ datas["answer_list"][2]["answer"] }}</p>
@@ -43,8 +43,8 @@ export default {
   data() {
     return {
       datas: {
-        'name' : null,
-        'nim' : null,
+        'name': null,
+        'nim': null,
         'id_course': this.$route.params.id,
         'answer_list': [
           {

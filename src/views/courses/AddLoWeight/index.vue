@@ -7,21 +7,29 @@
       <div class="form-card">
         <el-form>
           <el-row :gutter="30">
-            <el-col :span="6">
+            <el-row :span="6">
               <el-form-item>
                 <MDInput v-model="formData.component">Komponen</MDInput>
               </el-form-item>
-            </el-col>
-            <el-col :span="6">
+            </el-row>
+            <el-row :span="6">
               <el-form-item>
-                <MDInput v-model="formData.id_lo">Learning Outcome</MDInput>
+                <el-select v-model="formData.id_lo" placeholder="Learning Outcome">
+                  <el-option value="A"> A - Penyelesaian Masalah</el-option>
+                  <el-option value="B"> B - Desain</el-option>
+                  <el-option value="C"> C - Komunikasi</el-option>
+                  <el-option value="D"> D - Etika Profesi</el-option>
+                  <el-option value="E"> E - Kerja Sama</el-option>
+                  <el-option value="F"> F - Eksperimen</el-option>
+                  <el-option value="G"> G - Belajar Sepanjang Hayat</el-option>
+                </el-select>
               </el-form-item>
-            </el-col>
-            <el-col :span="6">
+            </el-row>
+            <el-row :span="6">
               <el-form-item>
                 <MDInput v-model="formData.percentage">Persentase</MDInput>
               </el-form-item>
-            </el-col>
+            </el-row>
           </el-row>
         </el-form>
         <el-button
@@ -59,6 +67,7 @@ export default {
       modal: {
         state: false
       },
+      learning_outcome: [],
       formData: {
         id_course: null,
         id_lo: null,
@@ -66,6 +75,14 @@ export default {
         percentage: null
       }
     }
+  },
+  watch: {
+    async currentPage() {
+      await this.fetchComponents()
+    }
+  },
+  async mounted() {
+    await this.fetchComponents()
   },
   methods: {
     openModal() {
@@ -82,9 +99,18 @@ export default {
         this.formData.percentage
       )
     },
+    async fetchComponents() {
+      try {
+        const fetched = await DosenLoWeight.getLO(this.$route.params.id)
+        this.learning_outcome = fetched.data
+      } catch (e) {
+        console.error(e.stack)
+      }
+    },
     async handleSubmit() {
       if (this.validateForm()) {
         try {
+          this.formData.id_lo = this.formData.id_lo.charCodeAt(0) - 64
           DosenLoWeight.addComponent(this.formData).then((res) => {
             if (res.msg === 'New row created successfully!') {
               Message({

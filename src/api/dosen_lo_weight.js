@@ -4,6 +4,7 @@ import service from '@/utils/request'
 export default class DosenLoWeight {
     static baseGroupURL = `dosen_lo_weight`;
     static courseGroupURL = `courses`;
+    static LOGroupURL = `course-lo`;
     static async fetchComponents(id) {
       const res = await service.get(`${this.baseGroupURL}/searchByID/${id}`)
       return res
@@ -25,6 +26,10 @@ export default class DosenLoWeight {
     }
     static async getCourseDetails(id) {
       const res = await service.get(`${this.courseGroupURL}/${id}`)
+      return res
+    }
+    static async getLO() {
+      const res = await service.get(`${this.LOGroupURL}/get/LO`)
       return res
     }
 }

@@ -14,8 +14,8 @@
     </div>
     <div class="content-container">
       <div class="card">
-        <h2 v-if="data.length == 0">LO belum disusun</h2>
-        <table v-if="data.length > 0">
+        <h2 v-if="data && data.length == 0">LO belum disusun</h2>
+        <table v-if="data && data.length > 0">
           <tr>
             <th>Learning Outcome</th>
             <th>KMT</th>
@@ -23,7 +23,7 @@
             <th />
           </tr>
           <tr v-for="lo in data" :key="lo.id">
-            <td>{{ lo.id_lo }}</td>
+            <td>{{ (lo.id_lo &lt; 8) ? mapping[lo.id_lo] : 'X' }}</td>
             <td>{{ lo.tag }}</td>
             <td>3.50</td>
             <td class="action">
@@ -84,6 +84,7 @@ export default {
       name: null,
       lecturer: null,
       data: null,
+      mapping: ['X', 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
       modal: {
         state: false, // Create Modal
         edit: false, // For Modal: to determine submit/edit
@@ -96,9 +97,10 @@ export default {
   async created() {
     this.id_course = this.$route.params.id
     try {
-      const res = await Courses.fetchCourseById(this.id_course)
-      this.name = res.rows[0].name
-      this.lecturer = res.rows[0].lecturer_name
+      Courses.fetchCourseById(this.id_course).then((res) => {
+        this.name = res.value[0].name
+        this.lecturer = res.value[0].id_lecturer
+      })
     } catch (e) {
       console.log(e.stack)
     }
@@ -126,6 +128,7 @@ export default {
       loDetails.code = this.id_course
       loDetails.tag = courseLO.tag
       loDetails.id = courseLO.id_lo
+      console.log(courseLO.id_lo)
       try {
         const res = await Courses.createCourseLO(loDetails)
         if (res.msg === 'OK') {
@@ -146,8 +149,9 @@ export default {
     },
     async fetchLO() {
       try {
-        const los = await Courses.fetchCourseLO(this.id_course)
-        this.data = los.data
+        Courses.fetchCourseLO(this.id_course).then((res) => {
+          this.data = res.data
+        })
       } catch (e) {
         Message({
           message: e.stack,

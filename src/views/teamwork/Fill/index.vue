@@ -5,10 +5,10 @@
     </header>
     <div class="content-container">
       <div class="card">
-        <p>Nama Lengkap : </p> 
-          <input v-model="datas.name" placeholder="Nama Lengkap">
+        <p>Nama Lengkap : </p>
+        <input v-model="datas.name" placeholder="Nama Lengkap">
         <p>NIM : </p>
-          <input v-model="datas.nim" placeholder="NIM">
+        <input v-model="datas.nim" placeholder="NIM">
         <div v-for="data in datas['answer_list']" :key="data['id']" :class="{ 'odd': data['id'] % 2 != 0 }">
           <p>{{ data["id"] }}. {{ data["text"] }}</p>
           <RadioInput v-model="data['answer']" />

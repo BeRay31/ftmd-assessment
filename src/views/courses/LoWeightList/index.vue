@@ -14,13 +14,13 @@
         <table>
           <tr>
             <th>Komponen</th>
-            <th>ID LO</th>
+            <th>LO</th>
             <th>Persentase</th>
             <th>Aksi</th>
           </tr>
           <tr v-for="component in components" :key="component.id">
             <td>{{ component.component }}</td>
-            <td>{{ component.id_lo }}</td>
+            <td>{{ component.code }}</td>
             <td>{{ component.percentage }}</td>
             <td class="action">
               <el-button
@@ -90,6 +90,7 @@ export default {
   methods: {
     async editComponent(edited) {
       try {
+        edited.id_lo = edited.code.charCodeAt(0) - 64
         console.log(edited)
         const fetched = await DosenLoWeight.editComponent(edited)
         if (fetched.msg === 'Update row success!') {
