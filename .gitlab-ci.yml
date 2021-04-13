@@ -14,8 +14,9 @@ install_dependencies:
 unit_testing:
   stage: test
   script:
-    - npm run test:unit
     - echo "Unit testing"
+    - npm install --silent
+    - npm run test:unit
 build_and_deploy_staging:
   stage: deploy
   cache:
