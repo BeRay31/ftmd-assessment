@@ -10,7 +10,7 @@ export default class Courses {
       return res
     }
 
-    static async updateCourse(id_course, data) {
+    static async editCourse(id_course, data) {
       await service.post(`${this.baseGroupURL}/${id_course}`, data)
     }
 
