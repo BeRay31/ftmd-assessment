@@ -63,6 +63,17 @@ const courseRoutes = {
       hidden: true
     },
     {
+      path: 'scores/:id',
+      component: () => import('@/views/courses/Scores/index'),
+      name: 'ScoresList',
+      meta: {
+        title: 'Nilai',
+        icon: 'form',
+        roles: ['lecturer']
+      },
+      hidden: true
+    },
+    {
       path: 'addLoComponent/:id',
       component: () => import('@/views/courses/AddLoWeight/index'),
       name: 'AddLoComponent',
