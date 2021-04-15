@@ -63,13 +63,13 @@
           </div>
         </el-form-item>
       </el-tooltip>
-
       <el-button
         :loading="loading"
         type="primary"
         class="btn btn-primary btn-login"
         @click.native.prevent="handleLogin"
       >Login</el-button>
+      <router-link to="/forgot-password" tag="div" class="forgot-password">Lupa Password</router-link>
     </el-form>
   </div>
 </template>
@@ -81,6 +81,7 @@ export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
+      console.log("VALIDATE")
       callback()
     }
     const validatePassword = (rule, value, callback) => {
@@ -284,6 +285,17 @@ $dark_gray: #889aa4;
   .btn-login {
     margin-top: 2rem;
     width: 10rem;
+  }
+
+  .forgot-password {
+    margin-top: 0.5rem;
+    color: rgba(33,150,243,255);
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      color: darken($color: rgba(33,150,243,255), $amount: 20);
+    }
   }
 
   .warning {

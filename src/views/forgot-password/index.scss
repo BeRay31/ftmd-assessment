@@ -1,0 +1,121 @@
+$bg: #f4f9f9;
+$bg-form: #a4ebf3;
+$dark_gray: #889aa4;
+
+.forgot-password-container {
+  min-height: 100%;
+  width: 100%;
+  background-color: $bg;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .login-form {
+    background: white;
+    border-radius: 2rem;
+    position: relative;
+    width: 520px;
+    max-width: 100%;
+    padding: 4rem;
+    margin: 0 auto;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.13);
+  }
+
+  .tips {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 10px;
+
+    span {
+      &:first-of-type {
+        margin-right: 16px;
+      }
+    }
+  }
+
+  .svg-container {
+    padding: 6px 5px 6px 15px;
+    color: black;
+    vertical-align: middle;
+    width: 30px;
+    display: inline-block;
+  }
+
+  .title-container {
+    position: relative;
+
+    .title {
+      font-size: 2rem;
+      color: rgba(33,150,243,255);
+      margin: 0px auto 2rem auto;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+
+  .show-pwd {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    // transform: translateY(-50%);
+    font-size: 16px;
+    color: black;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .thirdparty-button {
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+  }
+
+  .btn-login {
+    margin-top: 2rem;
+    width: 10rem;
+  }
+
+  .forgot-password {
+    margin-top: 0.5rem;
+    color: rgba(33,150,243,255);
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      color: darken($color: rgba(33,150,243,255), $amount: 20);
+    }
+  }
+
+  .warning {
+    background: rgba(255, 255, 255, 0.65);
+    color: #ff0000;
+    font-size: 0.8rem;
+    text-align: left;
+    padding: 0.25rem;
+    line-height: initial;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 75%;
+    z-index: -1;
+    opacity: 0;
+    // display: none;
+    transition: all 0.3s ease;
+
+    &.active {
+      z-index: 10;
+      opacity: 1;
+      top: 100%;
+      // display: block;
+    }
+  }
+
+  @media only screen and (max-width: 470px) {
+    .thirdparty-button {
+      display: none;
+    }
+  }
+}
