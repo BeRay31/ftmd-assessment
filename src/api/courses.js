@@ -57,4 +57,33 @@ export default class Courses {
       const res = await service.put(`${this.baseLOURL}/`, loDetails)
       return res
     }
+
+    static async fetchCourseAssessment(tahunAjaran, semester) {
+      const res = await service.get(`assess/`, {
+        params: {
+          tahunAjaran: tahunAjaran,
+          semester: semester
+        }
+      })
+      return res
+    }
+
+    static async fetchCourseDetails(id_course, page) {
+      const res = await service.get(`assess/${id_course}`, {
+        params: {
+          page: page
+        }
+      })
+      return res
+    }
+
+    static async calculateCourseAssessment(data) {
+      const res = await service.post(`assess/`, data)
+      return res
+    }
+
+    static async fetchAssessDetails(code, data) {
+      const res = await service.get(`assess/${code}`, { params: data })
+      return res
+    }
 }
