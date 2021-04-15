@@ -52,6 +52,27 @@ const courseRoutes = {
       hidden: true
     },
     {
+      path: 'assess',
+      component: () => import(/* webpackPreload: true */'@/views/courses/Assess/index'),
+      name: 'AssessCourse',
+      meta: {
+        icon: 'chart',
+        title: 'Assessment',
+        roles: ['admin']
+      }
+    },
+    {
+      path: 'assess/:code/:year/:sem',
+      component: () => import(/* webpackPreload: true */'@/views/courses/Assess/Details/index'),
+      name: 'AssessCourseDetails',
+      meta: {
+        title: 'Assessment Details',
+        roles: ['admin'],
+        activeMenu: '/assess'
+      },
+      hidden: true
+    },
+    {
       path: ':id',
       component: () => import(/* webpackPreload: true */'@/views/courses/LO/index'),
       name: 'LOCourse',
