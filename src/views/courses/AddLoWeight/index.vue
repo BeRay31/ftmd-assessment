@@ -27,7 +27,7 @@
             </el-row>
             <el-row :span="6">
               <el-form-item>
-                <MDInput v-model="formData.percentage">Persentase</MDInput>
+                <MDInput v-model="formData.percentage" type="number" min="0" max="100">Persentase</MDInput>
               </el-form-item>
             </el-row>
           </el-row>

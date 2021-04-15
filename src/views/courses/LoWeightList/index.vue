@@ -1,14 +1,9 @@
 <template>
   <div class="course-list-container">
     <header>
-      <h1> {{ courses[0].code }} {{ courses[0].name }} K{{ courses[0].class }}</h1>
+      <h1 v-if="courses"> {{ courses.code }} {{ courses.name }} K{{ courses.class }}</h1>
       <h1>Daftar Component LO</h1>
     </header>
-    <el-button
-      type="primary"
-      icon="el-icon-edit"
-      @click="addComponent()"
-    >Tambah Komponen</el-button>
     <div class="content-container">
       <div class="card">
         <table>
@@ -18,7 +13,7 @@
             <th>Persentase</th>
             <th>Aksi</th>
           </tr>
-          <tr v-for="component in components" :key="component.id">
+          <tr v-for="component in loComponents" :key="component.id">
             <td>{{ component.component }}</td>
             <td>{{ component.code }}</td>
             <td>{{ component.percentage }}</td>
@@ -38,6 +33,13 @@
           </tr>
         </table>
       </div>
+    </div>
+    <div class="btn-group">
+      <el-button
+        type="primary"
+        icon="el-icon-edit"
+        @click="addComponent()"
+      >Tambah Komponen</el-button>
     </div>
     <EditModal
       v-if="modal.state"
@@ -70,8 +72,8 @@ export default {
   },
   data() {
     return {
-      components: [],
-      courses: [],
+      loComponents: [],
+      courses: null,
       modal: {
         state: false,
         stateDelete: false,
@@ -91,7 +93,6 @@ export default {
     async editComponent(edited) {
       try {
         edited.id_lo = edited.code.charCodeAt(0) - 64
-        console.log(edited)
         const fetched = await DosenLoWeight.editComponent(edited)
         if (fetched.msg === 'Update row success!') {
           Message({
@@ -120,9 +121,8 @@ export default {
       try {
         const fetched = await DosenLoWeight.fetchComponents(this.$route.params.id)
         const fetch_courses = await DosenLoWeight.getCourseDetails(this.$route.params.id)
-        this.components = fetched.value
-        this.courses = fetch_courses.value
-        console.log(this.courses)
+        this.loComponents = fetched.value
+        this.courses = fetch_courses.data
       } catch (e) {
         console.error(e.stack)
       }

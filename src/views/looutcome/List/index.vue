@@ -70,7 +70,8 @@ export default {
   data() {
     return {
       courses: [],
-      outcome: []
+      outcome: [],
+      listLoading: false
     }
   },
   async mounted() {

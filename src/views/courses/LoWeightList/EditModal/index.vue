@@ -16,25 +16,8 @@
             <el-option value="G"> G - Belajar Sepanjang Hayat</el-option>
           </el-select>
         </el-form-item>
-        <el-row :gutter="20">
-          <el-col :span="6">
-            <el-form-item>
-              <MDInput v-model="editCourse.class">Kelas</MDInput>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item>
-              <MDInput v-model="editCourse.semester">Semester</MDInput>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item>
-              <MDInput v-model="editCourse.tahun_ajaran">Tahun Ajaran</MDInput>
-            </el-form-item>
-          </el-col>
-        </el-row>
         <el-form-item>
-          <MDInput v-model="editComponent.percentage">Persentase</MDInput>
+          <MDInput v-model="editComponent.percentage" type="number" min="0" max="100">Persentase</MDInput>
         </el-form-item>
       </el-form>
       <div class="content__button-group">
@@ -74,14 +57,6 @@ export default {
   },
   data() {
     return {
-      editCourse: {
-        id_course: this.course.id_course,
-        name: this.course.name,
-        class: this.course.class,
-        semester: this.course.semester,
-        lecturer_name: this.course.lecturer_name,
-        tahun_ajaran: this.course.tahun_ajaran
-      },
       editComponent: {
         id: this.component.id,
         id_course: this.component.id_course,

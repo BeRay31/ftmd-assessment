@@ -50,29 +50,33 @@
               <td>{{ course.tahun_ajaran }}</td>
               <template v-if="$store.getters.routes_user_type !== 'student'">
                 <td class="action">
-                  <el-button
-                    type="primary"
-                    icon="el-icon-edit"
-                    @click="goToEditCourse(course)"
-                  >Edit</el-button>
-                  <el-button
-                    type="primary"
-                    icon="el-icon-edit"
-                    @click="goToComponentLo(course)"
-                  >Komponen LO</el-button>
-                  <el-button
-                    type="warning"
-                    icon="el-icon-s-management"
-                    @click="openLOModal(course.id_course)"
-                  >Lihat LO</el-button>
-                  <el-button
-                    type="warning"
-                    icon="el-icon-delete"
-                    @click="openDeleteModal(course)"
-                  >Delete</el-button>
+                  <template v-if="$store.getters.routes_user_type === 'admin'">
+                    <el-button
+                      type="primary"
+                      icon="el-icon-edit"
+                      @click="goToEditCourse(course)"
+                    >Edit</el-button>
+                    <el-button
+                      type="warning"
+                      icon="el-icon-s-management"
+                      @click="openLOModal(course.id_course)"
+                    >Lihat LO</el-button>
+                    <el-button
+                      type="warning"
+                      icon="el-icon-delete"
+                      @click="openDeleteModal(course)"
+                    >Delete</el-button>
+                  </template>
+                  <template v-if="$store.getters.routes_user_type === 'lecturer'">
+                    <el-button
+                      type="primary"
+                      icon="el-icon-edit"
+                      @click="goToComponentLo(course)"
+                    >Komponen LO</el-button>
+                  </template>
                 </td>
               </template>
-              <template v-else>
+              <template v-if="$store.getters.routes_user_type === 'student'">
                 <td class="action">
                   <el-button
                     :disabled="course.index == null"
