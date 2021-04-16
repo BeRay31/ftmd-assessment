@@ -2,7 +2,9 @@
   <div class="course-lo-container">
     <header>
       <h1>Learning Outcomes</h1>
-      <div style="font-size: 1rem; margin-top: -1rem; margin-bottom: 1rem">{{ name }} ({{ lecturer }})</div>
+      <div style="font-size: 1rem; margin-top: -1rem; margin-bottom: 1rem">
+        {{ code }} {{ name }} - {{ lecturer }}
+      </div>
     </header>
     <div class="button-panel">
       <el-button
@@ -83,6 +85,7 @@ export default {
       id_course: null,
       name: null,
       lecturer: null,
+      code: null,
       data: null,
       mapping: ['X', 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
       modal: {
@@ -97,12 +100,18 @@ export default {
   async created() {
     this.id_course = this.$route.params.id
     try {
-      Courses.fetchCourseById(this.id_course).then((res) => {
-        this.name = res.value[0].name
-        this.lecturer = res.value[0].id_lecturer
-      })
+      const res = await Courses.fetchCourseById(this.id_course)
+        if (res) {
+          this.name = res.data.name
+          this.lecturer = res.data.lecturer_name
+          this.code = res.data.code
+        }
     } catch (e) {
-      console.log(e.stack)
+      Message({
+        message: 'Gagal memuat data',
+        type: 'error',
+        duration: 2 * 1000
+      })
     }
     this.fetchLO()
   },
@@ -123,25 +132,32 @@ export default {
       this.modal.edit = false
     },
     async addLO(courseLO) {
-      this.modal.state = false
-      const loDetails = {}
+      var loDetails = {}
       loDetails.code = this.id_course
       loDetails.tag = courseLO.tag
       loDetails.id = courseLO.id_lo
-      console.log(courseLO.id_lo)
-      try {
-        const res = await Courses.createCourseLO(loDetails)
-        if (res.msg === 'OK') {
+      if (this.validateLO(loDetails)) {
+        try {
+          this.modal.state = false
+          const res = await Courses.createCourseLO(loDetails)
+          if (res.msg === 'OK') {
+            Message({
+              message: 'LO berhasil ditambahkan',
+              type: 'success',
+              duration: 3 * 1000
+            })
+            this.fetchLO()
+          }
+        } catch (e) {
           Message({
-            message: 'LO berhasil ditambahkan',
-            type: 'success',
+            message: 'LO gagal ditambahkan',
+            type: 'error',
             duration: 3 * 1000
           })
-          this.fetchLO()
         }
-      } catch (e) {
+      } else {
         Message({
-          message: e.stack,
+          message: 'LO telah ditambahkan',
           type: 'error',
           duration: 3 * 1000
         })
@@ -172,11 +188,14 @@ export default {
         this.fetchLO()
       } catch (e) {
         Message({
-          message: e.stack,
+          message: 'LO gagal dihapus',
           type: 'error',
           duration: 3 * 1000
         })
       }
+    },
+    validateLO(loDetails) {
+      return this.data.findIndex((lo) => lo.id_lo === loDetails.id) > -1
     },
     async editLO(courseLO) {
       try {
@@ -184,12 +203,20 @@ export default {
         loDetails.code = this.id_course
         loDetails.tag = courseLO.tag
         loDetails.id = courseLO.id_lo
-        this.closeModal()
-        await Courses.editCourseLO(loDetails)
-        this.fetchLO()
+        if (this.validateLO(loDetails)) {
+          this.closeModal()
+          await Courses.editCourseLO(loDetails)
+          this.fetchLO()
+        } else {
+          Message({
+            message: 'Perubahan gagal ditambahkan',
+            type: 'error',
+            duration: 3 * 1000
+          })
+        }
       } catch (e) {
         Message({
-          message: e.stack,
+          message: 'Perubahan gagal ditambahkan',
           type: 'error',
           duration: 3 * 1000
         })
