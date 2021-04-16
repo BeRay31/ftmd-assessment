@@ -17,7 +17,9 @@ import questionnaireRoute from './modules/questionnaire'
 import portofolioRoute from './modules/portofolio'
 import teamworkRoute from './modules/teamwork'
 import communicationRoute from './modules/communication'
+import loAssessmentRoute from './modules/loassessment'
 import loutcomeRoute from './modules/looutcome'
+
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -124,6 +126,7 @@ export const asyncRoutes = [
   portofolioRoute,
   teamworkRoute,
   communicationRoute,
+  loAssessmentRoute,
   loutcomeRoute,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
