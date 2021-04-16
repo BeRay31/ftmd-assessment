@@ -71,6 +71,11 @@
                     <el-button
                       type="primary"
                       icon="el-icon-edit"
+                      @click="goToEditCourse(course)"
+                    >Edit</el-button>
+                    <el-button
+                      type="primary"
+                      icon="el-icon-edit"
                       @click="goToComponentLo(course)"
                     >Komponen LO</el-button>
                   </template>
