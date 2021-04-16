@@ -79,6 +79,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/forgot-password',
+    component: () => import('@/views/forgot-password/index'),
+    hidden: true
+  },
+  {
     path: '/auth-redirect',
     component: () => import('@/views/login/auth-redirect'),
     hidden: true
