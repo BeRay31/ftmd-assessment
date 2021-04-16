@@ -17,4 +17,19 @@ export default class Authorization {
     const resp = await service.post(`${this.baseGroupURL}/logout`)
     return resp
   }
+
+  static async sendMail(data) {
+    const resp = await service.post(`${this.baseGroupURL}/send-verification`, data)
+    return resp
+  }
+
+  static async verifyCode(data) {
+    const resp = await service.post(`${this.baseGroupURL}/validate-verification`, data)
+    return resp
+  }
+
+  static async changePassword(data) {
+    const resp = await service.post(`${this.baseGroupURL}/change-password`, data)
+    return resp
+  }
 }

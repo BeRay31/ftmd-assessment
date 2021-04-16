@@ -9,7 +9,7 @@ import Authorization from '@/api/authorization'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
+const whiteList = ['/login', '/auth-redirect', '/forgot-password'] // no redirect whitelist
 
 async function validateToken(token) {
   try {
