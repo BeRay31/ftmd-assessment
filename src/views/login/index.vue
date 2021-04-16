@@ -81,7 +81,6 @@ export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      console.log("VALIDATE")
       callback()
     }
     const validatePassword = (rule, value, callback) => {

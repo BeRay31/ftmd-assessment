@@ -115,7 +115,7 @@
           type="primary"
           class="btn btn-primary btn-login"
           @click.prevent="handleNewPassword"
-        >Verifikasi Kode</el-button>
+        >Ganti Password</el-button>
       </template>
 
       <router-link to="/login" tag="div" class="forgot-password">Masuk</router-link>
@@ -134,6 +134,7 @@ export default {
       verificationCode: '',
       isEmailSent: false,
       isVerified: false,
+      userToken: null,
       passwordForm: {
         new: '',
         confirm: ''
@@ -146,59 +147,91 @@ export default {
     }
   },
   methods: {
-    handleSendEmail() {
-      const isValid = this.validateEmail(this.email)
-      if (isValid) {
-        this.$message({
-          message: 'Email valid',
-          type: 'success'
-        })
-        this.isEmailSent = true
-      } else {
-        this.$message({
-          message: 'Email tidak valid',
-          type: 'error'
-        })
+    async handleSendEmail() {
+      this.loading = true
+      try {
+        const isValid = this.validateEmail(this.email)
+        if (isValid) {
+          const data = {
+            email: this.email
+          }
+          await Authorization.sendMail(data)
+          this.$message({
+            message: 'Email Terkirim',
+            type: 'success'
+          })
+          this.isEmailSent = true
+        } else {
+          this.$message({
+            message: 'Email tidak valid',
+            type: 'error'
+          })
+        }
+      } catch (e) {
+        console.log(e)
       }
+      this.loading = false
     },
     validateEmail(email) {
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(String(email).toLowerCase())
     },
-    handleVerify() {
-      const isValid = this.validateCode(this.verificationCode)
-      if (isValid) {
-        this.$message({
-          message: 'Kode valid',
-          type: 'success'
-        })
-        this.isVerified = true
-      } else {
-        this.$message({
-          message: 'Kode tidak valid',
-          type: 'error'
-        })
+    async handleVerify() {
+      this.loading = true
+      try {
+        const isValid = await this.validateCode(this.verificationCode)
+        if (isValid) {
+          this.$message({
+            message: 'Kode valid',
+            type: 'success'
+          })
+          this.isVerified = true
+        } else {
+          this.$message({
+            message: 'Kode tidak valid',
+            type: 'error'
+          })
+        }
+      } catch (e) {
+        console.log(e)
       }
+      this.loading = false
     },
-    validateCode(code) {
-      return code.length > 10
+    async validateCode(code) {
+      const data = {
+        verifyCode: code
+      }
+      const resp = await Authorization.verifyCode(data)
+      this.userToken = resp.data.token
+      return resp.msg === 'Verified'
     },
-    handleNewPassword() {
-      const isValid = this.validateNewPassword(this.passwordForm.new, this.passwordForm.confirm)
+    async handleNewPassword() {
+      this.loading = true
+      const isValid = await this.validateNewPassword(this.passwordForm.new, this.passwordForm.confirm)
       if (isValid) {
         this.$message({
           message: 'Password diubah',
           type: 'success'
         })
+        this.$router.push({ path: '/login' })
       } else {
         this.$message({
           message: 'Password Tidak Sama',
           type: 'error'
         })
       }
+      this.loading = false
     },
-    validateNewPassword(newPass, confirm) {
-      return newPass.length > 6 && confirm.includes(newPass) && newPass.includes(confirm)
+    async validateNewPassword(newPass, confirm) {
+      const isFormValid = newPass.length > 6 && confirm.includes(newPass) && newPass.includes(confirm)
+      if (isFormValid) {
+        const data = {
+          password: newPass,
+          token: this.userToken
+        }
+        const resp = await Authorization.changePassword(data)
+        return resp.msg === 'Password Changed'
+      } return false
     },
     toggleShow(ctx) {
       if (this.passType[ctx] === 'password') {
