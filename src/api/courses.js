@@ -19,13 +19,38 @@ export default class Courses {
       return res
     }
 
+    static async getComponent(id_course) {
+      const res = await service.get(`${this.baseGroupURL}/component/${id_course}`)
+      return res
+    }
+
     static async deleteCourse(id_course) {
       const res = await service.delete(`${this.baseGroupURL}/${id_course}`)
       return res
     }
 
+    static async deleteScores(data) {
+      const res = await service.post(`${this.baseGroupURL}/scores/delete`, data)
+      return res
+    }
+
+    static async updateScores(data) {
+      const res = await service.post(`${this.baseGroupURL}/scores/update`, data)
+      return res
+    }
+
     static async createCourse(data) {
       const res = await service.post(`${this.baseGroupURL}/`, data)
+      return res
+    }
+
+    static async createScores(data) {
+      const res = await service.post(`${this.baseGroupURL}/scores/add`, data)
+      return res
+    }
+
+    static async getScores(id_course, params) {
+      const res = await service.get(`${this.baseGroupURL}/scores/get/${id_course}`, { params })
       return res
     }
 

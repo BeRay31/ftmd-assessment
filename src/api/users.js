@@ -10,6 +10,10 @@ export default class Users {
     const resp = await service.get(`/user/`, { params })
     return resp
   }
+  static async getAllUserCourse(params, id) {
+    const resp = await service.get(`/user/course/${id}`, { params })
+    return resp
+  }
 
   static async getById(id_user) {
     const resp = await service.get(`/user/${id_user}`)

@@ -1,15 +1,7 @@
 <template>
   <div class="class-attendance-container">
     <header>
-      <h1>Daftar Mahasiswa</h1>
-      <el-button
-        v-if="!isAdmin"
-        :loading="loading"
-        type="primary"
-        class="btn btn-primary btn-login"
-        @click="goToAddScore()"
-      > Input Nilai
-      </el-button>
+      <h1>Daftar Nilai Keseluruhan</h1>
       <div class="search">
         <img src="@/assets/svg/search.svg" alt>
         <input v-model="searchQuery" type="text" class="card" placeholder="Cari Mahasiswa">
@@ -21,13 +13,22 @@
           <th>Id</th>
           <th>Username/NIM</th>
           <th>Nama Lengkap</th>
-          <th v-if="isAdmin">Aksi</th>
+          <th>Komponen</th>
+          <th>Nilai</th>
+          <th>Aksi</th>
         </tr>
         <tr v-for="student in students" :key="student.id_user">
           <td>{{ student.id_user }}</td>
           <td>{{ student.username }}</td>
           <td>{{ student.name }}</td>
-          <td v-if="isAdmin" class="action">
+          <td>{{ student.component }}</td>
+          <td>{{ student.score }}</td>
+          <td class="action">
+            <el-button
+              type="warning"
+              icon="el-icon-edit"
+              @click="openModalEdit(student)"
+            >Edit</el-button>
             <el-button
               type="warning"
               icon="el-icon-delete"
@@ -51,10 +52,17 @@
     <DeleteModal
       v-if="isModalOpen('deleteConfirm')"
       :state="isModalOpen('deleteConfirm')"
-      title="Hapus Mahasiswa dari Kelas ?"
-      :content="`Mahasiswa '${modal.carriedData.name}' akan dihapus dari daftar mahasiswa`"
+      title="Hapus nilai ini ?"
+      :content="`Mahasiswa '${modal.carriedData.name}' dengan nilai '${modal.carriedData.score}' pada komponen '${modal.carriedData.component}' akan dihapus`"
       @closeModal="closeModal"
       @submit="deleteEnrollment"
+    />
+    <EditModal
+      v-if="modal.stateEdit"
+      :state="modal.stateEdit"
+      :component="modal.editComponent"
+      @closeModal="closeModal"
+      @submit="editComponent"
     />
     <ChooseStudents
       v-if="isModalOpen('selectStudents')"
@@ -76,8 +84,10 @@
 
 <script>
 import CourseStudent from '@/api/courseStudent'
+import Course from '@/api/courses'
 import Pagination from '@/components/Pagination/Pagination'
 import DeleteModal from '@/views/courses/Modal/DeleteModal/index'
+import EditModal from '@/views/courses/Scores/EditModal/index'
 import ChooseStudents from '@/views/courses/Modal/ChooseStudentsModal/index'
 import SubmitModal from '@/views/courses/Modal/SubmitModal/index'
 import { Message } from 'element-ui'
@@ -88,6 +98,7 @@ export default {
     Pagination,
     DeleteModal,
     ChooseStudents,
+    EditModal,
     SubmitModal
   },
   props: {
@@ -109,6 +120,8 @@ export default {
       modal: {
         state: '',
         type: '',
+        stateEdit: false,
+        editComponent: null,
         carriedData: null
       }
     }
@@ -124,12 +137,14 @@ export default {
   },
   methods: {
     async getAllClassAttendance() {
-      const attendanceResp = await CourseStudent.getCourseStudent(this.idCourse)
+      const attendanceResp = await Course.getScores(this.idCourse)
       if (attendanceResp.data && attendanceResp.data.length > 0) {
         this.currentStudentList = attendanceResp.data.map(el => el.id_user)
       } else {
         this.currentStudentList = []
       }
+      setTimeout(() => { this.getAllClassAttendance() }, 1500)
+      this.getClassAttendance()
     },
     goToAddScore() {
       this.$router.push({ name: 'ScoresList', params: { id: this.idCourse }})
@@ -144,7 +159,7 @@ export default {
         if (this.searchQuery !== '') {
           params.searchQuery = this.searchQuery
         }
-        const attendanceResp = await CourseStudent.getCourseStudent(this.idCourse, params)
+        const attendanceResp = await Course.getScores(this.idCourse, params)
         this.students = attendanceResp.data
         this.totalPage = attendanceResp.lastPage
       } catch (e) {
@@ -154,8 +169,8 @@ export default {
     },
     async deleteEnrollment() {
       try {
-        await CourseStudent.deleteCourseEnrollmentById(this.modal.carriedData.id)
-        await this.getClassAttendance()
+        console.log(this.modal.carriedData)
+        await Course.deleteScores(this.modal.carriedData)
         await this.getAllClassAttendance()
         Message({
           message: 'Mahasiswa berhasil dihapus dari kelas',
@@ -166,6 +181,25 @@ export default {
         console.log(e)
         Message({
           message: 'Error saat menghapus Mahasiswa dari kelas',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
+      this.closeModal()
+    },
+    async editComponent(edited) {
+      try {
+        await Course.updateScores(edited)
+        await this.getAllClassAttendance()
+        Message({
+          message: 'Nilai Berhasil di Update',
+          type: 'success',
+          duration: 5 * 1000
+        })
+      } catch (e) {
+        console.log(e)
+        Message({
+          message: 'Error saat mengupdate nilai',
           type: 'error',
           duration: 5 * 1000
         })
@@ -214,8 +248,13 @@ export default {
       this.openModal('deleteConfirm')
       this.modal.carriedData = carriedData
     },
+    openModalEdit(student) {
+      this.modal.editComponent = student
+      this.modal.stateEdit = true
+    },
     closeModal() {
       this.modal.state = false
+      this.modal.stateEdit = false
       this.modal.carriedData = null
     },
     openModal(type) {
