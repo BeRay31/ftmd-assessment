@@ -181,8 +181,10 @@ export default {
           }
           await CourseStudent.enrollUserByIds(this.idCourse, data)
         } else if (this.modal.carriedData.emitType === 'fileData') {
-          await CourseStudent.enrolluserByFile(this.idCourse, this.modal.carriedData.fileStudents)
           // TODO:: Handle file Data
+          // const formDatawFile = new FormData();
+          // formDatawFile.append('excel', this.modal.carriedData.fileStudents);
+          await CourseStudent.enrollUserByFile(this.idCourse, this.modal.carriedData.fileStudents);
         }
         await this.getAllClassAttendance()
         Message({

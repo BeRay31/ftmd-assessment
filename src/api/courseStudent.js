@@ -27,4 +27,9 @@ export default class CourseStudent {
     const resp = await service.post(`${this.baseGroupURL}/${id_course}`, data)
     return resp
   }
+
+  static async enrollUserByFile(id_course, data) {
+    const resp = await service.post(`${this.baseGroupURL}/excel/${id_course}`, data)
+    return resp
+  }
 }
