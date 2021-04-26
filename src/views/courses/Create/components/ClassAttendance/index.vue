@@ -1,5 +1,22 @@
 <template>
   <div class="class-attendance-container">
+    <div class="class-attendance-container">
+      <header>
+        <h2>Input Nilai Mahasiswa CSV</h2>
+        <a href="https://docs.google.com/spreadsheets/d/1y0dB5QqLlK6VVNRbFDwLZd1vNLTEr4ZicRvBbFaNllE/edit?usp=sharing">Template CSV</a>
+        <form enctype="multipart/form-data">
+        <input type="file" @change="onFileChange">
+        </form>
+        <el-button
+          v-if="!isAdmin"
+          :loading="loading"
+          type="primary"
+          class="btn btn-primary btn-login"
+          @click="goToAddScoreFile()"
+        > Upload
+        </el-button>
+      </header>
+    </div>
     <header>
       <h1>Daftar Mahasiswa</h1>
       <el-button
@@ -8,7 +25,7 @@
         type="primary"
         class="btn btn-primary btn-login"
         @click="goToAddScore()"
-      > Input Nilai
+      > Daftar Nilai
       </el-button>
       <div class="search">
         <img src="@/assets/svg/search.svg" alt>
@@ -81,7 +98,7 @@ import DeleteModal from '@/views/courses/Modal/DeleteModal/index'
 import ChooseStudents from '@/views/courses/Modal/ChooseStudentsModal/index'
 import SubmitModal from '@/views/courses/Modal/SubmitModal/index'
 import { Message } from 'element-ui'
-
+var textFile
 export default {
   name: 'ClassAttendance',
   components: {
@@ -103,6 +120,7 @@ export default {
       currentPage: 1,
       totalPage: null,
       searchQuery: '',
+      textFile: null,
       listLoading: false,
       selectedStudents: [],
       currentStudentList: [],
@@ -133,6 +151,18 @@ export default {
     },
     goToAddScore() {
       this.$router.push({ name: 'ScoresList', params: { id: this.idCourse }})
+    },
+    async goToAddScoreFile() {
+      console.log(textFile)
+      const params = {
+        text: textFile
+      }
+      await CourseStudent.addScoresCSV(this.idCourse, params)
+      Message({
+        message: 'Upload Nilai dan Komponen Berhasil',
+        type: 'success',
+        duration: 5 * 1000
+      })
     },
     async getClassAttendance() {
       this.listLoading = true
@@ -205,6 +235,18 @@ export default {
     openEnrollConfirmModal(carriedData) {
       this.modal.carriedData = carriedData
       this.openModal('confirmEnroll')
+    },
+    onFileChange: function(e) {
+      const file = e.target.files[0]
+      const reader = new FileReader()
+      reader.onload = function(e) {
+        textFile = e.target.result
+        console.log(textFile)
+      }
+      reader.readAsText(file)
+    },
+    saveText(data) {
+      this.textFile = data
     },
     async updatePage(index) {
       this.currentPage = index

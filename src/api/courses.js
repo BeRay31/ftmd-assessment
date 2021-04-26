@@ -19,6 +19,11 @@ export default class Courses {
       return res
     }
 
+    static async deleteScoresAll(id_course) {
+      const res = await service.delete(`${this.baseGroupURL}/delete/all/${id_course}`)
+      return res
+    }
+
     static async getComponent(id_course) {
       const res = await service.get(`${this.baseGroupURL}/component/${id_course}`)
       return res
