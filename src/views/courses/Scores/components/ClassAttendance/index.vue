@@ -17,7 +17,7 @@
           <th>Nilai</th>
           <th>Aksi</th>
         </tr>
-        <tr v-for="student in students" :key="student.id_user">
+        <tr v-for="(student, idx) in students" :key="idx">
           <td>{{ student.id_user }}</td>
           <td>{{ student.username }}</td>
           <td>{{ student.name }}</td>

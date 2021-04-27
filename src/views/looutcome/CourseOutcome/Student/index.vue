@@ -12,7 +12,7 @@
             <th>Komponen</th>
             <th>Nilai</th>
           </tr>
-          <tr v-for="outcome in outcomeData" :key="outcome.component">
+          <tr v-for="(outcome, idx) in outcomeData" :key="idx">
             <td>{{ outcome.component }}</td>
             <td>{{ outcome.score }}</td>
           </tr>

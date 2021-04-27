@@ -20,7 +20,6 @@
             <td>{{ average }}</td>
           </tr>
         </table>
-
         <el-button type="primary" icon="el-icon-document">Upload CSV</el-button>
       </div>
     </div>

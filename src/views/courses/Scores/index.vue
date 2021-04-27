@@ -30,7 +30,7 @@
             <el-col :span="6">
               <el-form-item>
                 <el-select v-model="formData.class" placeholder="Komponen">
-                  <el-option v-for="component in components" :key="component.component" :value="component.component">{{ component.component }}</el-option>
+                  <el-option v-for="(component, idx) in components" :key="idx" :value="component.component">{{ component.component }}</el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -164,9 +164,7 @@ export default {
     },
     async getComponent() {
       const fetched = await Course.getComponent(this.$route.params.id)
-      console.log(fetched)
       this.components = fetched.data
-      console.log(this.components[0].component)
     },
     validateForm() {
       let messageObject
