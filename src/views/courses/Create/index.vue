@@ -147,7 +147,6 @@ export default {
         lecturer_name: null,
         year: null,
         id_lecturer: null,
-        year: null,
         sks: null
       },
       lecturerData: null

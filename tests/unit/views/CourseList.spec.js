@@ -90,15 +90,15 @@ describe('CoursesList.vue', () => {
     expect(wrapper.vm.$data.courses).toBeInstanceOf(Array)
   })
 
-  // it('simulate delete course list', async () => {
-  //   const wrapper = mount(CourseList, { store, localVue })
-  //   wrapper.vm.$data.modal.course = { id_course: 1 }
-  //   await wrapper.vm.deleteCourse()
-  //   expect(wrapper.vm.$data.modal.state).toBeFalsy()
-  // })
+  it('simulate delete course list', async() => {
+    const wrapper = await mount(CourseList, { store, localVue })
+    wrapper.vm.$data.modal.course = { id_course: 1 }
+    await wrapper.vm.deleteCourse()
+    expect(wrapper.vm.$data.modal.state).toBeFalsy()
+  })
 
-  it('beginning data', async () => {
-    const wrapper = mount(CourseList, { store, localVue })
+  it('beginning data', async() => {
+    const wrapper = await mount(CourseList, { store, localVue })
     expect(wrapper.vm.$data.courses.length).toEqual(0)
     expect(wrapper.vm.$data.currentPage).toEqual(1)
     expect(wrapper.vm.$data.totalPage).toBeNull()
@@ -108,5 +108,4 @@ describe('CoursesList.vue', () => {
     expect(wrapper.vm.$data.semesterFilter).toBeFalsy()
     expect(wrapper.vm.$data.listLoading).toBeFalsy()
   })
-
 })

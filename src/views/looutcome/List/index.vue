@@ -84,7 +84,7 @@ export default {
         let courseResp
         if (this.$store.getters.routes_user_type !== 'student') {
           courseResp = await Loutcome.viewcoallcourse()
-        } 
+        }
         this.courses = courseResp.value.component
         this.outcome = courseResp.value.result
         this.totalPage = courseResp.lastPage
@@ -92,7 +92,7 @@ export default {
         console.error(e.stack)
       }
       this.listLoading = false
-    },
+    }
   }
 }
 </script>
