@@ -34,7 +34,7 @@ export default {
     },
     title: {
       type: String,
-      default: 'Apakah anda yakin ingin membuat user?'
+      default: 'Apakah anda yakin ingin menambah user?'
     }
   }
 }
