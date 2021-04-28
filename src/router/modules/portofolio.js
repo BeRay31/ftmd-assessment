@@ -12,14 +12,25 @@ const portofolioRoute = {
   },
   children: [
     {
-      path: 'porto',
-      component: () => import('@/views/portofolio/index'),
+      path: 'list',
+      component: () => import('@/views/portofolio/List/index'),
       name: 'CoursePortofolio',
       meta: {
         title: 'Portofolio Perkuliahan',
         icon: 'excel',
         roles: ['admin', 'lecturer']
       }
+    },
+    {
+      path: 'detail/:id',
+      component: () => import('@/views/portofolio/Detail/index'),
+      name: 'PortfolioDetails',
+      mete: {
+        title: 'Detil Portfolio',
+        icon: 'excel',
+        roles: ['admin', 'lecturer']
+      },
+      hidden: true
     }
   ]
 }
