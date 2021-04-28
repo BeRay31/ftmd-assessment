@@ -1,59 +1,68 @@
 <template>
-  <div class="course-list-container">
-    <header>
-      <h1 v-if="courses"> {{ courses.code }} {{ courses.name }} K{{ courses.class }}</h1>
-      <h1>Daftar Component LO</h1>
-    </header>
-    <div class="content-container">
-      <div class="card">
-        <table>
-          <tr>
-            <th>Komponen</th>
-            <th>LO</th>
-            <th>Persentase</th>
-            <th>Aksi</th>
-          </tr>
-          <tr v-for="component in loComponents" :key="component.id">
-            <td>{{ component.component }}</td>
-            <td>{{ component.code }}</td>
-            <td>{{ component.percentage }}</td>
-            <td class="action">
-              <el-button
-                type="primary"
-                icon="el-icon-edit"
-                @click="openModal(component)"
-              >Edit</el-button>
-              <el-button
-                type="warning"
-                icon="el-icon-delete"
-                @click="openDeleteModal(component)"
-                @submit="deleteComponent(component)"
-              >Delete</el-button>
-            </td>
-          </tr>
-        </table>
+  <div class="buffer">
+    <div class="course-list-container">
+      <header>
+        <h1>Daftar Komponen Penilaian</h1>
+        <p v-if="courses"> {{ courses.code }} {{ courses.name }} K{{ courses.class }}</p>
+      </header>
+      <div class="content-container">
+        <div class="card">
+          <table>
+            <tr>
+              <th>Komponen</th>
+              <th>LO A</th>
+              <th>LO B</th>
+              <th>LO C</th>
+              <th>LO D</th>
+              <th>LO E</th>
+              <th>LO F</th>
+              <th>LO G</th>
+              <th>% NA</th>
+              <th>Aksi</th>
+            </tr>
+            <tr v-for="(comp, name) in loComponents" :key="name">
+              <td>{{ name }}</td>
+              <td v-for="(item, idx) in comp" :key="idx">
+                {{ item > 0 ? item : '-' }}
+              </td>
+              <td class="action">
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  @click="openModal(name, comp)"
+                >Edit</el-button>
+                <el-button
+                  type="warning"
+                  icon="el-icon-delete"
+                  @click="openDeleteModal(name)"
+                >Delete</el-button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
+      <EditModal
+        v-if="modal.state"
+        :state="modal.state"
+        :component="modal.component"
+        :percentage="modal.percentage"
+        :id-course="parseInt(id_course)"
+        @closeModal="closeModal"
+        @submit="editComponent"
+      />
+      <DeleteModal
+        v-if="modal.stateDelete"
+        :state="modal.stateDelete"
+        :component="modal.component"
+        @closeModal="closeModal"
+        @submit="deleteComponent"
+      />
     </div>
-    <div class="btn-group">
-      <el-button
-        type="primary"
-        icon="el-icon-edit"
-        @click="addComponent()"
-      >Tambah Komponen</el-button>
-    </div>
-    <EditModal
-      v-if="modal.state"
-      :state="modal.state"
-      :component="modal.component"
-      @closeModal="closeModal"
-      @submit="editComponent"
-    />
-    <DeleteModal
-      v-if="modal.stateDelete"
-      :state="modal.stateDelete"
-      :component="modal.component"
-      @closeModal="closeModal"
-      @submit="deleteComponent"
+    <AddLoWeight
+      v-if="showAdd"
+      :id-course="parseInt(id_course)"
+      :class-details="courses"
+      @update="fetchComponents"
     />
   </div>
 </template>
@@ -62,22 +71,27 @@
 import DosenLoWeight from '@/api/dosen_lo_weight'
 import EditModal from '@/views/courses/LoWeightList/EditModal/index'
 import DeleteModal from '@/views/courses/LoWeightList/DeleteModal/index'
+import AddLoWeight from '@/views/courses/AddLoWeight/index'
 import { Message } from 'element-ui'
 
 export default {
   name: 'LoComponentList',
   components: {
     EditModal,
-    DeleteModal
+    DeleteModal,
+    AddLoWeight
   },
   data() {
     return {
       loComponents: [],
       courses: null,
+      showAdd: false,
+      id_course: this.$route.params.id,
       modal: {
         state: false,
         stateDelete: false,
-        course: null
+        course: null,
+        percentage: [0, 0, 0, 0, 0, 0, 0]
       }
     }
   },
@@ -86,13 +100,20 @@ export default {
       await this.fetchComponents()
     }
   },
+  async created() {
+    const fetch_courses = await DosenLoWeight.getCourseDetails(this.$route.params.id)
+    this.courses = fetch_courses.data
+    this.showAdd = true
+  },
   async mounted() {
     await this.fetchComponents()
   },
   methods: {
     async editComponent(edited) {
       try {
-        edited.id_lo = edited.code.charCodeAt(0) - 64
+        edited.semester = this.courses.semester
+        edited.tahun_ajaran = this.courses.tahun_ajaran
+        edited.code = this.courses.code
         const fetched = await DosenLoWeight.editComponent(edited)
         if (fetched.msg === 'Update row success!') {
           Message({
@@ -111,7 +132,7 @@ export default {
         this.fetchComponents()
       } catch (e) {
         Message({
-          message: e.stack,
+          message: 'Komponen gagal di edit',
           type: 'error',
           duration: 3 * 1000
         })
@@ -120,22 +141,27 @@ export default {
     async fetchComponents() {
       try {
         const fetched = await DosenLoWeight.fetchComponents(this.$route.params.id)
-        const fetch_courses = await DosenLoWeight.getCourseDetails(this.$route.params.id)
         this.loComponents = fetched.value
-        this.courses = fetch_courses.data
       } catch (e) {
-        console.error(e.stack)
+        Message({
+          message: 'Komponen tidak ditemukan',
+          type: 'error',
+          duration: 3 * 1000
+        })
       }
     },
-    openDeleteModal(component) {
+    openDeleteModal(name) {
       this.modal.stateDelete = true
-      this.modal.component = component
+      this.modal.component = name
     },
-    addComponent() {
-      this.$router.push({ name: 'AddLoComponent' })
-    },
-    async deleteComponent() {
-      DosenLoWeight.deleteComponent(this.modal.component).then((res) => {
+    async deleteComponent(name) {
+      const data = {}
+      data['component'] = this.modal.component
+      data['id_course'] = this.id_course
+      data['semester'] = this.courses.semester
+      data['tahun_ajaran'] = this.courses.tahun_ajaran
+      data['code'] = this.courses.code
+      DosenLoWeight.deleteComponent(data).then((res) => {
         if (res.msg === 'Row deleted successfully!') {
           this.modal.state = false
           this.modal.stateDelete = false
@@ -161,8 +187,9 @@ export default {
       this.modal.stateDelete = false
       this.modal.component = null
     },
-    openModal(component) {
-      this.modal.component = component
+    openModal(name, comp) {
+      this.modal.percentage = comp
+      this.modal.component = name
       this.modal.state = true
     }
   }
