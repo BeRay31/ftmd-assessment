@@ -13,6 +13,11 @@ export default class CourseStudent {
     return resp
   }
 
+  static async addScoresCSV(id_course, params) {
+    const res = await service.post(`courses/add/scores/csv/${id_course}`, { params })
+    return res
+  }
+
   static async getCourseStudent(id_course, params) {
     const resp = await service.get(`${this.baseGroupURL}/${id_course}`, { params })
     return resp
