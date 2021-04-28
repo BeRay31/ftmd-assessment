@@ -5,7 +5,7 @@
         <h2>Input Nilai Mahasiswa CSV</h2>
         <a href="https://docs.google.com/spreadsheets/d/1y0dB5QqLlK6VVNRbFDwLZd1vNLTEr4ZicRvBbFaNllE/edit?usp=sharing">Template CSV</a>
         <form enctype="multipart/form-data">
-        <input type="file" @change="onFileChange">
+          <input type="file" @change="onFileChange">
         </form>
         <el-button
           v-if="!isAdmin"
@@ -65,6 +65,69 @@
         @click="openModal('selectStudents')"
       >Tambah Mahasiswa</el-button>
     </div>
+    <header>
+      <h1>Range Index</h1>
+    </header>
+    <div class="form-card">
+      <el-form>
+        <el-form-item>
+          A >= <el-input-number v-model="rangeA" :min="0" :max="100" size="small" :step="10" />
+        </el-form-item>
+        <el-form-item>
+          AB >= <el-input-number v-model="rangeAB" :min="0" :max="100" size="small" :step="10" />
+        </el-form-item>
+        <el-form-item>
+          B >= <el-input-number v-model="rangeB" :min="0" :max="100" size="small" :step="10" />
+        </el-form-item>
+        <el-form-item>
+          BC >= <el-input-number v-model="rangeBC" :min="0" :max="100" size="small" :step="10" />
+        </el-form-item>
+        <el-form-item>
+          C >= <el-input-number v-model="rangeC" :min="0" :max="100" size="small" :step="10" />
+        </el-form-item>
+        <el-form-item>
+          D >= <el-input-number v-model="rangeD" :min="0" :max="100" size="small" :step="10" />
+        </el-form-item>
+      </el-form>
+    </div>
+    <el-button
+      type="primary"
+      class="btn"
+      @click="openModal('countIndex')"
+    >Hitung Index</el-button>
+    <div class="class-attendance-container">
+      <h2>Daftar Index</h2>
+      <div class = "card">
+        <table>
+          <tr>
+            <th></th>
+            <th>A</th>
+            <th>AB</th>
+            <th>B</th>
+            <th>BC</th>
+            <th>C</th>
+            <th>D</th>
+            <th>E</th>
+          </tr>
+          <tr>
+            <td>Total</td>
+            <td>{{ totalA }}</td>
+            <td>{{ totalAB }}</td>
+            <td>{{ totalB }}</td>
+            <td>{{ totalBC }}</td>
+            <td>{{ totalC }}</td>
+            <td>{{ totalD }}</td>
+            <td>{{ totalE }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <el-button
+      type="primary"
+      class="btn"
+      style="margin-top:20px; margin-left:600px"
+      @click="openModal('uploadScore')"
+    >Upload Nilai Ke Admin</el-button>
     <DeleteModal
       v-if="isModalOpen('deleteConfirm')"
       :state="isModalOpen('deleteConfirm')"
@@ -88,15 +151,34 @@
       @closeModal="closeModal"
       @submit="handleSubmitSelectedStudents"
     />
+    <SubmitModal1
+      v-if="isModalOpen('countIndex')"
+      :state="isModalOpen('countIndex')"
+      title="Hitung Nilai Index Mahasiswa ?"
+      content="Nilai index mahasiswa akan dihitung sesuai dengan range yang telah diberikan"
+      @closeModal="closeModal"
+      @submit="handleSubmitCountIndex"
+    />
+    <SubmitModal2
+      v-if="isModalOpen('uploadScore')"
+      :state="isModalOpen('uploadScore')"
+      title="Yakin akan upload nilai ke TU ?"
+      content="Nilai akan terlihat pada bagian portfolio admin dan mahasiswa"
+      @closeModal="closeModal"
+      @submit="uploadAllScore"
+    />
   </div>
 </template>
 
 <script>
 import CourseStudent from '@/api/courseStudent'
+import Course from '@/api/courses'
 import Pagination from '@/components/Pagination/Pagination'
 import DeleteModal from '@/views/courses/Modal/DeleteModal/index'
 import ChooseStudents from '@/views/courses/Modal/ChooseStudentsModal/index'
 import SubmitModal from '@/views/courses/Modal/SubmitModal/index'
+import SubmitModal1 from '@/views/courses/Modal/SubmitModal/index'
+import SubmitModal2 from '@/views/courses/Modal/SubmitModal/index'
 import { Message } from 'element-ui'
 var textFile
 export default {
@@ -105,7 +187,9 @@ export default {
     Pagination,
     DeleteModal,
     ChooseStudents,
-    SubmitModal
+    SubmitModal,
+    SubmitModal1,
+    SubmitModal2
   },
   props: {
     idCourse: {
@@ -123,6 +207,21 @@ export default {
       textFile: null,
       listLoading: false,
       selectedStudents: [],
+      totalA: 0,
+      totalAB: 0,
+      totalB: 0,
+      totalBC: 0,
+      totalC: 0,
+      totalD: 0,
+      totalE: 0,
+      rangeA: null,
+      rangeAB: null,
+      rangeB: null,
+      rangeBC: null,
+      rangeC: null,
+      rangeD: null,
+      rangeE: null,
+      total: 0,
       currentStudentList: [],
       modal: {
         state: '',
@@ -139,6 +238,7 @@ export default {
   async mounted() {
     await this.getClassAttendance()
     await this.getAllClassAttendance()
+    await this.getIndex()
   },
   methods: {
     async getAllClassAttendance() {
@@ -152,6 +252,33 @@ export default {
     goToAddScore() {
       this.$router.push({ name: 'ScoresList', params: { id: this.idCourse }})
     },
+    async handleSubmitCountIndex() {
+      const params = {
+        rangeA: this.rangeA,
+        rangeAB: this.rangeAB,
+        rangeB: this.rangeB,
+        rangeBC: this.rangeBC,
+        rangeC: this.rangeC,
+        rangeD: this.rangeD,
+      }
+      await CourseStudent.addIndexes(this.idCourse, params)
+      Message({
+        message: 'Index Berhasil Dihitung',
+        type: 'success',
+        duration: 5 * 1000
+      })
+      this.closeModal()
+      this.getIndex()
+    },
+    async uploadAllScore() {
+      await CourseStudent.uploadAll(this.idCourse)
+      Message({
+        message: 'Upload Nilai ke TU Berhasil',
+        type: 'success',
+        duration: 5 * 1000
+      })
+      this.closeModal()
+    },
     async goToAddScoreFile() {
       console.log(textFile)
       const params = {
@@ -163,6 +290,40 @@ export default {
         type: 'success',
         duration: 5 * 1000
       })
+    },
+    async getIndex() {
+      this.totalA = 0
+      this.totalAB = 0
+      this.totalB = 0
+      this.totalBC = 0
+      this.totalC = 0
+      this.totalD = 0
+      this.totalE = 0
+      const resp = await Course.getIndexes(this.idCourse)
+      for (var i = 0; i < resp.data.length; i++) {
+        if (resp.data[i].index_char === 'A') {
+          this.totalA = resp.data[i].total
+        }
+        if (resp.data[i].index_char === 'AB') {
+          this.totalAB = resp.data[i].total
+        }
+        if (resp.data[i].index_char === 'B') {
+          this.totalB = resp.data[i].total
+        }
+        if (resp.data[i].index_char === 'BC') {
+          this.totalBC = resp.data[i].total
+        }
+        if (resp.data[i].index_char === 'C') {
+          this.totalC = resp.data[i].total
+        }
+        if (resp.data[i].index_char === 'D') {
+          this.totalD = resp.data[i].total
+        }
+        if (resp.data[i].index_char === 'E') {
+          this.totalE = resp.data[i].total
+        }
+      }
+      console.log(resp)
     },
     async getClassAttendance() {
       this.listLoading = true
@@ -214,7 +375,7 @@ export default {
           // TODO:: Handle file Data
           // const formDatawFile = new FormData();
           // formDatawFile.append('excel', this.modal.carriedData.fileStudents);
-          await CourseStudent.enrollUserByFile(this.idCourse, this.modal.carriedData.fileStudents);
+          await CourseStudent.enrollUserByFile(this.idCourse, this.modal.carriedData.fileStudents)
         }
         await this.getAllClassAttendance()
         Message({

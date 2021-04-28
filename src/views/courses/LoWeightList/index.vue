@@ -41,6 +41,14 @@
           </table>
         </div>
       </div>
+      <div class="course-list-container">
+        <el-button
+          type="primary"
+          style="margin-top:20px"
+          icon="el-icon-edit"
+          @click="countScoreIndex()"
+        >Hitung Nilai Indeks</el-button>
+      </div>
       <EditModal
         v-if="modal.state"
         :state="modal.state"
@@ -69,6 +77,7 @@
 
 <script>
 import DosenLoWeight from '@/api/dosen_lo_weight'
+import Course from '@/api/courses'
 import EditModal from '@/views/courses/LoWeightList/EditModal/index'
 import DeleteModal from '@/views/courses/LoWeightList/DeleteModal/index'
 import AddLoWeight from '@/views/courses/AddLoWeight/index'
@@ -137,6 +146,15 @@ export default {
           duration: 3 * 1000
         })
       }
+    },
+    async countScoreIndex() {
+      await Course.countScoreIndexes(this.$route.params.id)
+      Message({
+          message: 'Nilai Berhasil dihitung',
+          type: 'success',
+          duration: 3 * 1000
+        })
+      this.$router.push({ name: 'EditCourse', params: { id: this.$route.params.id }})
     },
     async fetchComponents() {
       try {
