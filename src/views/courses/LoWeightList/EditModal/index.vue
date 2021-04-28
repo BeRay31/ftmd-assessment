@@ -2,29 +2,24 @@
   <Modal :state="state" :title="title" @closeModal="$emit('closeModal')">
     <div class="content">
       <el-form>
-        <el-form-item>
-          <MDInput v-model="editComponent.component">Komponen</MDInput>
-        </el-form-item>
-        <el-form-item>
-          <el-select v-model="editComponent.code" placeholder="Learning Outcome">
-            <el-option value="A"> A - Penyelesaian Masalah</el-option>
-            <el-option value="B"> B - Desain</el-option>
-            <el-option value="C"> C - Komunikasi</el-option>
-            <el-option value="D"> D - Etika Profesi</el-option>
-            <el-option value="E"> E - Kerja Sama</el-option>
-            <el-option value="F"> F - Eksperimen</el-option>
-            <el-option value="G"> G - Belajar Sepanjang Hayat</el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <MDInput v-model="editComponent.percentage" type="number" min="0" max="100">Persentase</MDInput>
-        </el-form-item>
+        <h2>{{ editComponent.name }}</h2>
+        <h4 style="margin-bottom: 1rem;">Pembobotan Nilai Akhir</h4>
+        <el-input-number v-model="editComponent.index_percentage" :min="0" :max="100" size="small" :step="10" />
+        <h4 style="margin-bottom: 1rem;">Pembobotan LO</h4>
+        <el-row v-for="(out, idx) in outcomes" :key="idx">
+          <el-col :span="span">
+            <span class="number-label">{{ out }}</span>
+          </el-col>
+          <el-col :span="6">
+            <el-input-number v-model="editComponent.percentage[idx]" :min="0" :max="100" size="small" :step="10" />
+          </el-col>
+        </el-row>
       </el-form>
       <div class="content__button-group">
         <el-button class="btn btn-primary-alt" @click="$emit('closeModal')">Batalkan</el-button>
         <el-button
           :class="['btn btn-primary']"
-          @click="$emit('submit', editComponent)"
+          @click.prevent="emitSubmit"
         >Ubah</el-button>
       </div>
     </div>
@@ -33,13 +28,12 @@
 
 <script>
 import Modal from '@/components/Modal'
-import MDInput from '@/components/MDinput'
+import { Message } from 'element-ui'
 
 export default {
   name: 'EditModal',
   components: {
-    Modal,
-    MDInput
+    Modal
   },
   props: {
     state: {
@@ -51,19 +45,58 @@ export default {
       default: 'Ubah Detail Komponen'
     },
     component: {
-      type: Object,
+      type: String,
+      default: null
+    },
+    idCourse: {
+      type: Number,
+      default: null
+    },
+    percentage: {
+      type: Array,
       default: null
     }
   },
   data() {
     return {
+      span: 10,
+      outcomes: [
+        'A - Penyelesaian Masalah',
+        'B - Desain',
+        'C - Komunikasi',
+        'D - Etika Profesi',
+        'E - Kerja Sama',
+        'F - Eksperimen',
+        'G - Belajar Sepanjang Hayat'
+      ],
       editComponent: {
-        id: this.component.id,
-        id_course: this.component.id_course,
-        component: this.component.component,
-        code: this.component.code,
-        id_lo: this.component.id_lo,
-        percentage: this.component.percentage
+        id_course: this.idCourse,
+        name: this.component,
+        percentage: this.percentage,
+        index_percentage: this.percentage[7]
+      }
+    }
+  },
+  mounted() {
+    this.editComponent.name = this.component
+    this.editComponent.id_course = this.idCourse
+    this.editComponent.percentage = this.percentage.slice(0, 7)
+    this.editComponent.index_percentage = this.percentage[7]
+  },
+  methods: {
+    isValid() {
+      return (this.editComponent.index_percentage > 0 &&
+      this.editComponent.percentage.reduce((a, b) => a + b, 0) === 100)
+    },
+    emitSubmit() {
+      if (this.isValid()) {
+        this.$emit('submit', this.editComponent)
+      } else {
+        Message({
+          message: 'Pastikan masukan sudah benar',
+          type: 'error',
+          duration: 3 * 1000
+        })
       }
     }
   }

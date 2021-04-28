@@ -1,35 +1,36 @@
 <template>
   <div class="course-container">
     <header>
-      <h1>Tambah Lo Component</h1>
+      <h1>Tambah Komponen Nilai</h1>
     </header>
     <div class="content-container">
       <div class="form-card">
         <el-form>
-          <el-row :gutter="30">
-            <el-row :span="6">
-              <el-form-item>
-                <MDInput v-model="formData.component">Komponen</MDInput>
-              </el-form-item>
-            </el-row>
-            <el-row :span="6">
-              <el-form-item>
-                <el-select v-model="formData.id_lo" placeholder="Learning Outcome">
-                  <el-option value="A"> A - Penyelesaian Masalah</el-option>
-                  <el-option value="B"> B - Desain</el-option>
-                  <el-option value="C"> C - Komunikasi</el-option>
-                  <el-option value="D"> D - Etika Profesi</el-option>
-                  <el-option value="E"> E - Kerja Sama</el-option>
-                  <el-option value="F"> F - Eksperimen</el-option>
-                  <el-option value="G"> G - Belajar Sepanjang Hayat</el-option>
-                </el-select>
-              </el-form-item>
-            </el-row>
-            <el-row :span="6">
-              <el-form-item>
-                <MDInput v-model="formData.percentage" type="number" min="0" max="100">Persentase</MDInput>
-              </el-form-item>
-            </el-row>
+          <h3 class="number-label">Nama Komponen</h3>
+          <el-select v-model="formData.component">
+            <el-option
+              v-for="(item, idx) in options"
+              :key="idx"
+              :label="item.component"
+              :value="item.component"
+            />
+          </el-select>
+          <el-row>
+            <el-col :span="6">
+              <h3 class="number-label">Persentase Nilai Akhir</h3>
+            </el-col>
+            <el-col>
+              <el-input-number v-model="formData.index_percentage" :min="0" :max="100" size="small" :step="10" />
+            </el-col>
+          </el-row>
+          <h3 style="margin-bottom: 1rem;">Pembobotan LO</h3>
+          <el-row v-for="(out, idx) in outcomes" :key="out">
+            <el-col :span="6">
+              <span class="number-label">{{ out }}</span>
+            </el-col>
+            <el-col :span="6">
+              <el-input-number v-model="formData.percentage[idx]" :min="0" :max="100" size="small" :step="10" />
+            </el-col>
           </el-row>
         </el-form>
         <el-button
@@ -51,38 +52,59 @@
 
 <script>
 import SubmitModal from './SubmitModal/index'
-import MDInput from '@/components/MDinput'
 import { Message } from 'element-ui'
 import DosenLoWeight from '@/api/dosen_lo_weight'
 
 export default {
   name: 'Course',
   components: {
-    MDInput,
     SubmitModal
+  },
+  props: {
+    idCourse: {
+      type: Number,
+      default: null
+    },
+    classDetails: {
+      type: Object,
+      default: null
+    }
   },
   data() {
     return {
       loading: false,
+      outcomes: [
+        'A - Penyelesaian Masalah',
+        'B - Desain',
+        'C - Komunikasi',
+        'D - Etika Profesi',
+        'E - Kerja Sama',
+        'F - Eksperimen',
+        'G - Belajar Sepanjang Hayat'
+      ],
       modal: {
         state: false
       },
       learning_outcome: [],
+      options: [1, 2, 3],
       formData: {
         id_course: null,
-        id_lo: null,
+        index_percentage: 0,
         component: null,
-        percentage: null
+        percentage: [0, 0, 0, 0, 0, 0, 0],
+        semester: null,
+        code: null,
+        tahun_ajaran: null
       }
     }
   },
-  watch: {
-    async currentPage() {
-      await this.fetchComponents()
-    }
-  },
   async mounted() {
-    await this.fetchComponents()
+    this.id_course = this.idCourse
+    this.formData.semester = this.classDetails.semester
+    this.formData.code = this.classDetails.code
+    this.formData.tahun_ajaran = this.classDetails.tahun_ajaran
+    const components = await DosenLoWeight.fetchScoreComponents(this.id_course)
+    this.options = components.data
   },
   methods: {
     openModal() {
@@ -94,23 +116,13 @@ export default {
     },
     validateForm() {
       return (
-        this.formData.id_lo &&
         this.formData.component &&
-        this.formData.percentage
+        this.formData.percentage.reduce((a, b) => a + b, 0) === 100
       )
-    },
-    async fetchComponents() {
-      try {
-        const fetched = await DosenLoWeight.getLO(this.$route.params.id)
-        this.learning_outcome = fetched.data
-      } catch (e) {
-        console.error(e.stack)
-      }
     },
     async handleSubmit() {
       if (this.validateForm()) {
         try {
-          this.formData.id_lo = this.formData.id_lo.charCodeAt(0) - 64
           DosenLoWeight.addComponent(this.formData).then((res) => {
             if (res.msg === 'New row created successfully!') {
               Message({
@@ -118,7 +130,8 @@ export default {
                 type: 'success',
                 duration: 5 * 1000
               })
-              this.$router.push({ name: 'LoComponentList' })
+              this.closeModal()
+              this.$emit('update')
             } else {
               Message({
                 message: 'Komponen gagal ditambahkan',
@@ -130,17 +143,26 @@ export default {
           })
         } catch (e) {
           Message({
-            message: e.stack,
+            message: 'Terjadi kesalahan dalam penambahan komponen',
             type: 'error',
             duration: 4 * 1000
           })
+          this.closeModal()
         }
       } else {
-        Message({
-          message: 'Mohon mengisi semua field',
-          type: 'error',
-          duration: 3 * 1000
-        })
+        if (this.formData.percentage.reduce((a, b) => a + b, 0) !== 100) {
+          Message({
+            message: 'Total pembobotan harus 100 persen',
+            type: 'error',
+            duration: 4 * 1000
+          })
+        } else {
+          Message({
+            message: 'Mohon mengisi semua field',
+            type: 'error',
+            duration: 3 * 1000
+          })
+        }
         this.closeModal()
       }
     }

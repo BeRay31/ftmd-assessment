@@ -2,7 +2,7 @@
   <Modal :state="state" :title="title" @closeModal="$emit('closeModal')">
     <div class="content">
       <div class="content__body">
-        Komponen {{ component.component }} akan terhapus dari sistem.
+        Komponen {{ component }} akan terhapus dari sistem.
       </div>
       <div class="content__button-group">
         <button class="btn btn-primary-alt" @click="$emit('closeModal')">Batal</button>
@@ -33,7 +33,7 @@ export default {
       default: 'Hapus Mata Kuliah?'
     },
     component: {
-      type: Object,
+      type: String,
       default: null
     }
   }
