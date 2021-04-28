@@ -48,31 +48,31 @@
                   <el-button
                     type="primary"
                     icon="el-icon-edit"
-                    @click="goToFillQuestionnaire(course)"
-                  >Pengisian</el-button>
+                    @click="goToFillQuestionnaires(course)"
+                  >Lihat</el-button>
                   <el-button
                     type="warning"
                     icon="el-icon-s-order"
-                    @click="goToQuestionnaireResults(course)"
+                    @click="goToQuestionnaireResult(course)"
                   >Lihat Hasil</el-button>
                 </td>
               </template>
-              <template v-else-if="$store.getters.routes_user_type !== 'student'">
+              <template v-else-if="$store.getters.routes_user_type === 'student'">
                 <td class="action">
                   <el-button
-                    type="warning"
-                    icon="el-icon-s-order"
-                    @click="goToQuestionnaireResults(course)"
-                  >Lihat Hasil</el-button>
+                    type="primary"
+                    icon="el-icon-edit"
+                    @click="goToFillQuestionnaires(course)"
+                  >Pengisian</el-button>
                 </td>
               </template>
               <template v-else>
                 <td class="action">
                   <el-button
-                    type="primary"
-                    icon="el-icon-edit"
-                    @click="goToFillQuestionnaire(course)"
-                  >Pengisian</el-button>
+                    type="warning"
+                    icon="el-icon-s-order"
+                    @click="goToQuestionnaireResult(course)"
+                  >Lihat Hasil</el-button>
                 </td>
               </template>
             </tr>
@@ -167,10 +167,10 @@ export default {
       }
       this.listLoading = false
     },
-    goToFillQuestionnaire(course) {
+    goToFillQuestionnaires(course) {
       this.$router.push({ name: 'FillTeamworkQuestionnaire', params: { id: course.id_course }})
     },
-    goToQuestionnaireResults(course) {
+    goToQuestionnaireResult(course) {
       this.$router.push({ name: 'TeamworkQuestionnaireResults', params: { id: course.id_course }})
     }
   }

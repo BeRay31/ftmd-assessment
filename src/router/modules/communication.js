@@ -17,7 +17,7 @@ const communicationRoute = {
       name: 'CommQuestionnaireList',
       meta: {
         title: 'Kuesioner Komunikasi',
-        icon: 'form',
+        icon: 'list',
         roles: ['admin', 'lecturer', 'student']
       }
     },
@@ -28,7 +28,7 @@ const communicationRoute = {
       meta: {
         title: 'Pengisian Kuesioner',
         icon: 'edit',
-        roles: ['admin', 'student']
+        roles: ['admin', 'lecturer', 'student']
       },
       hidden: true
     },
@@ -39,7 +39,7 @@ const communicationRoute = {
       meta: {
         title: 'Hasil Kuisioner',
         icon: 'documentation',
-        roles: ['admin', 'lecturer']
+        roles: ['admin', 'lecturer', 'student']
       },
       hidden: true
     }

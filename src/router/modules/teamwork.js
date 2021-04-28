@@ -17,7 +17,7 @@ const teamworkRoute = {
       name: 'TeamworkQuestionnaireList',
       meta: {
         title: 'Kuesioner Kerjasama',
-        icon: 'form',
+        icon: 'list',
         roles: ['admin', 'lecturer', 'student']
       }
     },

@@ -1,20 +1,27 @@
 <template>
   <div class="questionnaire-result-container">
     <header>
-      <h1>Hasil Kuisioner - {{ datas['id_course'] }}</h1>
+      <h1>Hasil Kuisioner Komunikasi- {{ this.$route.params.id }}</h1>
     </header>
     <div class="content-container">
       <div class="card">
         <table>
           <tr>
             <th>No</th>
-            <th>Pertanyaan</th>
-            <th>Nilai (Skala 4)</th>
+            <th>NIM</th>
+            <th>Nilai</th>
+            <th>Jumlah Penilai</th>
           </tr>
-          <tr v-for="data in datas['answer_list']" :key="data['id']">
+          <tr v-for="data in scores" :key="data['id']">
             <td>{{ data['id'] }}</td>
-            <td class="left-align">{{ data["text"] }}</td>
-            <td>{{ data['answer'] }}</td>
+            <td>{{ data["username"] }}</td>
+            <td>{{ data['communication_indexes'] }}</td>
+            <td>{{ data['count_communication'] }}</td>
+          </tr>
+          <tr>
+            <th class="right-align" colspan="2">Rata-rata</th>
+            <td>{{ mean }}</td>
+            <td>{{ count }}</td>
           </tr>
         </table>
       </div>
@@ -23,73 +30,34 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
+
+import Softskill from '@/api/softskill'
+
 export default {
   data() {
     return {
-      datas: {
-        'id_course': this.$route.params.id,
-        'answer_list': [
-          {
-            'id': 1,
-            'text': 'Saya memperoleh informasi yang cukup tentang hal-hal tertentu yang harus saya capai atau kuasai (luaran matakuliah) sesudah mengikuti matakuliah ini.',
-            'answer': 4.0
-          },
-          {
-            'id': 2,
-            'text': 'Pelaksanaan perkuliahan diarahkan agar mahasiswa dapat mencapai atau menguasai luaran matakuliah ini.',
-            'answer': 4.0
-          },
-          {
-            'id': 3,
-            'text': 'Saya mencapai atau menguasai luaran matakuliah ini.',
-            'answer': 4.0
-          },
-          {
-            'id': 4,
-            'text': 'Pelaksanaan perkuliahan terorganisir dengan baik.',
-            'answer': 4.0
-          },
-          {
-            'id': 5,
-            'text': 'Dosen berkomunikasi dengan efektif.',
-            'answer': 4.0
-          },
-          {
-            'id': 6,
-            'text': 'Dosen peduli terhadap pencapaian atau penguasaan mahasiswa akan luaran matakuliah ini.',
-            'answer': 4.0
-          },
-          {
-            'id': 7,
-            'text': 'Dosen berlaku adil (fair) kepada mahasiswa.',
-            'answer': 4.0
-          },
-          {
-            'id': 8,
-            'text': 'Beban kerja untuk matakuliah ini sesuai dengan SKS-nya.',
-            'answer': 4.0
-          },
-          {
-            'id': 9,
-            'text': 'Sarana dan prasarana untuk matakuliah tersedia dengan memadai.',
-            'answer': 4.0
-          },
-          {
-            'id': 10,
-            'text': 'Tersedia cukup fasilitas pendukung di luar kuliah yang memungkinkan saya mengikuti matakuliah ini dengan baik.',
-            'answer': 4.0
-          },
-          {
-            'id': 11,
-            'text': 'Saya berusaha dengan sungguh-sungguh mengikuti matakuliah ini.',
-            'answer': 4.0
-          },
-          {
-            'id': 12,
-            'text': 'Saya memperoleh pengalaman belajar yang positif dalam matakuliah ini.',
-            'answer': 4.0
-          }
-        ]
+      scores: [],
+      mean: 0,
+      count: 0
+    }
+  },
+  async mounted() {
+    await this.viewCourseAnswer()
+  },
+  methods: {
+    async viewCourseAnswer() {
+      try {
+        const answers = await Softskill.viewCourseAnswer(this.$route.params.id);
+        this.scores = answers.value;
+        this.mean = answers.mean;
+        this.count = answers.count;
+      } catch (e) {
+        Message({
+          message: e.stack || 'Error while reading scores',
+          type: 'error',
+          duration: 5 * 1000
+        })
       }
     }
   }
@@ -125,7 +93,7 @@ export default {
     padding: 1rem 2rem;
   }
 
-  .left-align {
-      text-align: left;
+  .right-align {
+      text-align: right;
   }
 </style>
