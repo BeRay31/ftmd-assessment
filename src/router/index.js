@@ -19,6 +19,7 @@ import teamworkRoute from './modules/teamwork'
 import communicationRoute from './modules/communication'
 import loAssessmentRoute from './modules/loassessment'
 import loutcomeRoute from './modules/looutcome'
+import studentAssessmentRoute from './modules/studentAssessment';
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -133,6 +134,7 @@ export const asyncRoutes = [
   communicationRoute,
   loAssessmentRoute,
   loutcomeRoute,
+  studentAssessmentRoute,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
