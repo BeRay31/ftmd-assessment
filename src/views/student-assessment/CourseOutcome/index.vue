@@ -11,8 +11,7 @@
             :key="index"
             :label="item.tahun_ajaran"
             :value="item.tahun_ajaran"
-          >
-          </el-option>
+          />
         </el-select>
       </div>
       <div class="filter__item">
@@ -66,10 +65,10 @@
 
 <script>
 import LOAssessment from '@/api/loAssessment'
-import studentAssessment from '@/api/studentAssessment';
+import studentAssessment from '@/api/studentAssessment'
 
 export default {
-  name: "CourseOutcome",
+  name: 'CourseOutcome',
   data() {
     return {
       selectedTahunAjaran: '',
@@ -80,20 +79,20 @@ export default {
       loading: false
     }
   },
-  async mounted() {
-    await this.getTahunAjaranList();
-    if (this.listTahunAjaran.length > 0) {
-      this.selectedTahunAjaran = this.listTahunAjaran[0];
-    }
-    await this.getScoreList();
-  },
   watch: {
     async selectedSemester() {
-      await this.getScoreList();
+      await this.getScoreList()
     },
     async selectedTahunAjaran() {
-      await this.getScoreList();
+      await this.getScoreList()
     }
+  },
+  async mounted() {
+    await this.getTahunAjaranList()
+    if (this.listTahunAjaran.length > 0) {
+      this.selectedTahunAjaran = this.listTahunAjaran[0]
+    }
+    await this.getScoreList()
   },
   methods: {
     async getTahunAjaranList() {
@@ -106,20 +105,20 @@ export default {
     },
     async getScoreList() {
       if (!this.loading) {
-        this.loading = true;
+        this.loading = true
         try {
           const params = {
             id_user: this.$store.getters.id_user,
             semester: this.selectedSemester,
             tahun_ajaran: this.selectedTahunAjaran
           }
-          const scoreList = await studentAssessment.getScore(params);
-          this.listScore = scoreList.data;
-          this.summary = scoreList.summary;
+          const scoreList = await studentAssessment.getScore(params)
+          this.listScore = scoreList.data
+          this.summary = scoreList.summary
         } catch (e) {
-          console.error(e.stack);
+          console.error(e.stack)
         }
-        this.loading = false;
+        this.loading = false
       }
     }
   }

@@ -19,7 +19,7 @@ import teamworkRoute from './modules/teamwork'
 import communicationRoute from './modules/communication'
 import loAssessmentRoute from './modules/loassessment'
 import loutcomeRoute from './modules/looutcome'
-import studentAssessmentRoute from './modules/studentAssessment';
+import studentAssessmentRoute from './modules/studentAssessment'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1

@@ -101,11 +101,11 @@ export default {
     this.id_course = this.$route.params.id
     try {
       const res = await Courses.fetchCourseById(this.id_course)
-        if (res) {
-          this.name = res.data.name
-          this.lecturer = res.data.lecturer_name
-          this.code = res.data.code
-        }
+      if (res) {
+        this.name = res.data.name
+        this.lecturer = res.data.lecturer_name
+        this.code = res.data.code
+      }
     } catch (e) {
       Message({
         message: 'Gagal memuat data',
