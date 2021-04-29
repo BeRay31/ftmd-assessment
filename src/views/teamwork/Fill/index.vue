@@ -76,22 +76,22 @@ export default {
               {
                 'id_option':1,
                 'value':1,
-                'text':'A'
+                'text':'1'
               },
               {
                 'id_option':2,
                 'value':2,
-                'text':'B'
+                'text':'2'
               },
               {
                 'id_option':3,
                 'value':3,
-                'text':'C'
+                'text':'3'
               },
               {
                 'id_option':4,
                 'value':4,
-                'text':'D'
+                'text':'4'
               },
             ]
           },
@@ -103,22 +103,22 @@ export default {
               {
                 'id_option':1,
                 'value':1,
-                'text':'A'
+                'text':'1'
               },
               {
                 'id_option':2,
                 'value':2,
-                'text':'B'
+                'text':'2'
               },
               {
                 'id_option':3,
                 'value':3,
-                'text':'C'
+                'text':'3'
               },
               {
                 'id_option':4,
                 'value':4,
-                'text':'D'
+                'text':'4'
               },
             ]
           },
@@ -130,22 +130,22 @@ export default {
               {
                 'id_option':1,
                 'value':1,
-                'text':'A'
+                'text':'1'
               },
               {
                 'id_option':2,
                 'value':2,
-                'text':'B'
+                'text':'2'
               },
               {
                 'id_option':3,
                 'value':3,
-                'text':'C'
+                'text':'3'
               },
               {
                 'id_option':4,
                 'value':4,
-                'text':'D'
+                'text':'4'
               },
             ]
           },

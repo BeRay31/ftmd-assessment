@@ -12,17 +12,24 @@
             <th>Nilai</th>
             <th>Jumlah Penilai</th>
           </tr>
-          <tr v-for="data in scores" :key="data['id']">
-            <td>{{ data['id'] }}</td>
-            <td>{{ data["username"] }}</td>
-            <td>{{ data['communication_indexes'] }}</td>
-            <td>{{ data['count_communication'] }}</td>
-          </tr>
-          <tr>
-            <th class="right-align" colspan="2">Rata-rata</th>
-            <td>{{ mean }}</td>
-            <td>{{ count }}</td>
-          </tr>
+          <template v-if="!scores || scores.length == 0">
+            <tr>
+              <th colspan="4"><h4 class="empty-state">No - Data</h4></th>
+            </tr>
+          </template>
+          <template v-else>
+            <tr v-for="data in scores" :key="data['id']">
+              <td>{{ data['id'] }}</td>
+              <td>{{ data["username"] }}</td>
+              <td>{{ data['communication_indexes'].toFixed(2) }}</td>
+              <td>{{ data['count_communication'] }}</td>
+            </tr>
+            <tr>
+              <th class="right-align" colspan="2">Rata-rata</th>
+              <td>{{ mean }}</td>
+              <td>{{ count }}</td>
+            </tr>
+          </template>
         </table>
       </div>
     </div>
@@ -50,8 +57,8 @@ export default {
       try {
         const answers = await Softskill.viewCourseAnswer(this.$route.params.id);
         this.scores = answers.value;
-        this.mean = answers.mean;
-        this.count = answers.count;
+        this.mean = answers.meanC;
+        this.count = answers.countC;
       } catch (e) {
         Message({
           message: e.stack || 'Error while reading scores',
@@ -95,5 +102,9 @@ export default {
 
   .right-align {
       text-align: right;
+  }
+
+  .empty-state{
+    text-align: center;
   }
 </style>
