@@ -9,6 +9,15 @@ export default class Courses {
       const res = await service.get(`${this.baseGroupURL}/`, { params })
       return res
     }
+    static async getIndexes(id_course) {
+      const res = await service.get(`${this.baseGroupURL}/get/indexes/${id_course}`)
+      return res
+    }
+
+    static async countScoreIndexes(id_course) {
+      const res = await service.post(`${this.baseGroupURL}/add/indexes/${id_course}`)
+      return res
+    }
 
     static async editCourse(id_course, data) {
       await service.post(`${this.baseGroupURL}/${id_course}`, data)
@@ -16,6 +25,11 @@ export default class Courses {
 
     static async fetchCourseById(id_course) {
       const res = await service.get(`${this.baseGroupURL}/${id_course}`)
+      return res
+    }
+
+    static async deleteScoresAll(id_course) {
+      const res = await service.delete(`${this.baseGroupURL}/delete/all/${id_course}`)
       return res
     }
 

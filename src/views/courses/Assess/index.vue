@@ -31,14 +31,14 @@
       >Genap</el-button>
 
       <select v-model="tahunAjaran">
-        <option v-for="tahun in allTahun" :key="tahun" :value="tahun.tahun_ajaran">
+        <option v-for="(tahun, id) in allTahun" :key="id" :value="tahun.tahun_ajaran">
           {{ tahun.tahun_ajaran }}
         </option>
       </select>
     </div>
     <div class="content-container">
       <div class="card">
-        <table v-if="courses.length > 0">
+        <table v-if="courses && courses.length > 0">
           <tr>
             <th colspan="3">Mata Kuliah</th>
             <th rowspan="2">Course Outcome</th>
@@ -52,7 +52,7 @@
             <th>Nama</th>
             <th>Kelas</th>
           </tr>
-          <tr v-for="course in displayed" :key="course.code">
+          <tr v-for="(course, id) in displayed" :key="id">
             <td>{{ course.code }}</td>
             <td class="course-name" @click.prevent="goToDetails(course.code)">{{ course.name }}</td>
             <td>
@@ -110,7 +110,7 @@ export default {
     const now = new Date()
     const month = now.getMonth()
     const year = now.getFullYear()
-    if (month > 6) {
+    if (month < 6) {
       this.tahunAjaran = year.toString() + '/' + (year + 1).toString()
       this.semester = 2
     } else {
@@ -119,7 +119,6 @@ export default {
     }
   },
   async mounted() {
-    this.semester = 2
     this.fetchCourseAssessment()
   },
   methods: {

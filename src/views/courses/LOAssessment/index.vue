@@ -34,7 +34,7 @@
           <template v-if="loScores && loScores.length > 0">
             <tr v-for="score in loScores" :key="score.id_lo">
               <td>{{ score.name }}</td>
-              <td>{{ score.index_lo === -1 ? '-' : score.index_lo }}</td>
+              <td>{{ score.index_lo === -1 ? '-' : score.index_lo.toFixed(2) }}</td>
               <td>{{ score.index_lo === -1 ? '-' : score.index_lo > 3 ? 'MAINTAIN' : 'IMPROVE' }}</td>
             </tr>
           </template>
@@ -73,8 +73,7 @@
             <th rowspan="2">Kelas</th>
             <th rowspan="2">Tahun Ajaran</th>
             <th rowspan="2">Semester</th>
-            <th rowspan="2">Course Assessment</th>
-            <th colspan="7">KML</th>
+            <th colspan="7">Course Outcome per LO</th>
           </tr>
           <tr>
             <th>LO A</th>
@@ -92,14 +91,12 @@
               <td>{{ course.class }}</td>
               <td>{{ course.tahun_ajaran }}</td>
               <td>{{ course.semester %2 == 0 ? 'Genap' : 'Ganjil' }}</td>
-              <td>{{ course.course_assessment == -1 ? '-' : course.course_assessment }}</td>
-              <td>{{ course.loKML[1] == 0 ? '-' : course.loKML[1] }}</td>
-              <td>{{ course.loKML[2] == 0 ? '-' : course.loKML[2] }}</td>
-              <td>{{ course.loKML[3] == 0 ? '-' : course.loKML[3] }}</td>
-              <td>{{ course.loKML[4] == 0 ? '-' : course.loKML[4] }}</td>
-              <td>{{ course.loKML[5] == 0 ? '-' : course.loKML[5] }}</td>
-              <td>{{ course.loKML[6] == 0 ? '-' : course.loKML[6] }}</td>
-              <td>{{ course.loKML[7] == 0 ? '-' : course.loKML[7] }}</td>
+              <template v-for="i in [1, 2, 3, 4, 5, 6, 7]">
+                <td :key="i">
+                  {{ (course.course_lo_assessment[i] == null ? '-' : course.course_lo_assessment[i]) }}
+                  {{ course.loKMT[i] == null ? '' : `(${course.loKMT[i]})` }}
+                </td>
+              </template>
             </tr>
           </template>
         </table>
@@ -177,12 +174,12 @@ export default {
           semester: this.semesterFilter,
           tahun_ajaran: this.tahunAjaran,
           course_assessments: [],
-          loKMLs: []
+          loKMTs: []
         }
 
         for (var i = 0; i < this.courses.length; i++) {
-          params.course_assessments.push(this.courses[i].course_assessment)
-          params.loKMLs.push(this.courses[i].loKML)
+          params.course_assessments.push(this.courses[i].course_lo_assessment)
+          params.loKMTs.push(this.courses[i].loKMT)
         }
         const result = await LOAssessment.insertLOAssessment(params)
         console.log(result.msg)
@@ -197,12 +194,12 @@ export default {
           semester: this.semesterFilter,
           tahun_ajaran: this.tahunAjaran,
           course_assessments: [],
-          loKMLs: []
+          loKMTs: []
         }
 
         for (var i = 0; i < this.courses.length; i++) {
-          params.course_assessments.push(this.courses[i].course_assessment)
-          params.loKMLs.push(this.courses[i].loKML)
+          params.course_assessments.push(this.courses[i].course_lo_assessment)
+          params.loKMTs.push(this.courses[i].loKMT)
         }
         const result = await LOAssessment.updateLOAssessment(params)
         console.log(result.msg)
@@ -231,7 +228,7 @@ export default {
         if (this.tahunAjaran) {
           params.tahun_ajaran = this.tahunAjaran
         }
-        const courseResp = await LOAssessment.fetchCoursesWithLOKML(params)
+        const courseResp = await LOAssessment.fetchCoursesWithLOKMT(params)
         this.courses = courseResp.data
       } catch (e) {
         console.error(e.stack)

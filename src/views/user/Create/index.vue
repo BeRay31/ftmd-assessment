@@ -3,10 +3,39 @@
     <header>
       <h1 v-if="!id_user">Tambahkan Pengguna</h1>
       <h1 v-else>Update Data Pengguna</h1>
+      <div>
+        <el-button v-if="!id_user"
+        type="primary"
+        class="btn"
+        @click="toggleUseXlsx"
+        >{{useExcel ? 'Input Manual' : 'Gunakan Excel'}}</el-button>
+      </div>
     </header>
     <div class="content-container">
       <div class="form-card">
-        <el-form>
+        <el-form v-if="useExcel">
+          <el-form-item label="Upload Data Pengguna">
+              <input
+                id="hidden-input-file-button"
+                type="file"
+                name="csv"
+                accept=".csv, .xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                @change="getFile"
+              >
+              <div class="input-file-container">
+                <div id="input-file-button" class="btn-primary-light btn-small" @click="inputFile">
+                  <template v-if="!fileData">
+                    <span>Upload</span>
+                  </template>
+                  <template v-else>
+                    <span>Ganti File</span>
+                  </template>
+                </div>
+                <p class="place-holder">{{ fileData ? fileData.name : 'Upload Data Pengguna...' }}</p>
+              </div>
+            </el-form-item>
+        </el-form>
+        <el-form v-else>
           <el-form-item v-if="id_user">
             <MDInput
               v-model="id_user"
@@ -102,6 +131,9 @@ export default {
     return {
       loading: false,
       id_user: null,
+      useExcel: false,
+      fileData: null,
+      urlFileData: null,
       formData: {
         name: null,
         username: null,
@@ -145,27 +177,50 @@ export default {
       this.modal.state = true
       this.modal.carriedData = this.formData
     },
+    toggleUseXlsx() {
+      this.useExcel = !this.useExcel
+    },
     validateForm() {
       return (
-        this.formData.name &&
+        ((this.formData.name &&
         this.formData.username &&
         this.formData.email &&
         this.formData.password &&
-        this.formData.user_type
+        this.formData.user_type) || 
+        (this.useExcel &&
+        this.fileData &&
+        this.urlFileData))
       )
+    },
+    inputFile() {
+      document.getElementById('hidden-input-file-button').click()
+    },
+    getFile(e) {
+      this.fileData = e.target.files[0]
+      this.urlFileData = URL.createObjectURL(e.target.files[0])
+      document.getElementById('hidden-input-file-button').value = null
     },
     async handleSubmit() {
       if (this.validateForm()) {
         this.loading = true
         try {
           let message
-          if (this.id_user) {
-            await Users.updateUser(this.id_user, this.formData)
-            message = 'User berhasil diupdate'
+          if (this.useExcel){
+            const formDatawFile = new FormData();
+            formDatawFile.append('excel', this.fileData);
+            
+            await Users.createUserFromExcel(formDatawFile);
+            message = 'User baru ditambahkan melalui Excel'
           } else {
-            await Users.createUser(this.formData)
-            message = 'User baru ditambahkan'
+            if (this.id_user) {
+              await Users.updateUser(this.id_user, this.formData)
+              message = 'User berhasil diupdate'
+            } else {
+              await Users.createUser(this.formData)
+              message = 'User baru ditambahkan'
+            }
           }
+
           Message({
             message: message,
             type: 'success',

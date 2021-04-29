@@ -29,5 +29,10 @@ export default class Users {
     const resp = await service.post(`/user/${id_user}`, data)
     return resp
   }
+
+  static async createUserFromExcel(data) {
+    const resp = await service.post(`/user/excel/`, data)
+    return resp
+  }
 }
 

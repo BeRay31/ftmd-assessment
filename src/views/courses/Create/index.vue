@@ -97,7 +97,7 @@
     <SubmitModal
       v-if="isModalOpen('submitConfirmation')"
       :state="isModalOpen('submitConfirmation')"
-      :title="id_course? `Ubah properti Mata Kuliah ${formData.name} ?` : `Tamabah Mata kuliah ?`"
+      :title="id_course? `Ubah properti Mata Kuliah ${formData.name} ?` : `Tambah Mata kuliah ?`"
       :content="id_course? `Data yang diganti akan di simpan kedalam sistem` : `Mata kuliah '${formData.name}' akan ditambahkan kedalam sistem`"
       @closeModal="closeModal"
       @submit="handleSubmit"
@@ -147,7 +147,6 @@ export default {
         lecturer_name: null,
         year: null,
         id_lecturer: null,
-        year: null,
         sks: null
       },
       lecturerData: null

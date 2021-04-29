@@ -75,9 +75,9 @@
                     >Edit</el-button>
                     <el-button
                       type="primary"
-                      icon="el-icon-edit"
+                      icon="el-icon-plus"
                       @click="goToComponentLo(course)"
-                    >Komponen LO</el-button>
+                    >Komponen Nilai</el-button>
                   </template>
                 </td>
               </template>

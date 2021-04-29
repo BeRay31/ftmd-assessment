@@ -30,7 +30,7 @@
             <el-col :span="6">
               <el-form-item>
                 <el-select v-model="formData.class" placeholder="Komponen">
-                  <el-option v-for="component in components" :key="component.component" :value="component.component">{{ component.component }}</el-option>
+                  <el-option v-for="(component, idx) in components" :key="idx" :value="component.component">{{ component.component }}</el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -89,7 +89,6 @@ import ChooseStudentScore from '../Modal/ChooseStudentScoreModal/index'
 import MDInput from '@/components/MDinput'
 import { Message } from 'element-ui'
 import Course from '@/api/courses'
-import Users from '@/api/users'
 
 export default {
   name: 'Course',
@@ -134,16 +133,6 @@ export default {
   async mounted() {
     this.id_course = this.$route.params.id
     await this.getComponent()
-    if (this.id_course) {
-      const respCourse = await Course.getById(this.id_course)
-      this.formData.name = respCourse.data.name
-      this.formData.semester = respCourse.data.semester
-      this.formData.year = respCourse.data.tahun_ajaran
-      this.formData.class = respCourse.data.class + ''
-      this.formData.id_lecturer = respCourse.data.id_lecturer
-      const respUser = await Users.getById(this.formData.id_lecturer)
-      this.lecturerData = respUser.data
-    }
   },
   methods: {
     openModal(type) {
@@ -164,9 +153,7 @@ export default {
     },
     async getComponent() {
       const fetched = await Course.getComponent(this.$route.params.id)
-      console.log(fetched)
       this.components = fetched.data
-      console.log(this.components[0].component)
     },
     validateForm() {
       let messageObject

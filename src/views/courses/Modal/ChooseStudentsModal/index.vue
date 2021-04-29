@@ -19,13 +19,13 @@
               <input
                 id="hidden-input-file-button"
                 type="file"
+                name="excel"
                 accept=".csv, .xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 @change="getFile"
               >
               <div class="input-file-container">
                 <div id="input-file-button" class="btn-primary-light btn-small" @click="inputFile">
                   <template v-if="!fileData">
-                    <span>+</span>
                     <span>Upload</span>
                   </template>
                   <template v-else>
@@ -152,7 +152,7 @@ export default {
         })
       } else if (this.fileData) {
         const data = new FormData()
-        data.append('fileStudents', this.fileData)
+        data.append('excel', this.fileData)
         this.$emit('submit', {
           emitType: 'fileData',
           fileStudents: data

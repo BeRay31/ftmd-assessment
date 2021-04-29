@@ -2,6 +2,11 @@
   <div class="class-attendance-container">
     <header>
       <h1>Daftar Nilai Keseluruhan</h1>
+      <el-button
+        type="warning"
+        icon="el-icon-delete"
+        @click="openDeleteEnrollmentModalAll()"
+      >Reset Nilai</el-button>
       <div class="search">
         <img src="@/assets/svg/search.svg" alt>
         <input v-model="searchQuery" type="text" class="card" placeholder="Cari Mahasiswa">
@@ -17,7 +22,7 @@
           <th>Nilai</th>
           <th>Aksi</th>
         </tr>
-        <tr v-for="student in students" :key="student.id_user">
+        <tr v-for="(student, idx) in students" :key="idx">
           <td>{{ student.id_user }}</td>
           <td>{{ student.username }}</td>
           <td>{{ student.name }}</td>
@@ -57,6 +62,14 @@
       @closeModal="closeModal"
       @submit="deleteEnrollment"
     />
+    <DeleteModalAll
+      v-if="isModalOpen('deleteConfirm1')"
+      :state="isModalOpen('deleteConfirm1')"
+      title="Reset Semua Nilai Mahasiswa ?"
+      :content="`Semua nilai mahasiswa dan komponen akan terhapus secara otomatis`"
+      @closeModal="closeModal"
+      @submit="deleteAll"
+    />
     <EditModal
       v-if="modal.stateEdit"
       :state="modal.stateEdit"
@@ -87,6 +100,7 @@ import CourseStudent from '@/api/courseStudent'
 import Course from '@/api/courses'
 import Pagination from '@/components/Pagination/Pagination'
 import DeleteModal from '@/views/courses/Modal/DeleteModal/index'
+import DeleteModalAll from '@/views/courses/Modal/DeleteModal/index'
 import EditModal from '@/views/courses/Scores/EditModal/index'
 import ChooseStudents from '@/views/courses/Modal/ChooseStudentsModal/index'
 import SubmitModal from '@/views/courses/Modal/SubmitModal/index'
@@ -97,6 +111,7 @@ export default {
   components: {
     Pagination,
     DeleteModal,
+    DeleteModalAll,
     ChooseStudents,
     EditModal,
     SubmitModal
@@ -187,6 +202,25 @@ export default {
       }
       this.closeModal()
     },
+    async deleteAll() {
+      try {
+        await Course.deleteScoresAll(this.idCourse)
+        await this.getAllClassAttendance()
+        Message({
+          message: 'Nilai Mahasiswa Sudah di Reset',
+          type: 'success',
+          duration: 5 * 1000
+        })
+      } catch (e) {
+        console.log(e)
+        Message({
+          message: 'Error saat menghapus Mahasiswa dari kelas',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
+      this.closeModal()
+    },
     async editComponent(edited) {
       try {
         await Course.updateScores(edited)
@@ -247,6 +281,9 @@ export default {
     openDeleteEnrollmentModal(carriedData) {
       this.openModal('deleteConfirm')
       this.modal.carriedData = carriedData
+    },
+    openDeleteEnrollmentModalAll() {
+      this.openModal('deleteConfirm1')
     },
     openModalEdit(student) {
       this.modal.editComponent = student

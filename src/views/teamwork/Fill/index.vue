@@ -1,76 +1,201 @@
 <template>
   <div class="questionnaire-container">
     <header>
-      <h1>Kuisioner Perkuliahan - {{ datas['id_course'] }}</h1>
+      <h1>Kuisioner Teamwork - {{ datas['id_course'] }}</h1>
     </header>
     <div class="content-container">
       <div class="card">
-        <p>Nama Lengkap : </p>
-        <input v-model="datas.name" placeholder="Nama Lengkap">
-        <p>NIM : </p>
-        <input v-model="datas.nim" placeholder="NIM">
+        <div class="input">
+          <MDInput
+            v-model="datas['nama_lengkap']"
+            :maxlength="100"
+            required
+
+            name="nama_lengkap"
+          >
+            Nama yang Dinilai
+          </MDInput>
+        </div>
+        <div class="input">
+          <MDInput
+            v-model="datas['nim']"
+            :maxlength="100"
+            required
+
+            name="nim"
+          >
+            NIM yang Dinilai
+          </MDInput>
+        </div>
         <div v-for="data in datas['answer_list']" :key="data['id']" :class="{ 'odd': data['id'] % 2 != 0 }">
           <p>{{ data["id"] }}. {{ data["text"] }}</p>
-          <RadioInput v-model="data['answer']" />
+          <!-- <RadioInput v-model="data['answer']" /> -->
+          <form class="radio">
+            <div v-for="o in data['option']" :key="o['id']" class="input_option">
+              <input v-model="data['answer']" type="radio" :value="o['value']" :name="data['id']">
+              <label>{{ o["text"] }}</label>
+            </div>
+          </form>
         </div>
+        
         <div class="submitBtn">
-          <button @click="handleSubmit">Submit</button>
+          <el-button
+          :loading="loading"
+          type="primary"
+          class="btn btn-primary btn-login"
+          @click="handleSubmit"
+        >Submit</el-button>
         </div>
       </div>
-    </div>
-    <div v-if="submitted">
-      <p>questionOne : {{ datas["answer_list"][0]["answer"] }}</p>
-      <p>questionTwo : {{ datas["answer_list"][1]["answer"] }}</p>
-      <p>questionThree : {{ datas["answer_list"][2]["answer"] }}</p>
-      <p>questionFour : {{ datas["answer_list"][3]["answer"] }}</p>
-      <p>questionFive : {{ datas["answer_list"][4]["answer"] }}</p>
     </div>
   </div>
 </template>
 
 <script>
+import { Message } from 'element-ui'
+
+import Softskill from '@/api/softskill'
 import RadioInput from './components/RadioInput.vue'
+import MDInput from '@/components/MDinput'
 
 export default {
-  components: { RadioInput },
+  components: { RadioInput, MDInput },
   data() {
     return {
       datas: {
+        'id_user': this.$store.getters.id_user,
         'id_course': this.$route.params.id,
+        'nama_lengkap':null,
+        'nim':null,
         'answer_list': [
           {
             'id': 1,
-            'text': 'Kontribusi',
-            'answer': null
+            'text': 'Mahasiswa mampu bekerjasama dengan baik',
+            'answer': null,
+            'option': [
+              {
+                'id_option':1,
+                'value':1,
+                'text':'1'
+              },
+              {
+                'id_option':2,
+                'value':2,
+                'text':'2'
+              },
+              {
+                'id_option':3,
+                'value':3,
+                'text':'3'
+              },
+              {
+                'id_option':4,
+                'value':4,
+                'text':'4'
+              },
+            ]
           },
           {
             'id': 2,
-            'text': 'Pemecahan Masalah',
-            'answer': null
+            'text': 'Mahasiswa memiliki inisiatif tinggi saat bekerja',
+            'answer': null,
+            'option': [
+              {
+                'id_option':1,
+                'value':1,
+                'text':'1'
+              },
+              {
+                'id_option':2,
+                'value':2,
+                'text':'2'
+              },
+              {
+                'id_option':3,
+                'value':3,
+                'text':'3'
+              },
+              {
+                'id_option':4,
+                'value':4,
+                'text':'4'
+              },
+            ]
           },
           {
             'id': 3,
-            'text': 'Sikap',
-            'answer': null
+            'text': 'Mahasiswa mampu berkomunikasi dengan rekan setim dengan baik',
+            'answer': null,
+            'option': [
+              {
+                'id_option':1,
+                'value':1,
+                'text':'1'
+              },
+              {
+                'id_option':2,
+                'value':2,
+                'text':'2'
+              },
+              {
+                'id_option':3,
+                'value':3,
+                'text':'3'
+              },
+              {
+                'id_option':4,
+                'value':4,
+                'text':'4'
+              },
+            ]
           },
-          {
-            'id': 4,
-            'text': 'Fokus terhadap tugas',
-            'answer': null
-          },
-          {
-            'id': 5,
-            'text': 'Bekerja dengan orang lain',
-            'answer': null
-          }
         ]
-      },
-      submitted: false
+      }
     }
   },
   methods: {
-    handleSubmit() {
-      this.submitted = !this.submitted
+    validateForm() {
+      var temp = true
+      for (var i = 0; i < this.datas.answer_list.length; i++) {
+        temp = temp && (this.datas.answer_list[i].answer !== null)
+      }
+      return temp && this.datas.nama_lengkap && this.datas.nim
+    },
+    async handleSubmit() {
+      if (this.$store.getters.routes_user_type !== 'student') {
+        if (this.validateForm()) {
+          console.log('wao')
+        }
+        Message({
+          message: 'Hanya mahasiswa yang bisa submit form',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      } else {
+        if (this.validateForm()) {
+          try {
+            await Softskill.saveAnswerKerjasama(this.datas)
+            Message({
+              message: 'Kuisioner berhasil di submit!',
+              type: 'success',
+              duration: 5 * 1000
+            })
+            this.$router.push({ name: 'TeamworkQuestionnaireList' })
+          } catch (e) {
+            Message({
+              message: e.stack || 'Error while submitting',
+              type: 'error',
+              duration: 5 * 1000
+            })
+          }
+        } else {
+          Message({
+            message: 'Seluruh pertanyaan harus diisi',
+            type: 'error',
+            duration: 5 * 1000
+          })
+        }
+      }
     }
   }
 }
@@ -108,6 +233,20 @@ header h1 {
   margin-left: 12px;
 }
 
+.input{
+  margin-top:15px;
+  margin-bottom:15px;
+  width:50%;
+  margin-left:15px;
+}
+.input_option{
+  label{
+    margin-left:20px;
+  }
+  margin-bottom: 5px;
+  margin-left: 15px;
+}
+
 .submitBtn {
   padding-top: 40px;
   margin: auto;
@@ -126,10 +265,5 @@ header h1 {
 
 .odd {
   background-color: #FAFAFA;
-}
-
-input {
-  width: 50%;
-  margin-left: 15px;
 }
 </style>

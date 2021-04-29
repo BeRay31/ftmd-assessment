@@ -13,6 +13,21 @@ export default class CourseStudent {
     return resp
   }
 
+  static async addIndexes(id_course, params) {
+    const res = await service.post(`/courses/add/indexes/all/${id_course}`, { params })
+    return res
+  }
+
+  static async uploadAll(id_course) {
+    const res = await service.post(`/courses/upload/all/${id_course}`)
+    return res
+  }
+
+  static async addScoresCSV(id_course, params) {
+    const res = await service.post(`courses/add/scores/csv/${id_course}`, { params })
+    return res
+  }
+
   static async getCourseStudent(id_course, params) {
     const resp = await service.get(`${this.baseGroupURL}/${id_course}`, { params })
     return resp
@@ -25,6 +40,11 @@ export default class CourseStudent {
 
   static async enrollUserByIds(id_course, data) {
     const resp = await service.post(`${this.baseGroupURL}/${id_course}`, data)
+    return resp
+  }
+
+  static async enrollUserByFile(id_course, data) {
+    const resp = await service.post(`${this.baseGroupURL}/excel/${id_course}`, data)
     return resp
   }
 }

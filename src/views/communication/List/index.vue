@@ -57,22 +57,22 @@
                   >Lihat Hasil</el-button>
                 </td>
               </template>
-              <template v-else-if="$store.getters.routes_user_type !== 'student'">
-                <td class="action">
-                  <el-button
-                    type="warning"
-                    icon="el-icon-s-order"
-                    @click="goToQuestionnaireResults(course)"
-                  >Lihat Hasil</el-button>
-                </td>
-              </template>
-              <template v-else>
+              <template v-else-if="$store.getters.routes_user_type === 'student'">
                 <td class="action">
                   <el-button
                     type="primary"
                     icon="el-icon-edit"
                     @click="goToFillQuestionnaire(course)"
                   >Pengisian</el-button>
+                </td>
+              </template>
+              <template v-else>
+                <td class="action">
+                  <el-button
+                    type="warning"
+                    icon="el-icon-s-order"
+                    @click="goToQuestionnaireResults(course)"
+                  >Lihat Hasil</el-button>
                 </td>
               </template>
             </tr>

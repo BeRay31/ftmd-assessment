@@ -4,8 +4,8 @@ import service from '@/utils/request'
 export default class LOAssessment {
     static baseGroupURL = `lo_assess`
 
-    static async fetchCoursesWithLOKML(params) {
-      const res = await service.get(`${this.baseGroupURL}/coursesWithLOKML`, { params })
+    static async fetchCoursesWithLOKMT(params) {
+      const res = await service.get(`${this.baseGroupURL}/coursesWithLOKMT`, { params })
       return res
     }
 
