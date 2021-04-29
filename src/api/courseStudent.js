@@ -13,6 +13,16 @@ export default class CourseStudent {
     return resp
   }
 
+  static async addIndexes(id_course, params) {
+    const res = await service.post(`/courses/add/indexes/all/${id_course}`, { params })
+    return res
+  }
+
+  static async uploadAll(id_course) {
+    const res = await service.post(`/courses/upload/all/${id_course}`)
+    return res
+  }
+
   static async addScoresCSV(id_course, params) {
     const res = await service.post(`courses/add/scores/csv/${id_course}`, { params })
     return res
