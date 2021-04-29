@@ -1,0 +1,17 @@
+.course-outcome {
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  .filter-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .title {
+    font-weight: bold;
+  }
+}
