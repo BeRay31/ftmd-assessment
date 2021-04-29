@@ -195,7 +195,7 @@ export default {
       }
     },
     validateLO(loDetails) {
-      return this.data.findIndex((lo) => lo.id_lo === loDetails.id) > -1
+      return this.data.findIndex((lo) => lo.id_lo == loDetails.id) == -1
     },
     async editLO(courseLO) {
       try {
