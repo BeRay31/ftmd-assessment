@@ -14,7 +14,7 @@
           <tr v-for="data in datas['answer_list']" :key="data['id']">
             <td>{{ data['id'] }}</td>
             <td class="left-align">{{ data["text"] }}</td>
-            <td>{{ data['answer'] }}</td>
+            <td>{{ data['answer'] == null ? '-' : parseFloat(data['answer']).toFixed(2) }}</td>
           </tr>
         </table>
       </div>
@@ -104,15 +104,13 @@ export default {
     async viewCourseAnswer() {
       try {
         const answers = await Questionnaire.viewCourseAnswer(this.datas['id_course'])
-        for (var i = 0; i < this.datas['answer_list'].length; i++) {
-          this.datas.answer_list[i].answer = answers.value[i].avg
+        if (answers.value && answers.value.length > 0) {
+          for (var i = 0; i < this.datas['answer_list'].length; i++) {
+            this.datas.answer_list[i].answer = answers.value[i].avg
+          }
         }
       } catch (e) {
-        Message({
-          message: e.stack || 'Error while reading scores',
-          type: 'error',
-          duration: 5 * 1000
-        })
+        console.log(e.stack)
       }
     }
   }
