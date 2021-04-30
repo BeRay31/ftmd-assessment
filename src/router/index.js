@@ -10,7 +10,6 @@ import Layout from '@/layout'
 // import componentsRouter from './modules/unused/components'
 // import chartsRouter from './modules/unused/charts'
 // import tableRouter from './modules/unused/table'
-import nestedRouter from './modules/nested'
 import courseRouter from './modules/courses'
 import userRoute from './modules/user'
 import questionnaireRoute from './modules/questionnaire'
@@ -48,23 +47,6 @@ import studentAssessmentRoute from './modules/studentAssessment'
  * all roles can be accessed
  */
 export const constantRoutes = [
-  {
-    path: '/icon',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: {
-          title: 'Icons',
-          icon: 'icon',
-          noCache: true,
-          roles: ['lecturer']
-        }
-      }
-    ]
-  },
   {
     path: '/redirect',
     component: Layout,
@@ -104,15 +86,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
+    redirect: '/courses/list'
   }
 ]
 
@@ -127,7 +101,6 @@ export const asyncRoutes = [
   // tableRouter,
   userRoute,
   courseRouter,
-  nestedRouter,
   questionnaireRoute,
   portofolioRoute,
   teamworkRoute,

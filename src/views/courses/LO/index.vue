@@ -27,12 +27,8 @@
           <tr v-for="lo in data" :key="lo.id">
             <td>{{ (lo.id_lo &lt; 8) ? mapping[lo.id_lo] : 'X' }}</td>
             <td>{{ lo.tag }}</td>
-            <td>3.50</td>
+            <td>{{ sums[lo.id_lo - 1].toFixed(2) }}</td>
             <td class="action">
-              <el-button
-                type="primary"
-                icon="el-icon-view"
-              >Lihat detail</el-button>
               <el-button
                 type="primary"
                 icon="el-icon-delete"
@@ -85,6 +81,7 @@ export default {
       id_course: null,
       name: null,
       lecturer: null,
+      sums: null,
       code: null,
       data: null,
       mapping: ['X', 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
@@ -167,6 +164,7 @@ export default {
       try {
         Courses.fetchCourseLO(this.id_course).then((res) => {
           this.data = res.data
+          this.sums = res.sums
         })
       } catch (e) {
         Message({

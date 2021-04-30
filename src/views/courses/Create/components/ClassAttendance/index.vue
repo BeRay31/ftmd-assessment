@@ -206,6 +206,7 @@ export default {
       searchQuery: '',
       textFile: null,
       listLoading: false,
+      loading: false,
       selectedStudents: [],
       totalA: 0,
       totalAB: 0,

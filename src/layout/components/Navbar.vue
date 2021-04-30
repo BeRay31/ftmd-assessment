@@ -15,9 +15,6 @@
           <el-dropdown-item>
             {{ user_type }}
           </el-dropdown-item>
-          <router-link to="/profile/index">
-            <el-dropdown-item>Profile</el-dropdown-item>
-          </router-link>
           <router-link to="/">
             <el-dropdown-item>Dashboard</el-dropdown-item>
           </router-link>

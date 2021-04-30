@@ -184,6 +184,9 @@ export default {
         if (this.semesterFilter) {
           params.semester = this.semesterFilter
         }
+        if (this.$store.getters.routes_user_type === 'lecturer') {
+          params.lecturer = parseInt(this.$store.getters.id_user)
+        }
         let courseResp
         if (this.$store.getters.routes_user_type !== 'student') {
           courseResp = await Courses.fetchCourses(params)

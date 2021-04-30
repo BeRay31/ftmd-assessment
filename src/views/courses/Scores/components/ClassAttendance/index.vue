@@ -2,6 +2,15 @@
   <div class="class-attendance-container">
     <header>
       <h1>Daftar Nilai Keseluruhan</h1>
+      <el-select v-model="filter">
+        <el-option
+          v-for="(comp, idx) in components"
+          :key="idx"
+          :label="comp"
+          :value="comp"
+        />
+        <el-option :label="'Semua'" :value="'Semua'" />
+      </el-select>
       <el-button
         type="warning"
         icon="el-icon-delete"
@@ -22,7 +31,7 @@
           <th>Nilai</th>
           <th>Aksi</th>
         </tr>
-        <tr v-for="(student, idx) in students" :key="idx">
+        <tr v-for="(student, idx) in displayed" :key="idx">
           <td>{{ student.id_user }}</td>
           <td>{{ student.username }}</td>
           <td>{{ student.name }}</td>
@@ -98,6 +107,7 @@
 <script>
 import CourseStudent from '@/api/courseStudent'
 import Course from '@/api/courses'
+import DosenLoWeight from '@/api/dosen_lo_weight'
 import Pagination from '@/components/Pagination/Pagination'
 import DeleteModal from '@/views/courses/Modal/DeleteModal/index'
 import DeleteModalAll from '@/views/courses/Modal/DeleteModal/index'
@@ -128,10 +138,15 @@ export default {
       isAdmin: this.$store.getters.user_type === 'admin',
       currentPage: 1,
       totalPage: null,
+      loading: false,
       searchQuery: '',
       listLoading: false,
       selectedStudents: [],
       currentStudentList: [],
+      displayed: [],
+      filter: 'Semua',
+      components: [],
+      pageSize: 10,
       modal: {
         state: '',
         type: '',
@@ -144,11 +159,16 @@ export default {
   watch: {
     async searchQuery() {
       await this.getClassAttendance()
+    },
+    filter() {
+      this.filterList()
     }
   },
   async mounted() {
     await this.getClassAttendance()
     await this.getAllClassAttendance()
+    const components = await DosenLoWeight.fetchScoreComponents(this.idCourse)
+    this.components = components.data.map(c => c.component)
   },
   methods: {
     async getAllClassAttendance() {
@@ -160,9 +180,6 @@ export default {
       }
       setTimeout(() => { this.getAllClassAttendance() }, 1500)
       this.getClassAttendance()
-    },
-    goToAddScore() {
-      this.$router.push({ name: 'ScoresList', params: { id: this.idCourse }})
     },
     async getClassAttendance() {
       this.listLoading = true
@@ -177,14 +194,27 @@ export default {
         const attendanceResp = await Course.getScores(this.idCourse, params)
         this.students = attendanceResp.data
         this.totalPage = attendanceResp.lastPage
+        this.filterList()
       } catch (e) {
         console.error(e)
       }
       this.listLoading = false
     },
+    filterList() {
+      if (this.students && this.students.length > 0) {
+        this.displayed = this.students
+        if (this.filter !== 'Semua') {
+          this.displayed = this.students.filter(s => s.component === this.filter)
+        }
+        const startPage = (this.currentPage - 1) * this.pageSize
+        const endPage = this.currentPage * this.pageSize
+        this.displayed = this.displayed.slice(startPage, endPage)
+        this.totalPage = Math.ceil(this.displayed.length / this.pageSize)
+      }
+    },
     async deleteEnrollment() {
       try {
-        console.log(this.modal.carriedData)
+        // console.log(this.modal.carriedData)
         await Course.deleteScores(this.modal.carriedData)
         await this.getAllClassAttendance()
         Message({
