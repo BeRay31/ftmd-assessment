@@ -4,36 +4,37 @@
       <h1 v-if="!id_user">Tambahkan Pengguna</h1>
       <h1 v-else>Update Data Pengguna</h1>
       <div>
-        <el-button v-if="!id_user"
-        type="primary"
-        class="btn"
-        @click="toggleUseXlsx"
-        >{{useExcel ? 'Input Manual' : 'Gunakan Excel'}}</el-button>
+        <el-button
+          v-if="!id_user"
+          type="primary"
+          class="btn"
+          @click="toggleUseXlsx"
+        >{{ useExcel ? 'Input Manual' : 'Gunakan Excel' }}</el-button>
       </div>
     </header>
     <div class="content-container">
       <div class="form-card">
         <el-form v-if="useExcel">
           <el-form-item label="Upload Data Pengguna">
-              <input
-                id="hidden-input-file-button"
-                type="file"
-                name="csv"
-                accept=".csv, .xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                @change="getFile"
-              >
-              <div class="input-file-container">
-                <div id="input-file-button" class="btn-primary-light btn-small" @click="inputFile">
-                  <template v-if="!fileData">
-                    <span>Upload</span>
-                  </template>
-                  <template v-else>
-                    <span>Ganti File</span>
-                  </template>
-                </div>
-                <p class="place-holder">{{ fileData ? fileData.name : 'Upload Data Pengguna...' }}</p>
+            <input
+              id="hidden-input-file-button"
+              type="file"
+              name="csv"
+              accept=".csv, .xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              @change="getFile"
+            >
+            <div class="input-file-container">
+              <div id="input-file-button" class="btn-primary-light btn-small" @click="inputFile">
+                <template v-if="!fileData">
+                  <span>Upload</span>
+                </template>
+                <template v-else>
+                  <span>Ganti File</span>
+                </template>
               </div>
-            </el-form-item>
+              <p class="place-holder">{{ fileData ? fileData.name : 'Upload Data Pengguna...' }}</p>
+            </div>
+          </el-form-item>
         </el-form>
         <el-form v-else>
           <el-form-item v-if="id_user">
@@ -186,7 +187,7 @@ export default {
         this.formData.username &&
         this.formData.email &&
         this.formData.password &&
-        this.formData.user_type) || 
+        this.formData.user_type) ||
         (this.useExcel &&
         this.fileData &&
         this.urlFileData))
@@ -205,11 +206,11 @@ export default {
         this.loading = true
         try {
           let message
-          if (this.useExcel){
-            const formDatawFile = new FormData();
-            formDatawFile.append('excel', this.fileData);
-            
-            await Users.createUserFromExcel(formDatawFile);
+          if (this.useExcel) {
+            const formDatawFile = new FormData()
+            formDatawFile.append('excel', this.fileData)
+
+            await Users.createUserFromExcel(formDatawFile)
             message = 'User baru ditambahkan melalui Excel'
           } else {
             if (this.id_user) {
