@@ -32,14 +32,12 @@
         <tr>
           <th>No</th>
           <th>Mata Kuliah</th>
-          <th>Nilai Akhir</th>
           <th>Indeks</th>
         </tr>
         <template v-if="listScore && listScore.length > 0">
           <tr v-for="(item, index) in listScore" :key="index">
             <td>{{ index + 1 }}</td>
             <td>{{ `${item.code} ${item.name}` }}</td>
-            <td>{{ item.score }}</td>
             <td>{{ item.index_char }}</td>
           </tr>
         </template>
