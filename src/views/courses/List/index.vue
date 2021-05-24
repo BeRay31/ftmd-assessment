@@ -32,7 +32,7 @@
             <th>Dosen Pengampu</th>
             <th>Semester</th>
             <th>Tahun Ajaran</th>
-            <th>Aksi</th>
+            <th v-if="$store.getters.routes_user_type !== 'student'">Aksi</th>
             <template v-if="$store.getters.routes_user_type == 'student'">
               <th>Nilai Akhir</th>
             </template>
@@ -82,15 +82,15 @@
                 </td>
               </template>
               <template v-if="$store.getters.routes_user_type === 'student'">
-                <td class="action">
+                <!-- <td class="action">
                   <el-button
                     :disabled="course.index == null"
                     type="warning"
                     icon="el-icon-s-management"
                     @click="goToCourseOutcome(course)"
                   >Rincian Nilai</el-button>
-                </td>
-                <td style="padding: 19px 0rem">{{ course.index || 'N/A' }}</td>
+                </td> -->
+                <td style="padding: 19px 0rem">{{ course.index_char || 'N/A' }}</td>
               </template>
             </tr>
           </template>

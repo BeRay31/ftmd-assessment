@@ -51,11 +51,11 @@
           </td>
         </tr>
       </table>
-      <Pagination
+      <!-- <Pagination
         :total-page="totalPage"
         :current-page="currentPage"
         @pageChange="updatePage"
-      />
+      /> -->
       <el-button
         v-if="isAdmin"
         type="primary"
@@ -108,7 +108,7 @@
 import CourseStudent from '@/api/courseStudent'
 import Course from '@/api/courses'
 import DosenLoWeight from '@/api/dosen_lo_weight'
-import Pagination from '@/components/Pagination/Pagination'
+// import Pagination from '@/components/Pagination/Pagination'
 import DeleteModal from '@/views/courses/Modal/DeleteModal/index'
 import DeleteModalAll from '@/views/courses/Modal/DeleteModal/index'
 import EditModal from '@/views/courses/Scores/EditModal/index'
@@ -119,7 +119,7 @@ import { Message } from 'element-ui'
 export default {
   name: 'ClassAttendance',
   components: {
-    Pagination,
+    // Pagination,
     DeleteModal,
     DeleteModalAll,
     ChooseStudents,
@@ -208,7 +208,7 @@ export default {
         }
         const startPage = (this.currentPage - 1) * this.pageSize
         const endPage = this.currentPage * this.pageSize
-        this.displayed = this.displayed.slice(startPage, endPage)
+        // this.displayed = this.displayed.slice(startPage, endPage)
         this.totalPage = Math.ceil(this.displayed.length / this.pageSize)
       }
     },

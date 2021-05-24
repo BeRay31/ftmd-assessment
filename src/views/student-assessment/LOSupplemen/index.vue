@@ -76,7 +76,7 @@
             <td>{{ index + 1 }}</td>
             <td>{{ course.name }}</td>
             <el-tooltip v-for="i in 7" :key="i+'supplement'" class="item" effect="dark" :content="(course[i] && course[i].tag) || '-'" placement="top">
-              <td>{{ (course[i] && course[i].index_lo) || '-' }}</td>
+              <td>{{ (course[i] && course[i].index_lo.toFixed(2)) || '-' }}</td>
             </el-tooltip>
           </tr>
         </template>
@@ -88,7 +88,7 @@
         <template v-if="summarySupplementData">
           <tr>
             <td colspan="2" class="title">Hasil Akhir</td>
-            <td v-for="i in 7" :key="i + 'summary'">{{ (summarySupplementData[i] && summarySupplementData[i].totalScore/summarySupplementData[i].totalWeight) || '-' }}</td>
+            <td v-for="i in 7" :key="i + 'summary'">{{ (summarySupplementData[i] && (summarySupplementData[i].totalScore/summarySupplementData[i].totalWeight).toFixed(2)) || '-' }}</td>
           </tr>
         </template>
       </table>

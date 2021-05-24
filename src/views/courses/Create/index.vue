@@ -19,11 +19,11 @@
             </el-col>
           </el-row>
           <el-row :gutter="30">
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <el-form-item>
                 <MDInput v-model="formData.code">Kode</MDInput>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="6">
               <el-form-item>
                 <MDInput v-model="formData.sks" type="number" min="1" max="4">SKS</MDInput>
@@ -39,11 +39,11 @@
                 <MDInput v-model="formData.year" type="text">Tahun Ajaran</MDInput>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <el-form-item>
                 <MDInput v-model="formData.sks" type="number" min="1">Jumlah SKS</MDInput>
               </el-form-item>
-            </el-col>
+            </el-col> -->
           </el-row>
           <div class="input-container">
             <div class="label">
@@ -270,7 +270,7 @@ export default {
           this.formData.class = +this.formData.class
           let message
           if (this.id_course) {
-            await Course.updateCourse(this.id_course, this.formData)
+            await Course.editCourse(this.id_course, this.formData)
             message = 'Mata Kuliah berhasil diupdate'
           } else {
             await Course.createCourse(this.formData)

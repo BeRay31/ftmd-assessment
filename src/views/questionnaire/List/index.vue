@@ -32,9 +32,9 @@
             <th>Semester</th>
             <th>Tahun Ajaran</th>
             <th>Aksi</th>
-            <template v-if="$store.getters.routes_user_type == 'student'">
+            <!-- <template v-if="$store.getters.routes_user_type == 'student'">
               <th>Nilai Akhir</th>
-            </template>
+            </template> -->
           </tr>
           <template v-if="courses && courses.length > 0">
             <tr v-for="course in courses" :key="course.id_course">
@@ -77,7 +77,7 @@
                     @click="goToFillQuestionnaire(course)"
                   >Pengisian</el-button>
                 </td>
-                <td style="padding: 19px 0rem">{{ course.index || 'N/A' }}</td>
+                <!-- <td style="padding: 19px 0rem">{{ course.index || 'N/A' }}</td> -->
               </template>
             </tr>
           </template>

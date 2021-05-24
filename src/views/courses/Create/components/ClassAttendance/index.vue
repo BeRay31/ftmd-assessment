@@ -1,7 +1,7 @@
 <template>
   <div class="class-attendance-container">
     <div class="class-attendance-container">
-      <header>
+      <header v-if="!isAdmin">
         <h2>Input Nilai Mahasiswa CSV</h2>
         <a href="https://docs.google.com/spreadsheets/d/1y0dB5QqLlK6VVNRbFDwLZd1vNLTEr4ZicRvBbFaNllE/edit?usp=sharing">Template CSV</a>
         <form enctype="multipart/form-data">
@@ -65,6 +65,7 @@
         @click="openModal('selectStudents')"
       >Tambah Mahasiswa</el-button>
     </div>
+    <template v-if=!isAdmin>
     <header>
       <h1>Range Index</h1>
     </header>
@@ -128,6 +129,7 @@
       style="margin-top:20px; margin-left:600px"
       @click="openModal('uploadScore')"
     >Upload Nilai Ke Admin</el-button>
+    </template>
     <DeleteModal
       v-if="isModalOpen('deleteConfirm')"
       :state="isModalOpen('deleteConfirm')"

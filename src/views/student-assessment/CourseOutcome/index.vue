@@ -32,29 +32,29 @@
         <tr>
           <th>No</th>
           <th>Mata Kuliah</th>
-          <th>Nilai Akhir</th>
+          <!-- <th>Nilai Akhir</th> -->
           <th>Indeks</th>
         </tr>
         <template v-if="listScore && listScore.length > 0">
           <tr v-for="(item, index) in listScore" :key="index">
             <td>{{ index + 1 }}</td>
             <td>{{ `${item.code} ${item.name}` }}</td>
-            <td>{{ item.score }}</td>
+            <!-- <td>{{ item.score }}</td> -->
             <td>{{ item.index_char }}</td>
           </tr>
         </template>
         <template v-else>
           <tr>
-            <td colspan="4">Belum Ada Mata Kuliah</td>
+            <td colspan="3">Belum Ada Mata Kuliah</td>
           </tr>
         </template>
         <template v-if="summary">
           <tr>
-            <td colspan="3" class="title">Nilai Akhir</td>
+            <td colspan="2" class="title align-right">Nilai Akhir</td>
             <td>{{ summary.na }}</td>
           </tr>
           <tr>
-            <td colspan="3" class="title">Indeks Akhir</td>
+            <td colspan="2" class="title align-right">Indeks Akhir</td>
             <td>{{ summary.index }}</td>
           </tr>
         </template>
