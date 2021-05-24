@@ -23,8 +23,6 @@
 </template>
 
 <script>
-import { Message } from 'element-ui'
-
 import Questionnaire from '@/api/questionnaires'
 
 export default {

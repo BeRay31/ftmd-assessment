@@ -93,6 +93,8 @@ export default {
     return {
       courseLO: {
         id_lo: this.lo.id_lo,
+        id: this.lo.id,
+        editID: this.lo.id_lo,
         tag: this.lo.tag.trim()
       }
     }

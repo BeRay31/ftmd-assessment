@@ -128,7 +128,6 @@ export default {
       loDetails.code = this.id_course
       loDetails.tag = courseLO.tag
       loDetails.id = courseLO.id_lo
-      console.log(courseLO.id_lo)
       try {
         const res = await Courses.createCourseLO(loDetails)
         if (res.msg === 'OK') {
@@ -184,6 +183,7 @@ export default {
         loDetails.code = this.id_course
         loDetails.tag = courseLO.tag
         loDetails.id = courseLO.id_lo
+        console.log(loDetails)
         this.closeModal()
         await Courses.editCourseLO(loDetails)
         this.fetchLO()

@@ -37,14 +37,14 @@
             </div>
           </form>
         </div>
-        
+
         <div class="submitBtn">
           <el-button
-          :loading="loading"
-          type="primary"
-          class="btn btn-primary btn-login"
-          @click="handleSubmit"
-        >Submit</el-button>
+            :loading="loading"
+            type="primary"
+            class="btn btn-primary btn-login"
+            @click="handleSubmit"
+          >Submit</el-button>
         </div>
       </div>
     </div>
@@ -55,18 +55,17 @@
 import { Message } from 'element-ui'
 
 import Softskill from '@/api/softskill'
-import RadioInput from './components/RadioInput.vue'
 import MDInput from '@/components/MDinput'
 
 export default {
-  components: { RadioInput, MDInput },
+  components: { MDInput },
   data() {
     return {
       datas: {
         'id_user': this.$store.getters.id_user,
         'id_course': this.$route.params.id,
-        'nama_lengkap':null,
-        'nim':null,
+        'nama_lengkap': null,
+        'nim': null,
         'answer_list': [
           {
             'id': 1,
@@ -74,25 +73,25 @@ export default {
             'answer': null,
             'option': [
               {
-                'id_option':1,
-                'value':1,
-                'text':'1'
+                'id_option': 1,
+                'value': 1,
+                'text': '1'
               },
               {
-                'id_option':2,
-                'value':2,
-                'text':'2'
+                'id_option': 2,
+                'value': 2,
+                'text': '2'
               },
               {
-                'id_option':3,
-                'value':3,
-                'text':'3'
+                'id_option': 3,
+                'value': 3,
+                'text': '3'
               },
               {
-                'id_option':4,
-                'value':4,
-                'text':'4'
-              },
+                'id_option': 4,
+                'value': 4,
+                'text': '4'
+              }
             ]
           },
           {
@@ -101,25 +100,25 @@ export default {
             'answer': null,
             'option': [
               {
-                'id_option':1,
-                'value':1,
-                'text':'1'
+                'id_option': 1,
+                'value': 1,
+                'text': '1'
               },
               {
-                'id_option':2,
-                'value':2,
-                'text':'2'
+                'id_option': 2,
+                'value': 2,
+                'text': '2'
               },
               {
-                'id_option':3,
-                'value':3,
-                'text':'3'
+                'id_option': 3,
+                'value': 3,
+                'text': '3'
               },
               {
-                'id_option':4,
-                'value':4,
-                'text':'4'
-              },
+                'id_option': 4,
+                'value': 4,
+                'text': '4'
+              }
             ]
           },
           {
@@ -128,27 +127,27 @@ export default {
             'answer': null,
             'option': [
               {
-                'id_option':1,
-                'value':1,
-                'text':'1'
+                'id_option': 1,
+                'value': 1,
+                'text': '1'
               },
               {
-                'id_option':2,
-                'value':2,
-                'text':'2'
+                'id_option': 2,
+                'value': 2,
+                'text': '2'
               },
               {
-                'id_option':3,
-                'value':3,
-                'text':'3'
+                'id_option': 3,
+                'value': 3,
+                'text': '3'
               },
               {
-                'id_option':4,
-                'value':4,
-                'text':'4'
-              },
+                'id_option': 4,
+                'value': 4,
+                'text': '4'
+              }
             ]
-          },
+          }
         ]
       }
     }

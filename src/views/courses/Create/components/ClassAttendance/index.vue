@@ -65,70 +65,70 @@
         @click="openModal('selectStudents')"
       >Tambah Mahasiswa</el-button>
     </div>
-    <template v-if=!isAdmin>
-    <header>
-      <h1>Range Index</h1>
-    </header>
-    <div class="form-card">
-      <el-form>
-        <el-form-item>
-          A >= <el-input-number v-model="rangeA" :min="0" :max="100" size="small" :step="10" />
-        </el-form-item>
-        <el-form-item>
-          AB >= <el-input-number v-model="rangeAB" :min="0" :max="100" size="small" :step="10" />
-        </el-form-item>
-        <el-form-item>
-          B >= <el-input-number v-model="rangeB" :min="0" :max="100" size="small" :step="10" />
-        </el-form-item>
-        <el-form-item>
-          BC >= <el-input-number v-model="rangeBC" :min="0" :max="100" size="small" :step="10" />
-        </el-form-item>
-        <el-form-item>
-          C >= <el-input-number v-model="rangeC" :min="0" :max="100" size="small" :step="10" />
-        </el-form-item>
-        <el-form-item>
-          D >= <el-input-number v-model="rangeD" :min="0" :max="100" size="small" :step="10" />
-        </el-form-item>
-      </el-form>
-    </div>
-    <el-button
-      type="primary"
-      class="btn"
-      @click="openModal('countIndex')"
-    >Hitung Index</el-button>
-    <div class="class-attendance-container">
-      <h2>Daftar Index</h2>
-      <div class = "card">
-        <table>
-          <tr>
-            <th></th>
-            <th>A</th>
-            <th>AB</th>
-            <th>B</th>
-            <th>BC</th>
-            <th>C</th>
-            <th>D</th>
-            <th>E</th>
-          </tr>
-          <tr>
-            <td>Total</td>
-            <td>{{ totalA }}</td>
-            <td>{{ totalAB }}</td>
-            <td>{{ totalB }}</td>
-            <td>{{ totalBC }}</td>
-            <td>{{ totalC }}</td>
-            <td>{{ totalD }}</td>
-            <td>{{ totalE }}</td>
-          </tr>
-        </table>
+    <template v-if="!isAdmin">
+      <header>
+        <h1>Range Index</h1>
+      </header>
+      <div class="form-card">
+        <el-form>
+          <el-form-item>
+            A >= <el-input-number v-model="rangeA" :min="0" :max="100" size="small" :step="10" />
+          </el-form-item>
+          <el-form-item>
+            AB >= <el-input-number v-model="rangeAB" :min="0" :max="100" size="small" :step="10" />
+          </el-form-item>
+          <el-form-item>
+            B >= <el-input-number v-model="rangeB" :min="0" :max="100" size="small" :step="10" />
+          </el-form-item>
+          <el-form-item>
+            BC >= <el-input-number v-model="rangeBC" :min="0" :max="100" size="small" :step="10" />
+          </el-form-item>
+          <el-form-item>
+            C >= <el-input-number v-model="rangeC" :min="0" :max="100" size="small" :step="10" />
+          </el-form-item>
+          <el-form-item>
+            D >= <el-input-number v-model="rangeD" :min="0" :max="100" size="small" :step="10" />
+          </el-form-item>
+        </el-form>
       </div>
-    </div>
-    <el-button
-      type="primary"
-      class="btn"
-      style="margin-top:20px; margin-left:600px"
-      @click="openModal('uploadScore')"
-    >Upload Nilai Ke Admin</el-button>
+      <el-button
+        type="primary"
+        class="btn"
+        @click="openModal('countIndex')"
+      >Hitung Index</el-button>
+      <div class="class-attendance-container">
+        <h2>Daftar Index</h2>
+        <div class="card">
+          <table>
+            <tr>
+              <th />
+              <th>A</th>
+              <th>AB</th>
+              <th>B</th>
+              <th>BC</th>
+              <th>C</th>
+              <th>D</th>
+              <th>E</th>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td>{{ totalA }}</td>
+              <td>{{ totalAB }}</td>
+              <td>{{ totalB }}</td>
+              <td>{{ totalBC }}</td>
+              <td>{{ totalC }}</td>
+              <td>{{ totalD }}</td>
+              <td>{{ totalE }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <el-button
+        type="primary"
+        class="btn"
+        style="margin-top:20px; margin-left:600px"
+        @click="openModal('uploadScore')"
+      >Upload Nilai Ke Admin</el-button>
     </template>
     <DeleteModal
       v-if="isModalOpen('deleteConfirm')"
@@ -262,7 +262,7 @@ export default {
         rangeB: this.rangeB,
         rangeBC: this.rangeBC,
         rangeC: this.rangeC,
-        rangeD: this.rangeD,
+        rangeD: this.rangeD
       }
       await CourseStudent.addIndexes(this.idCourse, params)
       Message({

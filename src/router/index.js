@@ -17,7 +17,7 @@ import portofolioRoute from './modules/portofolio'
 import teamworkRoute from './modules/teamwork'
 import communicationRoute from './modules/communication'
 import loAssessmentRoute from './modules/loassessment'
-import loutcomeRoute from './modules/looutcome'
+// import loutcomeRoute from './modules/looutcome'
 import studentAssessmentRoute from './modules/studentAssessment'
 
 /**

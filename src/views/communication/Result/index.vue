@@ -55,10 +55,10 @@ export default {
   methods: {
     async viewCourseAnswer() {
       try {
-        const answers = await Softskill.viewCourseAnswer(this.$route.params.id);
-        this.scores = answers.value;
-        this.mean = answers.meanC;
-        this.count = answers.countC;
+        const answers = await Softskill.viewCourseAnswer(this.$route.params.id)
+        this.scores = answers.value
+        this.mean = answers.meanC
+        this.count = answers.countC
       } catch (e) {
         Message({
           message: e.stack || 'Error while reading scores',

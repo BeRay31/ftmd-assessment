@@ -206,8 +206,8 @@ export default {
         if (this.filter !== 'Semua') {
           this.displayed = this.students.filter(s => s.component === this.filter)
         }
-        const startPage = (this.currentPage - 1) * this.pageSize
-        const endPage = this.currentPage * this.pageSize
+        // const startPage = (this.currentPage - 1) * this.pageSize
+        // const endPage = this.currentPage * this.pageSize
         // this.displayed = this.displayed.slice(startPage, endPage)
         this.totalPage = Math.ceil(this.displayed.length / this.pageSize)
       }

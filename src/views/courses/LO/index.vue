@@ -110,7 +110,7 @@ export default {
         duration: 2 * 1000
       })
     }
-    this.fetchLO()
+    await this.fetchLO()
   },
   methods: {
     backToList() {
@@ -162,10 +162,9 @@ export default {
     },
     async fetchLO() {
       try {
-        Courses.fetchCourseLO(this.id_course).then((res) => {
-          this.data = res.data
-          this.sums = res.sums
-        })
+        const res = await Courses.fetchCourseLO(this.id_course)
+        this.data = res.data
+        this.sums = res.sums
       } catch (e) {
         Message({
           message: e.stack,
@@ -192,8 +191,11 @@ export default {
         })
       }
     },
-    validateLO(loDetails) {
-      return this.data.findIndex((lo) => lo.id_lo === loDetails.id) === -1
+    validateLO(loDetails, editID) {
+      if (editID) {
+        if (loDetails.id === editID) return true
+      }
+      return this.data.findIndex((lo) => lo.id_lo === parseInt(loDetails.id)) === -1
     },
     async editLO(courseLO) {
       try {
@@ -201,7 +203,8 @@ export default {
         loDetails.code = this.id_course
         loDetails.tag = courseLO.tag
         loDetails.id = courseLO.id_lo
-        if (!this.validateLO(loDetails)) {
+        loDetails.idTable = courseLO.id
+        if (this.validateLO(loDetails, courseLO.editID)) {
           this.closeModal()
           await Courses.editCourseLO(loDetails)
           this.fetchLO()

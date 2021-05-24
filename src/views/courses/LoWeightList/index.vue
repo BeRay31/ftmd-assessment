@@ -150,10 +150,10 @@ export default {
     async countScoreIndex() {
       await Course.countScoreIndexes(this.$route.params.id)
       Message({
-          message: 'Nilai Berhasil dihitung',
-          type: 'success',
-          duration: 3 * 1000
-        })
+        message: 'Nilai Berhasil dihitung',
+        type: 'success',
+        duration: 3 * 1000
+      })
       this.$router.push({ name: 'EditCourse', params: { id: this.$route.params.id }})
     },
     async fetchComponents() {

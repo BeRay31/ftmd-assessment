@@ -14,7 +14,7 @@
           </tr>
           <template v-if="!scores || scores.length == 0">
             <tr>
-               <th colspan="4"><h4 class="empty-state">No - Data</h4></th>
+              <th colspan="4"><h4 class="empty-state">No - Data</h4></th>
             </tr>
           </template>
           <template v-else>
@@ -55,10 +55,10 @@ export default {
   methods: {
     async viewCourseAnswer() {
       try {
-        const answers = await Softskill.viewCourseAnswer(this.$route.params.id);
-        this.scores = answers.value;
-        this.mean = answers.meanT;
-        this.count = answers.countT;
+        const answers = await Softskill.viewCourseAnswer(this.$route.params.id)
+        this.scores = answers.value
+        this.mean = answers.meanT
+        this.count = answers.countT
       } catch (e) {
         Message({
           message: e.stack || 'Error while reading scores',
