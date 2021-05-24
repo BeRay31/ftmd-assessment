@@ -201,7 +201,7 @@ export default {
         loDetails.code = this.id_course
         loDetails.tag = courseLO.tag
         loDetails.id = courseLO.id_lo
-        if (this.validateLO(loDetails)) {
+        if (!this.validateLO(loDetails)) {
           this.closeModal()
           await Courses.editCourseLO(loDetails)
           this.fetchLO()
